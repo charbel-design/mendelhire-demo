@@ -6,8 +6,23 @@
   <title>MendelHire - Proof-First Hiring Platform</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-primary: #0a1628;
+      --bg-card: rgba(255, 255, 255, 0.03);
+      --bg-card-hover: rgba(255, 255, 255, 0.06);
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(75, 147, 255, 0.25);
+      --accent: #4B93FF;
+      --accent-glow: rgba(75, 147, 255, 0.15);
+      --success: #5CD6C8;
+      --warning: #E5B84C;
+      --text-primary: #f0f4f8;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748B;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; font-family: 'Inter', sans-serif; background: #0a1628; color: #f0f4f8; }
+    html, body { width: 100%; height: 100%; font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11'; }
     #app { display: flex; height: 100vh; overflow: hidden; }
 
     /* ===== SIDEBAR ===== */
@@ -27,25 +42,26 @@
     .logo {
       font-size: 16px;
       font-weight: 700;
-      color: #f0f4f8;
-      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
       display: flex;
       align-items: center;
       gap: 12px;
     }
     .logo-icon {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       flex-shrink: 0;
+      filter: drop-shadow(0 0 8px rgba(75, 147, 255, 0.3));
     }
     .sidebar.collapsed .logo { font-size: 24px; }
     .nav { flex: 1; padding: 24px 0; display: flex; flex-direction: column; gap: 6px; }
     .sidebar.collapsed .nav { padding: 20px 0; align-items: center; }
     .nav-item {
       padding: 12px 16px;
-      color: #94a3b8;
+      color: var(--text-secondary);
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       align-items: center;
       gap: 12px;
@@ -53,25 +69,50 @@
       font-weight: 500;
       border-radius: 8px;
       margin: 0 8px;
+      border-left: 3px solid transparent;
     }
-    .sidebar.collapsed .nav-item { padding: 12px; justify-content: center; gap: 0; margin: 4px 0; }
+    .sidebar.collapsed .nav-item { padding: 12px; justify-content: center; gap: 0; margin: 4px 0; border-left: none; }
     .nav-item:hover {
-      color: #f0f4f8;
+      color: var(--text-primary);
       background: rgba(59, 130, 246, 0.1);
+      transform: scale(1.01);
     }
     .nav-item.active {
-      color: #4B93FF;
-      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent);
+      background: linear-gradient(135deg, rgba(75,147,255,0.15), rgba(75,147,255,0.05));
+      border-left: 3px solid var(--accent);
     }
     .sidebar.collapsed .nav-item.active { border-left: none; background: rgba(59, 130, 246, 0.15); }
     .nav-icon { width: 20px; height: 20px; text-align: center; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
     .sidebar.collapsed .nav-text { display: none; }
     .sidebar-bottom { padding: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
-    .user-card { padding: 16px; background: rgba(59, 130, 246, 0.08); border-radius: 12px; text-align: center; }
+    .user-card {
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(75,147,255,0.1), rgba(75,147,255,0.05));
+      border: 1px solid rgba(75,147,255,0.15);
+      border-radius: 12px;
+      text-align: center;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .user-card:hover { background: linear-gradient(135deg, rgba(75,147,255,0.15), rgba(75,147,255,0.08)); }
     .sidebar.collapsed .user-card { padding: 12px; }
-    .user-card-name { font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 4px; }
+    .user-card-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--accent-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 16px;
+      margin: 0 auto 12px;
+    }
+    .sidebar.collapsed .user-card-avatar { margin: 0; }
+    .user-card-name { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
     .sidebar.collapsed .user-card-name { display: none; }
-    .user-card-org { font-size: 12px; color: #64748B; }
+    .user-card-org { font-size: 12px; color: var(--text-muted); }
     .sidebar.collapsed .user-card-org { display: none; }
     .toggle-sidebar {
       width: 100%;
@@ -98,7 +139,7 @@
       align-items: center;
       gap: 20px;
     }
-    .topbar-title { font-size: 20px; font-weight: 700; color: #f0f4f8; }
+    .topbar-title { font-size: 20px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.02em; }
     .topbar-actions { display: flex; gap: 12px; align-items: center; }
     .topbar-search {
       padding: 10px 16px;
@@ -127,9 +168,9 @@
     .icon-btn:hover { background: rgba(59, 130, 246, 0.15); color: #4B93FF; }
     .content { flex: 1; overflow-y: auto; padding: 28px; }
     .page { display: none; }
-    .page.active { display: block; animation: slideIn 0.3s ease; }
+    .page.active { display: block; animation: fadeRise 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
-    @keyframes slideIn {
+    @keyframes fadeRise {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
@@ -138,44 +179,60 @@
     .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
     .metric-card {
       padding: 24px;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
       border-radius: 12px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      border-left: 3px solid transparent;
+      overflow: hidden;
     }
     .metric-card:hover {
-      background: rgba(255, 255, 255, 0.04);
-      border-color: rgba(75, 147, 255, 0.2);
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      border-left-color: var(--accent);
       transform: translateY(-2px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 24px rgba(0,0,0,0.3);
     }
-    .metric-label { font-size: 12px; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; font-weight: 600; }
-    .metric-value { font-size: 32px; font-weight: 700; color: #4B93FF; margin-bottom: 8px; }
-    .metric-change { font-size: 13px; color: #5CD6C8; }
+    .metric-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; font-weight: 600; }
+    .metric-value { font-size: 32px; font-weight: 800; color: var(--accent); margin-bottom: 8px; letter-spacing: -0.02em; }
+    .metric-change { font-size: 13px; color: var(--success); }
+    .metric-sparkline { height: 30px; margin-top: 12px; position: relative; }
     .activity-feed { margin-bottom: 32px; }
     .activity-title { font-size: 16px; font-weight: 700; color: #f0f4f8; margin-bottom: 16px; }
     .activity-item {
       padding: 16px;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
       border-radius: 12px;
       margin-bottom: 12px;
       display: flex;
       gap: 16px;
       align-items: flex-start;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+    .activity-item:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
     }
     .activity-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: rgba(75, 147, 255, 0.15);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent-glow);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 14px;
     }
-    .activity-icon.success { background: rgba(92, 214, 200, 0.15); color: #5CD6C8; }
-    .activity-icon.warning { background: rgba(229, 184, 76, 0.15); color: #E5B84C; }
+    .activity-icon.success { background: rgba(92, 214, 200, 0.15); color: var(--success); }
+    .activity-icon.warning { background: rgba(229, 184, 76, 0.15); color: var(--warning); }
     .activity-icon svg { width: 16px; height: 16px; }
     .activity-content { flex: 1; }
     .activity-text { font-size: 14px; color: #f0f4f8; margin-bottom: 4px; }
@@ -186,21 +243,21 @@
     .challenge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
     .challenge-card {
       padding: 24px;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
       border-radius: 12px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
     }
     .challenge-card:hover {
-      background: rgba(255, 255, 255, 0.04);
-      border-color: rgba(75, 147, 255, 0.2);
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
       transform: translateY(-4px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(75, 147, 255, 0.1);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 12px 28px rgba(75, 147, 255, 0.15);
     }
-    .challenge-type { font-size: 12px; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-    .challenge-title { font-size: 18px; font-weight: 700; color: #f0f4f8; margin-bottom: 12px; }
+    .challenge-type { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600; }
+    .challenge-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; letter-spacing: -0.02em; }
     .challenge-desc { font-size: 13px; color: #94a3b8; margin-bottom: 16px; line-height: 1.5; }
     .challenge-stats { display: flex; justify-content: space-between; margin-bottom: 16px; padding: 12px 0; border-top: 1px solid rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
     .challenge-stat { text-align: center; }
@@ -227,14 +284,14 @@
     /* ===== BUTTONS ===== */
     .btn-primary {
       padding: 12px 24px;
-      background: #4B93FF;
+      background: var(--accent);
       border: none;
       border-radius: 8px;
       color: white;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -242,26 +299,26 @@
     }
     .btn-primary:hover {
       background: #3a82ff;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(75, 147, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(75, 147, 255, 0.3);
     }
     .btn-secondary {
       padding: 10px 20px;
       background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-subtle);
       border-radius: 8px;
-      color: #f0f4f8;
+      color: var(--text-primary);
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       align-items: center;
       gap: 8px;
     }
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(75, 147, 255, 0.3);
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
     }
 
     /* ===== FORMS ===== */
@@ -271,17 +328,17 @@
       width: 100%;
       padding: 12px 16px;
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
       border-radius: 8px;
-      color: #f0f4f8;
+      color: var(--text-primary);
       font-size: 14px;
       font-family: inherit;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .form-input:focus, .form-select:focus, .form-textarea:focus {
       outline: none;
       background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(75, 147, 255, 0.3);
+      border-color: var(--border-hover);
       box-shadow: 0 0 0 3px rgba(75, 147, 255, 0.1);
     }
     .form-textarea { resize: vertical; min-height: 100px; }
@@ -292,7 +349,7 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.6);
+      background: radial-gradient(circle at center, rgba(75, 147, 255, 0.1) 0%, rgba(0, 0, 0, 0.6) 100%);
       backdrop-filter: blur(8px);
       display: none;
       align-items: center;
@@ -308,7 +365,7 @@
       max-height: 90vh;
       overflow-y: auto;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-      animation: modalIn 0.3s ease;
+      animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     @keyframes modalIn {
       from { opacity: 0; transform: scale(0.95); }
@@ -388,8 +445,8 @@
 
     /* ===== CHAT PANEL ===== */
     .ai-chat-panel {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
       border-radius: 12px;
       display: flex;
       flex-direction: column;
@@ -506,11 +563,12 @@
     .anti-cheat-item {
       padding: 12px;
       background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
       border-radius: 8px;
       display: flex;
       gap: 8px;
       align-items: center;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .anti-cheat-item.verified { border-color: rgba(92, 214, 200, 0.2); }
     .anti-cheat-item.pending { border-color: rgba(229, 184, 76, 0.2); }
@@ -518,10 +576,18 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #64748B;
+      background: var(--text-muted);
+      transition: all 0.25s ease;
     }
-    .anti-cheat-item.verified .anti-cheat-dot { background: #5CD6C8; }
-    .anti-cheat-item.pending .anti-cheat-dot { background: #E5B84C; }
+    .anti-cheat-item.verified .anti-cheat-dot {
+      background: var(--success);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .anti-cheat-item.pending .anti-cheat-dot { background: var(--warning); }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(92, 214, 200, 0.7); }
+      50% { box-shadow: 0 0 0 4px rgba(92, 214, 200, 0); }
+    }
     .anti-cheat-text { font-size: 13px; color: #f0f4f8; }
     .pivot-timeline {
       display: flex;
@@ -581,10 +647,11 @@
       left: 0;
       top: 0;
       height: 100%;
-      background: linear-gradient(90deg, #4B93FF, rgba(75, 147, 255, 0.4));
+      background: linear-gradient(90deg, var(--accent), rgba(75, 147, 255, 0.4));
       border-radius: 2px;
       z-index: 1;
       transition: width 0.1s linear;
+      box-shadow: 0 0 12px rgba(75, 147, 255, 0.4), inset 0 1px 2px rgba(255,255,255,0.1);
     }
     .pivot-timeline-labels {
       display: flex;
@@ -598,12 +665,18 @@
     .session-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 24px; }
     .stat-box {
       padding: 16px;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
       border-radius: 12px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .stat-box-label { font-size: 11px; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600; }
-    .stat-box-value { font-size: 24px; font-weight: 700; color: #4B93FF; }
+    .stat-box:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+    .stat-box-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600; }
+    .stat-box-value { font-size: 24px; font-weight: 700; color: var(--accent); }
     .progress-bar {
       width: 100%;
       height: 6px;
@@ -622,11 +695,17 @@
     .commit-feed { display: flex; flex-direction: column; gap: 12px; }
     .commit-item {
       padding: 16px;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
       border-radius: 12px;
       display: flex;
       gap: 12px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .commit-item:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      transform: translateX(4px);
     }
     .commit-icon {
       width: 32px;
@@ -669,20 +748,24 @@
       width: 100%;
       border-collapse: collapse;
       background: rgba(255, 255, 255, 0.01);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
       border-radius: 12px;
       overflow: hidden;
     }
     .candidates-table thead {
       background: rgba(255, 255, 255, 0.02);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(10px);
+      z-index: 10;
     }
     .candidates-table th {
       padding: 16px;
       text-align: left;
       font-size: 12px;
       font-weight: 700;
-      color: #94a3b8;
+      color: var(--text-secondary);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -690,10 +773,15 @@
       padding: 16px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.02);
       font-size: 14px;
-      color: #f0f4f8;
+      color: var(--text-primary);
+    }
+    .candidates-table tbody tr {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      border-left: 3px solid transparent;
     }
     .candidates-table tbody tr:hover {
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(255, 255, 255, 0.03);
+      border-left-color: var(--accent);
     }
 
     /* ===== SCORING ===== */
@@ -720,21 +808,170 @@
       bottom: 24px;
       right: 24px;
       padding: 16px 20px;
-      background: #0a1628;
+      background: var(--bg-primary);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 8px;
-      color: #f0f4f8;
+      color: var(--text-primary);
       font-size: 14px;
       z-index: 2000;
-      animation: slideUp 0.3s ease;
+      animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      border-left: 4px solid var(--border-subtle);
     }
     @keyframes slideUp {
       from { transform: translateY(100px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
-    .toast.success { border-color: rgba(92, 214, 200, 0.3); }
-    .toast.error { border-color: rgba(255, 100, 100, 0.3); }
+    .toast.success { border-left-color: var(--success); }
+    .toast.error { border-left-color: #ff6464; }
+    .toast-close { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 0; transition: all 0.2s ease; }
+    .toast-close:hover { color: var(--text-primary); }
+
+    /* ===== AVATAR BADGES ===== */
+    .avatar-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 12px;
+    }
+
+    /* ===== STATUS BADGE ===== */
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .status-badge.ready {
+      background: linear-gradient(135deg, rgba(92,214,200,0.2), rgba(92,214,200,0.1));
+      color: var(--success);
+      border: 1px solid rgba(92,214,200,0.3);
+    }
+    .status-badge.progress {
+      background: linear-gradient(135deg, rgba(75,147,255,0.2), rgba(75,147,255,0.1));
+      color: var(--accent);
+      border: 1px solid rgba(75,147,255,0.3);
+    }
+    .status-badge.scored {
+      background: linear-gradient(135deg, rgba(92,214,200,0.2), rgba(75,147,255,0.1));
+      color: var(--success);
+      border: 1px solid rgba(92,214,200,0.3);
+    }
+    .status-badge.invited {
+      background: linear-gradient(135deg, rgba(229,184,76,0.2), rgba(229,184,76,0.1));
+      color: var(--warning);
+      border: 1px solid rgba(229,184,76,0.3);
+    }
+
+    /* ===== SCORE RADIAL ===== */
+    .score-radial {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: conic-gradient(var(--accent) var(--score-percentage, 0%), rgba(255,255,255,0.1) 0%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      border: 2px solid var(--border-subtle);
+      transition: all 0.25s ease;
+    }
+
+    /* ===== CODE EDITOR ===== */
+    .code-editor {
+      background: #0a0f1a;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      color: #89ddff;
+      overflow-x: auto;
+      margin-top: 16px;
+    }
+    .code-editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .code-editor-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* ===== PIPELINE VISUALIZATION ===== */
+    .pipeline-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      margin-bottom: 32px;
+      overflow-x: auto;
+    }
+    .pipeline-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .pipeline-segment {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      transition: all 0.25s ease;
+    }
+    .pipeline-arrow {
+      color: var(--text-muted);
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ===== RADAR CHART ===== */
+    .radar-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 32px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 32px;
+    }
+    .radar-canvas {
+      max-width: 300px;
+      height: auto;
+    }
 
     /* ===== SCROLLBAR ===== */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -811,6 +1048,7 @@
       </nav>
       <div class="sidebar-bottom">
         <div class="user-card">
+          <div class="user-card-avatar">CA</div>
           <div class="user-card-name">Charbel A.</div>
           <div class="user-card-org">MendelHire</div>
         </div>
@@ -848,62 +1086,82 @@
               <div class="metric-label">Total Hires</div>
               <div class="metric-value">12</div>
               <div class="metric-change">+4 this month</div>
+              <svg class="metric-sparkline" viewBox="0 0 100 30" preserveAspectRatio="none">
+                <path d="M0,25 L10,20 L20,18 L30,15 L40,12 L50,10 L60,12 L70,8 L80,5 L90,3 L100,2" fill="none" stroke="rgba(75,147,255,0.3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </div>
             <div class="metric-card">
               <div class="metric-label">In Progress</div>
               <div class="metric-value">8</div>
               <div class="metric-change">-1 since yesterday</div>
+              <svg class="metric-sparkline" viewBox="0 0 100 30" preserveAspectRatio="none">
+                <path d="M0,10 L10,10 L20,11 L30,10 L40,11 L50,15 L60,14 L70,13 L80,12 L90,11 L100,10" fill="none" stroke="rgba(75,147,255,0.3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </div>
             <div class="metric-card">
               <div class="metric-label">Avg Score</div>
               <div class="metric-value">4.1</div>
               <div class="metric-change">+0.3 vs last batch</div>
+              <svg class="metric-sparkline" viewBox="0 0 100 30" preserveAspectRatio="none">
+                <path d="M0,22 L10,20 L20,18 L30,16 L40,14 L50,12 L60,10 L70,8 L80,6 L90,4 L100,2" fill="none" stroke="rgba(75,147,255,0.3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </div>
             <div class="metric-card">
               <div class="metric-label">Ready to Hire</div>
               <div class="metric-value">4</div>
               <div class="metric-change">2 need review</div>
+              <svg class="metric-sparkline" viewBox="0 0 100 30" preserveAspectRatio="none">
+                <path d="M0,25 L10,24 L20,22 L30,20 L40,18 L50,15 L60,12 L70,8 L80,5 L90,3 L100,2" fill="none" stroke="rgba(75,147,255,0.3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="pipeline-container">
+            <div class="pipeline-stage">
+              <div class="pipeline-segment" style="background: linear-gradient(135deg, rgba(75,147,255,0.8), rgba(75,147,255,0.6)); width: 140px;">Applied (24)</div>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-stage">
+              <div class="pipeline-segment" style="background: linear-gradient(135deg, rgba(92,214,200,0.8), rgba(92,214,200,0.6)); width: 110px;">Challenged (16)</div>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-stage">
+              <div class="pipeline-segment" style="background: linear-gradient(135deg, rgba(229,184,76,0.8), rgba(229,184,76,0.6)); width: 90px;">Scored (12)</div>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-stage">
+              <div class="pipeline-segment" style="background: linear-gradient(135deg, rgba(75,147,255,0.8), rgba(75,147,255,0.6)); width: 120px;">FitFolio Ready (4)</div>
+            </div>
+            <div class="pipeline-arrow">→</div>
+            <div class="pipeline-stage">
+              <div class="pipeline-segment" style="background: linear-gradient(135deg, rgba(92,214,200,0.8), rgba(92,214,200,0.6)); width: 80px;">Hired (2)</div>
             </div>
           </div>
 
           <div class="activity-feed">
             <div class="activity-title">Recent Activity</div>
             <div class="activity-item">
-              <div class="activity-icon success">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-              </div>
+              <div class="activity-icon success">SC</div>
               <div class="activity-content">
                 <div class="activity-text">Sarah Chen completed Frontend React challenge</div>
                 <div class="activity-time">2 hours ago</div>
               </div>
             </div>
             <div class="activity-item">
-              <div class="activity-icon warning">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3.05h16.94a2 2 0 0 0 1.71-3.05L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                  <line x1="12" y1="9" x2="12" y2="13"></line>
-                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                </svg>
-              </div>
+              <div class="activity-icon warning">MJ</div>
               <div class="activity-content">
                 <div class="activity-text">Marcus Johnson needs attention on scoring review</div>
                 <div class="activity-time">4 hours ago</div>
               </div>
             </div>
             <div class="activity-item">
-              <div class="activity-icon success">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path>
-                  <path d="M12.5 7H11v6l5.25 3.15"></path>
-                </svg>
-              </div>
+              <div class="activity-icon success">SY</div>
               <div class="activity-content">
                 <div class="activity-text">New challenge "Data Python/SQL" is ready to use</div>
                 <div class="activity-time">1 day ago</div>
               </div>
             </div>
+            <div style="text-align: center; padding: 12px 0; color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer;">View all activity</div>
           </div>
         </div>
 
@@ -1114,6 +1372,25 @@
               Message
             </button>
           </div>
+
+          <div class="code-editor">
+            <div class="code-editor-header">
+              <div class="code-editor-title">src/components/ProductCard.tsx</div>
+              <span style="font-size: 11px; color: var(--text-muted);">Latest commit</span>
+            </div>
+            <div style="font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.5; color: #89ddff;">
+              <div><span style="color: #c792ea;">export</span> <span style="color: #c792ea;">interface</span> <span style="color: #ffcb8b;">Product</span> {</div>
+              <div style="margin-left: 16px;"><span style="color: #89ddff;">id</span>: <span style="color: #c792ea;">string</span>;</div>
+              <div style="margin-left: 16px;"><span style="color: #89ddff;">name</span>: <span style="color: #c792ea;">string</span>;</div>
+              <div style="margin-left: 16px;"><span style="color: #89ddff;">price</span>: <span style="color: #c792ea;">number</span>;</div>
+              <div>}</div>
+              <div>&nbsp;</div>
+              <div><span style="color: #c792ea;">export</span> <span style="color: #c792ea;">const</span> <span style="color: #dfd9a8;">ProductCard</span>: <span style="color: #ffcb8b;">FC</span>&lt;<span style="color: #ffcb8b;">Product</span>&gt; = ({</div>
+              <div style="margin-left: 16px;"><span style="color: #89ddff;">id</span>, <span style="color: #89ddff;">name</span>, <span style="color: #89ddff;">price</span></div>
+              <div>}) =&gt; (</div>
+              <div style="margin-left: 16px;">&lt;<span style="color: #c792ea;">div</span> <span style="color: #89ddff;">className</span>=<span style="color: #c3e88d;">"card"</span>&gt;</div>
+            </div>
+          </div>
         </div>
 
         <!-- CANDIDATES PAGE -->
@@ -1179,70 +1456,70 @@
             <tbody id="candidatesTableBody">
               <tr data-status="FitFolio Ready" data-challenge="Frontend React" data-score="4.2">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2841"><strong>Sarah Chen</strong></td>
+                <td id="name-MH-2841"><div class="avatar-badge"><div class="avatar-circle">SC</div><strong>Sarah Chen</strong></div></td>
                 <td>MH-2841</td>
                 <td>Frontend React</td>
-                <td><span class="badge badge-success">FitFolio Ready</span></td>
-                <td><strong style="color: #5CD6C8;">4.2</strong></td>
+                <td><span class="status-badge ready">FitFolio Ready</span></td>
+                <td><div class="score-radial" style="--score-percentage: 84%;">4.2</div></td>
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2841')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
               <tr data-status="Scored" data-challenge="Frontend React" data-score="3.8">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2842"><strong>Marcus Johnson</strong></td>
+                <td id="name-MH-2842"><div class="avatar-badge"><div class="avatar-circle">MJ</div><strong>Marcus Johnson</strong></div></td>
                 <td>MH-2842</td>
                 <td>Frontend React</td>
-                <td><span class="badge badge-primary">Scored</span></td>
-                <td><strong style="color: #5CD6C8;">3.8</strong></td>
+                <td><span class="status-badge scored">Scored</span></td>
+                <td><div class="score-radial" style="--score-percentage: 76%;">3.8</div></td>
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2842')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
               <tr data-status="In Progress" data-challenge="Frontend React" data-score="0">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2843"><strong>Priya Patel</strong></td>
+                <td id="name-MH-2843"><div class="avatar-badge"><div class="avatar-circle">PP</div><strong>Priya Patel</strong></div></td>
                 <td>MH-2843</td>
                 <td>Frontend React</td>
-                <td><span class="badge badge-warning">In Progress</span></td>
+                <td><span class="status-badge progress">In Progress</span></td>
                 <td><span style="color: #94a3b8;">-</span></td>
                 <td><span style="font-size: 12px; color: #64748B;">-</span></td>
                 <td><button class="btn-secondary" style="font-size: 12px; padding: 8px 12px;" disabled>View</button></td>
               </tr>
               <tr data-status="FitFolio Ready" data-challenge="Data Python/SQL" data-score="4.5">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2844"><strong>Alex Rivera</strong></td>
+                <td id="name-MH-2844"><div class="avatar-badge"><div class="avatar-circle">AR</div><strong>Alex Rivera</strong></div></td>
                 <td>MH-2844</td>
                 <td>Data Python/SQL</td>
-                <td><span class="badge badge-success">FitFolio Ready</span></td>
-                <td><strong style="color: #5CD6C8;">4.5</strong></td>
+                <td><span class="status-badge ready">FitFolio Ready</span></td>
+                <td><div class="score-radial" style="--score-percentage: 90%;">4.5</div></td>
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2844')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
               <tr data-status="In Progress" data-challenge="Frontend React" data-score="0">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2845"><strong>Jordan Lee</strong></td>
+                <td id="name-MH-2845"><div class="avatar-badge"><div class="avatar-circle">JL</div><strong>Jordan Lee</strong></div></td>
                 <td>MH-2845</td>
                 <td>Frontend React</td>
-                <td><span class="badge badge-warning">In Progress (Live)</span></td>
+                <td><span class="status-badge progress">In Progress (Live)</span></td>
                 <td><span style="color: #94a3b8;">-</span></td>
                 <td><span style="font-size: 12px; color: #64748B;">-</span></td>
                 <td><button class="btn-secondary" style="font-size: 12px; padding: 8px 12px;" disabled>View</button></td>
               </tr>
               <tr data-status="Scored" data-challenge="Data Python/SQL" data-score="3.5">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2846"><strong>Tanya Williams</strong></td>
+                <td id="name-MH-2846"><div class="avatar-badge"><div class="avatar-circle">TW</div><strong>Tanya Williams</strong></div></td>
                 <td>MH-2846</td>
                 <td>Data Python/SQL</td>
-                <td><span class="badge badge-primary">Scored</span></td>
-                <td><strong style="color: #E5B84C;">3.5</strong></td>
+                <td><span class="status-badge scored">Scored</span></td>
+                <td><div class="score-radial" style="--score-percentage: 70%;">3.5</div></td>
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2846')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
               <tr data-status="Invited" data-challenge="Frontend React" data-score="0">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2847"><strong>Raj Krishnamurthy</strong></td>
+                <td id="name-MH-2847"><div class="avatar-badge"><div class="avatar-circle">RK</div><strong>Raj Krishnamurthy</strong></div></td>
                 <td>MH-2847</td>
                 <td>Frontend React</td>
-                <td><span class="badge" style="background: rgba(255, 255, 255, 0.1); color: #94a3b8;">Invited</span></td>
+                <td><span class="status-badge invited">Invited</span></td>
                 <td><span style="color: #94a3b8;">-</span></td>
                 <td><span style="font-size: 12px; color: #64748B;">-</span></td>
                 <td><button class="btn-secondary" style="font-size: 12px; padding: 8px 12px;" disabled>View</button></td>
@@ -1279,9 +1556,13 @@
             </select>
           </div>
 
+          <div class="radar-container">
+            <canvas id="radarChart" class="radar-canvas" width="300" height="300"></canvas>
+          </div>
+
           <div class="two-column">
             <div>
-              <h2 style="font-size: 18px; font-weight: 700; color: #f0f4f8; margin-bottom: 24px;">Scoring Rubric</h2>
+              <h2 style="font-size: 18px; font-weight: 700; color: #f0f4f8; margin-bottom: 24px; letter-spacing: -0.02em;">Scoring Rubric</h2>
 
               <div class="rubric-dimension">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
@@ -1683,9 +1964,73 @@
       navigateToPage(hash);
     }
 
+    // RADAR CHART DRAWING
+    function drawRadarChart() {
+      const canvas = document.getElementById('radarChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = 70;
+      const dimensions = ['Product Sense', 'Communication', 'Collaboration', 'Diagnostics', 'Customer Empathy'];
+      const values = [
+        parseInt(document.getElementById('val_ps').textContent),
+        parseInt(document.getElementById('val_cm').textContent),
+        parseInt(document.getElementById('val_cl').textContent),
+        parseInt(document.getElementById('val_dg').textContent),
+        parseInt(document.getElementById('val_ce').textContent)
+      ];
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.fillStyle = 'rgba(75, 147, 255, 0.15)';
+      ctx.lineWidth = 1;
+
+      // Draw grid
+      for (let i = 1; i <= 5; i++) {
+        ctx.beginPath();
+        for (let j = 0; j < dimensions.length; j++) {
+          const angle = (j * 2 * Math.PI) / dimensions.length - Math.PI / 2;
+          const x = centerX + (radius * i / 5) * Math.cos(angle);
+          const y = centerY + (radius * i / 5) * Math.sin(angle);
+          if (j === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+      }
+
+      // Draw spokes
+      for (let j = 0; j < dimensions.length; j++) {
+        const angle = (j * 2 * Math.PI) / dimensions.length - Math.PI / 2;
+        const x = centerX + radius * Math.cos(angle);
+        const y = centerY + radius * Math.sin(angle);
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+
+      // Draw data polygon
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(75, 147, 255, 0.8)';
+      ctx.lineWidth = 2;
+      for (let j = 0; j < dimensions.length; j++) {
+        const angle = (j * 2 * Math.PI) / dimensions.length - Math.PI / 2;
+        const x = centerX + (radius * values[j] / 5) * Math.cos(angle);
+        const y = centerY + (radius * values[j] / 5) * Math.sin(angle);
+        if (j === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+
     window.addEventListener('hashchange', handleHashChange);
     document.addEventListener('DOMContentLoaded', () => {
       handleHashChange();
+      setTimeout(drawRadarChart, 100);
 
       document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', () => {
@@ -1962,6 +2307,7 @@
       document.getElementById(valId).textContent = val;
       const pct = ((val - 1) / 4) * 100;
       slider.style.background = 'linear-gradient(to right, #4B93FF 0%, #4B93FF ' + pct + '%, rgba(255,255,255,0.12) ' + pct + '%, rgba(255,255,255,0.12) 100%)';
+      drawRadarChart();
     }
     // Initialize all sliders on load
     document.addEventListener('DOMContentLoaded', function() {
