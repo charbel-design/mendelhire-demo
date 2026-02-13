@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  
+  
+   #��SarMn: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a1628; color: #f0f4f8; line-height: 1.6; }
+    .container { width: 100%; height: 100%; display: flex; flex-direction: column; position: relative; }
+    .sections-wrapper { flex: 1; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
+    .section { display: none; position: absolute; width: 100%; height: 100%; padding: 60px 40px 120px; overflow-y: auto; opacity: 0; transform: translateY(20px); transition: opacity 0.35s ease-out, transform 0.35s ease-out; }
+    .section.active { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; opacity: 1; transform: translateY(0); }
+5px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+    .proof-controls { display: flex; gap: 15px; justify-content: center; margin-bottom: 30px; }
+    .proof-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: 100%; max-width: 1100px; margin-bottom: 30px; }
+    .proof-panel { background: #111d2e; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; }
+    .proof-panel h4 { font-size: 1rem; margin-bottom: 20px; color: #f0f4f8; }
+    .commit-feed { flex: 1; max-height: 400px; overflow-y: auto; font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 0.85rem; }
+    .commit-item { padding: 12px; margin-bottom: 10px; background: rgba(30, 58, 95, 0.3); border-left: 3px solid #3b82f6; border-radius: 4px; opacity: 0; animation: fadeInLeft 0.4s ease-out forwards; }
+    .commit-item.pivot { background: rgba(212, 168, 67, 0.15); border-left-color: #d4a843; }
+    .commit-time { color: #8899a6; font-size: 0.8rem; margin-bottom: 4px; }
+    .commit-msg { color: #f0f4f8; }
+    @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .stat-item { padding: 15px; background: rgba(78, 205, 196, 0.1); border-radius: 8px; border-left: 3px solid #4ecdc4; }
+    .stat-label { color: #8899a6; font-size: 0.85rem; margin-bottom: 5px; }
+.stat-value-large { color: #4ecdc4; font-size: 1.5rem; font-weight: 700; }
+    .timeline-container { width: 100%; max-width: 1100px; margin-bottom: 30px; }
+    .timeline-bar { width: 100%; height: 30px; background: #1e3a5f; border-radius: 8px; position: relative; cursor: pointer; overflow: hidden; margin-bottom: 15px; }
+    .timeline-fill { height: 100%; background: #3b82f6; transition: width 0.1s linear; position: relative; }
+    .timeline-pivot { position: absolute; left: 50%; top: 0; width: 2px; height: 100%; background: #d4a843; transform: translateX(-1px); }
+    .timeline-labels { display: flex; justify-content: space-between; font-size: 0.85rem; color: #8899a6; padding: 0 5px; }iew rounds per hire</div></div>
+          </div>
+          <div class="comparison-grid">
+            <div class="comparison-column">
+              <h3>Traditional Take-Home</h3>
+              <div class="comparison-item fail"><div class="comparison-icon">✗</div><div>No verification of identity</div></div>
+              <div class="comparison-item fail"><div class="comparison-icon">✗</div><div>No time limit, unpaid work</div></div>
+              <div class="comparison-item fail"><div class="comparison-icon">✗</div><div>No pivot, no adaptability signal</div></div>
+              <div class="comparison-item fail"><div class="comparison-icon">✗</div><div>No rubric, subjective scoring</div></div>
+            </div>
+            <div class="comparison-column">
+              <h3>MendelHire Proof</h3>
+              <div class="comparison-item pass"><div class="comparison-icon">✓</div><div>Identity-verified via Loom</div></div>
+              <div class="comparison-item pass"><div class="comparison-icon">✓</div><div>120 min time-capped, $100–150 stipend</div></div>
+              <div class="comparison-item pass"><div class="comparison-icon">✓</div><div>Pivot-tested at minute 60</div></div>
+              <div class="comparison-item pass"><div class="comparison-icon">✓</div><div>Rubric-scored, transparent</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+ background: rgba(212, 168, 67, 0.1); border: 1px solid rgba(212, 168, 67, 0.3); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+    .pivot-label { color: #d4a843; font-weight: 600; margin-bottom: 8px; }
+    .challenge-footer { display: flex; justify-content: space-between; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.9rem; color: #8899a6; }
+    .challenge-difficulty { color: #d4a843; }
+    .widener-label { margin-top: 20px; margin-bottom: 12px; font-size: 0.9rem; color: #f0f4f8; }
+    .widener-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .widener-chip { padding: 8px 16px; background: transparent; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease; color: #f0f4f8; }
+    .widener-chip:hover { border-color: #4ecdc4; }
+    .widener-chip.selected { background: #4ecdc4; color: #0a1628; border-color: #4ecdc4; }
+    /* Enhancement 1: AI Chat Drawer */
+    .chat-bar { margin-top: 20px; padding: 12px 18px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.3s ease; max-width: 700px; width: 100%; }
+    .chat-bar:hover { background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.4); }
+    .chat-bar-text { flex: 1; color: #8899a6; font-size: 0.9rem; }
+    .chat-bar-chevron { color: #8899a6; transition: transform 0.3s ease; font-size: 0.8rem; }
+    .chat-bar-chevron.open { transform: rotate(180deg); }        <div class="chat-drawer" id="chatDrawer">
+          <div class="chat-history" id="chatHistory">
+            <div style="color: #8899a6; font-size: 0.85rem;">Suggest changes, e.g. "make the pivot about accessibility" or add a GraphQL requirement</div>
+           </div>
+            <div class="chat-input-row">
+              <input type="text" class="chat-input" id="chatInput" placeholder="Refine this proof…">
+              <button class="chat-send" id="chatSend" onclick="sendChatMessage()">→</button>
+            </div>
+          </div>
+ icon">⏱️</div><div class="stat-value" data-count-to="4.2">0</div><div class="stat-description">average interview rounds per hire</div></div>
+
+          <div class="scoring-layout">
+            <div class="code-snippet"><span class="code-keyword">const</span> SearchFilter = ({ items, onFilter }) => {
+  <span class="code-keyword">const</span> [input, setInput] = useState('');
+  <span class="code-keyword">return</span> (
+    &lt;div className=<span class="code-string">"filter-container"</span>&gt;
+      &lt;input value={input} onChange={(e) => setInput(e.target.value)} /&gt;
+    &lt;/div&gt;
+  );
+};</div>
+ class="scoring-sliders">
+              <div class="slider-group"><div class="slider-header"><div><div class="slider-label">Code Quality</div><div class="slider-sublabel">Structure, naming, patterns</div></div><div class="slider-value" data-slider="quality">3.5/5</div></div><input type="range" min="1" max="5" step="0.5" value="3.5" class="slider" data-slider="quality"></div>
+ class="slider-group"><div class="slider-header"><div><div class="slider-label">Problem Solving</div><div class="slider-sublabel">Approach, algorithm choice, edge cases</div></div><div class="slider-value" data-slider="problem">3.5/5</div></div><input type="range" min="1" max="5" step="0.5" value="3.5" class="slider" data-slider="problem"></div>
+ class="slider-group"><div class="slider-header"><div><div class="slider-label">Testing</div><div class="slider-sublabel">Coverage, test design, assertions</div></div><div class="slider-value" data-slider="testing">3.5/5</div></div><input type="range" min="1" max="5" step="0.5" value="3.5" class="slider" data-slider="testing"></div>
