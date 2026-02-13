@@ -820,18 +820,18 @@
         <h1 class="topbar-title" id="topbarTitle">Dashboard</h1>
         <div class="topbar-actions">
           <input type="text" class="topbar-search" placeholder="Search...">
-          <button class="icon-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0 0 15.573 15H15"></path>
-              <path d="M4 12a8 8 0 0 1 15.202-2.861"></path>
-              <path d="M20 4v5h-5"></path>
+          <button class="icon-btn" onclick="showToast('Refreshing data...')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
             </svg>
           </button>
-          <button class="icon-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <button class="icon-btn" style="position: relative;" onclick="showToast('No new notifications')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
+            <span style="position: absolute; top: 4px; right: 4px; width: 8px; height: 8px; background: #4B93FF; border-radius: 50; border: 2px solid #0a1628;"></span>
           </button>
         </div>
       </div>
@@ -1259,6 +1259,22 @@
 
         <!-- SCORING PAGE -->
         <div id="scoring" class="page">
+          <!-- Candidate Selector -->
+          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 28px; padding: 20px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;">
+            <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(75,147,255,0.15); color: #4B93FF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">SC</div>
+            <div style="flex: 1;">
+              <div style="font-size: 16px; font-weight: 700; color: #f0f4f8;">Sarah Chen</div>
+              <div style="font-size: 13px; color: #64748B;">Frontend React · MH-2841 · FitFolio Ready</div>
+            </div>
+            <select class="form-select" style="width: 220px;" onchange="showToast('Switched candidate')">
+              <option>Sarah Chen — 4.2</option>
+              <option>Marcus Johnson — 3.8</option>
+              <option>Alex Rivera — 4.5</option>
+              <option>Tanya Williams — 3.5</option>
+              <option>Elena Volkova — 4.0</option>
+            </select>
+          </div>
+
           <div class="two-column">
             <div>
               <h2 style="font-size: 18px; font-weight: 700; color: #f0f4f8; margin-bottom: 24px;">Scoring Rubric</h2>
@@ -1602,7 +1618,7 @@
   </div>
 
   <!-- TOAST -->
-  <div id="toast"></div>
+  <div id="toast" style="display:none;"></div>
 
   <script>
     // CANDIDATE DATA
