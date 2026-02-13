@@ -162,6 +162,7 @@
     .tab-content { background: #111d2e; border: 1px solid #1e2d3d; border-top: none; border-radius: 0 0 8px 8px; padding: 32px; display: none; }
     .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
     .skill-radar { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 24px 0; }
     .radar-section { text-align: center; }
     .radar-title { font-size: 13px; font-weight: 600; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 16px; }
@@ -949,26 +950,45 @@
 
   <!-- MODALS -->
   <div class="modal-overlay" id="createChallengeModal">
-    <div class="modal">
+    <div class="modal" style="max-width: 900px;">
       <div class="modal-header">
         <span>Create New Challenge</span>
         <button class="modal-close" id="closeModalBtn">✕</button>
       </div>
-      <form id="challengeForm">
+
+      <!-- STEP 1: Role Selection -->
+      <div id="challengeStep1">
+        <p style="font-size: 14px; color: #8899a6; margin-bottom: 24px;">Select the role you're hiring for. MendelHire will generate a tailored proof challenge with brief, acceptance criteria, pivot, and rubric.</p>
         <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Challenge Title</label>
-            <input type="text" class="form-input" placeholder="e.g., Frontend React — Search Component">
+          <div class="form-group" style="flex: 2;">
+            <label class="form-label">Role</label>
+            <select class="form-select" id="roleSelect" style="font-size: 15px; padding: 12px;">
+              <option value="">Select a role...</option>
+              <option value="frontend">Frontend Engineer</option>
+              <option value="backend">Backend Engineer</option>
+              <option value="fullstack">Full-Stack Engineer</option>
+              <option value="data">Data Engineer / Analyst</option>
+              <option value="devops">DevOps / Infrastructure</option>
+              <option value="ai-ml">AI / ML Engineer</option>
+            </select>
           </div>
-          <div class="form-group">
-            <label class="form-label">Stack Tags</label>
-            <input type="text" class="form-input" placeholder="e.g., React, TypeScript">
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label">Seniority</label>
+            <select class="form-select" id="senioritySelect" style="font-size: 15px; padding: 12px;">
+              <option value="mid">Mid-Level</option>
+              <option value="senior" selected>Senior</option>
+              <option value="staff">Staff+</option>
+            </select>
           </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Focus Area <span style="color: #8899a6; font-weight: 400;">(optional)</span></label>
+          <input type="text" class="form-input" id="focusInput" placeholder="e.g., accessibility, real-time systems, data pipelines..." style="font-size: 14px; padding: 12px;">
         </div>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Time Cap</label>
-            <select class="form-select">
+            <select class="form-select" id="timeCapSelect">
               <option>90 minutes</option>
               <option selected>120 minutes</option>
               <option>150 minutes</option>
@@ -977,22 +997,90 @@
           </div>
           <div class="form-group">
             <label class="form-label">Stipend</label>
-            <select class="form-select">
+            <select class="form-select" id="stipendSelect">
               <option selected>$100</option>
               <option>$150</option>
               <option>$200</option>
             </select>
           </div>
         </div>
-        <div class="form-group">
-          <label class="form-label">Brief</label>
-          <textarea class="form-textarea" placeholder="Describe the challenge briefly..."></textarea>
-        </div>
         <div class="form-actions">
           <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
-          <button type="button" class="btn-primary">Save Challenge</button>
+          <button type="button" class="btn-primary" id="generateChallengeBtn" style="padding: 12px 24px; font-size: 15px;">Generate Challenge →</button>
         </div>
-      </form>
+      </div>
+
+      <!-- STEP 2: AI Generating -->
+      <div id="challengeStep2" style="display: none; text-align: center; padding: 48px 0;">
+        <div id="aiSpinner" style="width: 48px; height: 48px; border: 3px solid #1e2d3d; border-top-color: #3b82f6; border-radius: 50%; margin: 0 auto 24px; animation: spin 0.8s linear infinite;"></div>
+        <div style="font-size: 18px; font-weight: 600; color: #f0f4f8; margin-bottom: 8px;">Generating challenge...</div>
+        <div id="aiStatusText" style="font-size: 14px; color: #8899a6;">Analyzing role requirements</div>
+      </div>
+
+      <!-- STEP 3: Generated Result (editable) -->
+      <div id="challengeStep3" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px; padding: 12px 16px; background: rgba(78, 205, 196, 0.1); border: 1px solid rgba(78, 205, 196, 0.3); border-radius: 8px;">
+          <span style="color: #4ecdc4; font-size: 18px;">✦</span>
+          <span style="font-size: 13px; color: #4ecdc4;">AI-generated challenge — review and edit before publishing</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Challenge Title</label>
+          <input type="text" class="form-input" id="genTitle" style="font-size: 15px; font-weight: 600; padding: 12px;">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Stack</label>
+            <input type="text" class="form-input" id="genStack">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Time / Stipend</label>
+            <input type="text" class="form-input" id="genMeta" readonly style="color: #8899a6;">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Brief</label>
+          <textarea class="form-textarea" id="genBrief" style="min-height: 80px; font-size: 14px; line-height: 1.6;"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Acceptance Criteria</label>
+          <textarea class="form-textarea" id="genCriteria" style="min-height: 80px; font-size: 14px; line-height: 1.6;"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="color: #d4a843;">Pivot Specification <span style="font-weight: 400;">(triggered at midpoint)</span></label>
+          <textarea class="form-textarea" id="genPivot" style="min-height: 48px; font-size: 14px; line-height: 1.6; border-color: rgba(212, 168, 67, 0.3);"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Wideners <span style="font-weight: 400; color: #8899a6;">(candidate picks 2)</span></label>
+          <div class="checkbox-group" id="genWideners">
+            <div class="checkbox-item"><input type="checkbox" id="w1" checked><label for="w1">Product Sense — define success metrics and tradeoffs</label></div>
+            <div class="checkbox-item"><input type="checkbox" id="w2" checked><label for="w2">Communication & Documentation — write the README for a new teammate</label></div>
+            <div class="checkbox-item"><input type="checkbox" id="w3" checked><label for="w3">Collaboration — submit a PR review on a sample pull request</label></div>
+            <div class="checkbox-item"><input type="checkbox" id="w4" checked><label for="w4">Customer Empathy — rewrite the task as a user story with acceptance tests</label></div>
+            <div class="checkbox-item"><input type="checkbox" id="w5" checked><label for="w5">Diagnostics — 15-minute log of what failed and what was tried</label></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Rubric Preview</label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div style="background: #0a1628; border: 1px solid #1e2d3d; border-radius: 8px; padding: 16px;">
+              <div style="font-size: 12px; font-weight: 600; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Stack Dimensions</div>
+              <div id="genRubricStack" style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #8899a6;"></div>
+            </div>
+            <div style="background: #0a1628; border: 1px solid #1e2d3d; border-radius: 8px; padding: 16px;">
+              <div style="font-size: 12px; font-weight: 600; color: #d4a843; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">Trait Dimensions</div>
+              <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #8899a6;">
+                <div>• Ownership — followed instructions and handled pivot</div>
+                <div>• Problem-Solving — tradeoffs surfaced and explained</div>
+                <div>• Communication — README and Loom clarity</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions" style="margin-top: 24px;">
+          <button type="button" class="btn-secondary" id="regenerateBtn">↻ Regenerate</button>
+          <button type="button" class="btn-primary" id="publishChallengeBtn" style="padding: 12px 24px; font-size: 15px; background: #4ecdc4;">Publish Challenge</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1112,6 +1200,7 @@
       });
 
       document.getElementById('createChallengeBtn').addEventListener('click', function() {
+        resetChallengeModal();
         document.getElementById('createChallengeModal').classList.add('active');
       });
 
@@ -1121,6 +1210,28 @@
 
       document.getElementById('cancelBtn').addEventListener('click', function() {
         document.getElementById('createChallengeModal').classList.remove('active');
+      });
+
+      document.getElementById('generateChallengeBtn').addEventListener('click', function() {
+        const role = document.getElementById('roleSelect').value;
+        if (!role) { document.getElementById('roleSelect').style.borderColor = '#ff6b6b'; return; }
+        document.getElementById('roleSelect').style.borderColor = '';
+        generateChallenge(role);
+      });
+
+      document.getElementById('regenerateBtn').addEventListener('click', function() {
+        const role = document.getElementById('roleSelect').value;
+        generateChallenge(role);
+      });
+
+      document.getElementById('publishChallengeBtn').addEventListener('click', function() {
+        document.getElementById('createChallengeModal').classList.remove('active');
+        // Show a brief success notification
+        const notif = document.createElement('div');
+        notif.style.cssText = 'position: fixed; top: 80px; right: 32px; background: #4ecdc4; color: #0a1628; padding: 14px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; z-index: 2000; animation: fadeIn 0.3s ease;';
+        notif.textContent = '✓ Challenge published successfully';
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 3000);
       });
 
       document.getElementById('startSessionBtn').addEventListener('click', startSession);
@@ -1287,6 +1398,121 @@
           <button class="btn-primary" onclick="window.location.hash='scoring'">Proceed to Scoring →</button>
         </div>
       `;
+    }
+
+    function resetChallengeModal() {
+      document.getElementById('challengeStep1').style.display = 'block';
+      document.getElementById('challengeStep2').style.display = 'none';
+      document.getElementById('challengeStep3').style.display = 'none';
+      document.getElementById('roleSelect').value = '';
+      document.getElementById('focusInput').value = '';
+    }
+
+    const challengeTemplates = {
+      frontend: {
+        title: 'Frontend React — Search + Accessibility Pivot',
+        stack: 'React, TypeScript, CSS',
+        brief: 'Build a product list component with client-side search and category filter. The component should handle a dataset of 50+ items with real-time filtering. At minute 60, the pivot is triggered: add full keyboard navigation and ARIA labels for all interactive controls.',
+        criteria: '• Real-time search filters products by name and description\n• Category filter composes cleanly with search (both active simultaneously)\n• Keyboard navigation: Tab, Shift+Tab, Enter, Arrow keys work across all controls\n• ARIA labels on search input, category dropdown, and result list\n• Basic unit tests for filter logic and debounce function\n• README documents accessibility decisions and tradeoffs',
+        pivot: 'At 60 minutes: "Add keyboard navigation and ARIA labels for all controls. Focus on accessibility best practices. Justify your implementation choices in the README."',
+        rubricStack: ['Correctness & edge-case handling', 'Accessibility quality (ARIA, keyboard nav)', 'Code clarity and component structure']
+      },
+      backend: {
+        title: 'Backend API — Rate Limiter + Auth Pivot',
+        stack: 'Node.js, Express, PostgreSQL',
+        brief: 'Design and implement a RESTful API for a task management system with CRUD operations, input validation, and error handling. At minute 60, the pivot is triggered: add token-based rate limiting per user with configurable thresholds.',
+        criteria: '• CRUD endpoints for tasks (create, read, update, delete)\n• Input validation with clear error messages and proper HTTP status codes\n• Rate limiter tracks requests per token with sliding window\n• Configurable rate limits (requests per minute, burst allowance)\n• Integration tests for happy path and rate limit scenarios\n• README documents API design decisions',
+        pivot: 'At 60 minutes: "Implement token-based rate limiting. Each API token gets 100 requests per minute with a burst allowance of 20. Return 429 with Retry-After header when exceeded."',
+        rubricStack: ['API design and REST conventions', 'Rate limiting correctness', 'Error handling and validation quality']
+      },
+      fullstack: {
+        title: 'Full-Stack — Real-time Dashboard + WebSocket Pivot',
+        stack: 'React, Node.js, WebSocket',
+        brief: 'Build a metrics dashboard that displays data from an API with charts and filters. Start with polling-based updates. At minute 60, the pivot is triggered: migrate to WebSocket for real-time streaming updates.',
+        criteria: '• Dashboard displays at least 3 metric types with visual charts\n• Filters allow narrowing by date range and metric type\n• WebSocket connection with automatic reconnection on disconnect\n• Real-time updates reflect in charts within 500ms\n• Loading states and error boundaries handle edge cases\n• README compares polling vs WebSocket tradeoffs',
+        pivot: 'At 60 minutes: "Replace polling with WebSocket for real-time updates. Handle connection drops gracefully with exponential backoff reconnection. Show connection status indicator."',
+        rubricStack: ['Frontend component architecture', 'WebSocket implementation quality', 'Data flow and state management']
+      },
+      data: {
+        title: 'Data Analysis — Retention Cohorts + Pivot Redefinition',
+        stack: 'Python, SQL, Pandas',
+        brief: 'Analyze a CSV of user events to produce a monthly cohort retention chart and 5 key insights. At minute 60, the pivot is triggered: redefine cohorts by first paid event instead of signup date, update all analysis.',
+        criteria: '• Monthly cohort retention table and visualization\n• 5 concise, actionable insights from the data\n• Reproducible analysis steps in notebook\n• Pivot: cohorts redefined by first paid event with delta notes\n• Clear documentation of methodology and assumptions\n• At least 1 caveat about data quality or limitations',
+        pivot: 'At 60 minutes: "Redefine cohorts by first paid event instead of first seen. Update the retention chart. Note what changed and what stayed the same."',
+        rubricStack: ['Data cleaning and analysis quality', 'Visualization clarity', 'Insight depth and actionability']
+      },
+      devops: {
+        title: 'Infrastructure — CI Pipeline + Rollback Pivot',
+        stack: 'Docker, GitHub Actions, Terraform',
+        brief: 'Set up a CI/CD pipeline for a microservice: containerize the app, write a multi-stage Dockerfile, and create GitHub Actions workflow for build/test/deploy. At minute 60, add automated rollback on health check failure.',
+        criteria: '• Multi-stage Dockerfile with optimized image size\n• GitHub Actions workflow: lint, test, build, deploy stages\n• Health check endpoint and automated verification\n• Rollback mechanism triggers on failed health check\n• Pipeline runs in under 5 minutes end-to-end\n• README documents deployment strategy and rollback behavior',
+        pivot: 'At 60 minutes: "Add automated rollback. If the health check fails within 2 minutes of deployment, automatically revert to the previous version and alert via webhook."',
+        rubricStack: ['Container and pipeline design', 'Rollback mechanism correctness', 'Infrastructure-as-code quality']
+      },
+      'ai-ml': {
+        title: 'AI/ML — Classification Pipeline + Drift Detection Pivot',
+        stack: 'Python, scikit-learn, Pandas',
+        brief: 'Build a text classification pipeline: data preprocessing, feature extraction, model training, and evaluation. At minute 60, add a data drift detection module that flags when incoming data distribution shifts beyond a configurable threshold.',
+        criteria: '• End-to-end classification pipeline with train/test split\n• At least 2 model comparisons with metrics (precision, recall, F1)\n• Drift detector uses statistical test (KS, PSI, or chi-squared)\n• Configurable threshold with clear alerting mechanism\n• Notebook documents model selection rationale\n• Reproducible with pinned dependencies',
+        pivot: 'At 60 minutes: "Add drift detection. Monitor incoming feature distributions against training data. Flag drift when PSI > 0.2 or KS test p-value < 0.05. Log drift reports."',
+        rubricStack: ['ML pipeline correctness', 'Drift detection implementation', 'Evaluation methodology and documentation']
+      }
+    };
+
+    function generateChallenge(role) {
+      const template = challengeTemplates[role];
+      if (!template) return;
+
+      const focus = document.getElementById('focusInput').value;
+      const timeCap = document.getElementById('timeCapSelect').value;
+      const stipend = document.getElementById('stipendSelect').value;
+
+      // Step 1 → Step 2: Show generating animation
+      document.getElementById('challengeStep1').style.display = 'none';
+      document.getElementById('challengeStep2').style.display = 'block';
+      document.getElementById('challengeStep3').style.display = 'none';
+
+      const statusTexts = [
+        'Analyzing role requirements',
+        'Designing challenge brief',
+        'Calibrating difficulty for seniority',
+        'Generating acceptance criteria',
+        'Crafting pivot specification',
+        'Building rubric dimensions',
+        'Finalizing challenge'
+      ];
+      let statusIndex = 0;
+      const statusInterval = setInterval(() => {
+        statusIndex++;
+        if (statusIndex < statusTexts.length) {
+          document.getElementById('aiStatusText').textContent = statusTexts[statusIndex];
+        }
+      }, 400);
+
+      // After ~2.8 seconds, show the generated result
+      setTimeout(() => {
+        clearInterval(statusInterval);
+
+        // Populate generated fields
+        let title = template.title;
+        if (focus) {
+          title = title.split('—')[0].trim() + ' — ' + focus.charAt(0).toUpperCase() + focus.slice(1) + ' Focus';
+        }
+        document.getElementById('genTitle').value = title;
+        document.getElementById('genStack').value = template.stack;
+        document.getElementById('genMeta').value = timeCap + ' • ' + stipend + ' stipend';
+        document.getElementById('genBrief').value = template.brief;
+        document.getElementById('genCriteria').value = template.criteria;
+        document.getElementById('genPivot').value = template.pivot;
+
+        // Populate rubric stack dimensions
+        const rubricEl = document.getElementById('genRubricStack');
+        rubricEl.innerHTML = template.rubricStack.map(d => '<div>• ' + d + '</div>').join('');
+
+        // Step 2 → Step 3: Show the result
+        document.getElementById('challengeStep2').style.display = 'none';
+        document.getElementById('challengeStep3').style.display = 'block';
+      }, 2800);
     }
   </script>
 </body>
