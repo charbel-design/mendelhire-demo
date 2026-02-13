@@ -2622,7 +2622,7 @@
           <div class="pivot-label">Pivot Point</div>
           <div style="font-size: 14px; color: #f0f4f8;">60 minutes - ${pivot}</div>
         </div>
-        <button class="btn-primary" style="width: 100%; margin-top: 16px;" onclick="launchLiveSession({title:'${title.replace(/'/g, "\\'")}', type:'${tmpl.type}', stack:${JSON.stringify(stack)}, duration:${vals.duration}, stipend:${vals.stipend}, desc:'${desc.replace(/'/g, "\\'")}', pivot:'${pivot.replace(/'/g, "\\'")}'})">
+        <button class="btn-primary run-challenge-btn" style="width: 100%; margin-top: 16px;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
           Run Challenge
         </button>
@@ -2630,6 +2630,19 @@
 
       const grid = document.querySelector('.challenge-grid');
       grid.insertBefore(card, grid.firstChild);
+
+      // Attach click handler with proper data (avoids inline onclick quote issues)
+      card.querySelector('.run-challenge-btn').addEventListener('click', function() {
+        launchLiveSession({
+          title: title,
+          type: tmpl.type,
+          stack: stack,
+          duration: vals.duration,
+          stipend: vals.stipend,
+          desc: desc,
+          pivot: pivot
+        });
+      });
     }
 
     function showChallengeStep(step) {
