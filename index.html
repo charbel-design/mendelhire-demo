@@ -9,522 +9,863 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { width: 100%; height: 100%; font-family: 'Inter', sans-serif; background: #0a1628; color: #f0f4f8; }
     #app { display: flex; height: 100vh; overflow: hidden; }
-    .sidebar { width: 240px; background: #111d2e; border-right: 1px solid #1e2d3d; display: flex; flex-direction: column; transition: width 0.3s ease; z-index: 100; }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 240px;
+      background: rgba(13, 17, 23, 0.95);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      transition: width 0.3s ease;
+      z-index: 100;
+    }
     .sidebar.collapsed { width: 64px; }
-    .sidebar-top { padding: 20px; border-bottom: 1px solid #1e2d3d; }
-    .sidebar.collapsed .sidebar-top { padding: 16px; display: flex; align-items: center; justify-content: center; }
-    .logo { font-size: 18px; font-weight: 700; color: #3b82f6; letter-spacing: -0.5px; }
+    .sidebar-top { padding: 28px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+    .sidebar.collapsed .sidebar-top { padding: 20px; display: flex; align-items: center; justify-content: center; }
+    .logo {
+      font-size: 16px;
+      font-weight: 700;
+      color: #f0f4f8;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
     .sidebar.collapsed .logo { font-size: 24px; }
-    .nav { flex: 1; padding: 20px 0; display: flex; flex-direction: column; gap: 4px; }
-    .sidebar.collapsed .nav { padding: 16px 0; align-items: center; }
-    .nav-item { padding: 12px 16px; color: #8899a6; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 12px; border-left: 3px solid transparent; font-size: 14px; font-weight: 500; }
-    .sidebar.collapsed .nav-item { padding: 12px; justify-content: center; gap: 0; border-left: none; }
-    .nav-item:hover { color: #f0f4f8; background: rgba(59, 130, 246, 0.1); }
-    .nav-item.active { color: #3b82f6; border-left-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+    .nav { flex: 1; padding: 24px 0; display: flex; flex-direction: column; gap: 6px; }
+    .sidebar.collapsed .nav { padding: 20px 0; align-items: center; }
+    .nav-item {
+      padding: 12px 16px;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      margin: 0 8px;
+    }
+    .sidebar.collapsed .nav-item { padding: 12px; justify-content: center; gap: 0; margin: 4px 0; }
+    .nav-item:hover {
+      color: #f0f4f8;
+      background: rgba(59, 130, 246, 0.1);
+    }
+    .nav-item.active {
+      color: #4B93FF;
+      background: rgba(59, 130, 246, 0.15);
+    }
     .sidebar.collapsed .nav-item.active { border-left: none; background: rgba(59, 130, 246, 0.15); }
-    .nav-icon { width: 20px; text-align: center; flex-shrink: 0; }
+    .nav-icon { width: 20px; height: 20px; text-align: center; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
     .sidebar.collapsed .nav-text { display: none; }
-    .sidebar-bottom { padding: 16px; border-top: 1px solid #1e2d3d; display: flex; align-items: center; gap: 12px; }
-    .sidebar.collapsed .sidebar-bottom { flex-direction: column; gap: 8px; }
-    .user-avatar { width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; flex-shrink: 0; }
-    .user-info { flex: 1; }
-    .sidebar.collapsed .user-info { display: none; }
-    .user-name { font-size: 13px; font-weight: 600; color: #f0f4f8; }
-    .user-org { font-size: 12px; color: #8899a6; }
-    .topbar { height: 64px; background: #111d2e; border-bottom: 1px solid #1e2d3d; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-    .topbar-left { display: flex; align-items: center; gap: 32px; flex: 1; }
-    .page-title { font-size: 24px; font-weight: 700; color: #f0f4f8; }
-    .search-box { background: #0a1628; border: 1px solid #1e2d3d; border-radius: 8px; padding: 8px 12px; width: 280px; color: #f0f4f8; font-size: 14px; transition: all 0.2s ease; }
-    .search-box:focus { outline: none; border-color: #3b82f6; background: #0d1520; }
-    .topbar-right { display: flex; align-items: center; gap: 16px; }
-    .icon-btn { width: 40px; height: 40px; border: 1px solid #1e2d3d; background: rgba(59, 130, 246, 0.1); border-radius: 6px; color: #3b82f6; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: all 0.2s ease; }
-    .icon-btn:hover { background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; }
-    .icon-btn.notification { position: relative; }
-    .notification-dot { position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background: #ff6b6b; border-radius: 50%; }
-    .notification-dropdown { display: none; position: absolute; top: 50px; right: 0; background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; min-width: 320px; z-index: 500; }
-    .notification-dropdown.active { display: block; }
-    .notification-item { padding: 12px 16px; border-bottom: 1px solid #1e2d3d; font-size: 13px; color: #f0f4f8; cursor: pointer; transition: all 0.2s ease; }
-    .notification-item:last-child { border-bottom: none; }
-    .notification-item:hover { background: rgba(59, 130, 246, 0.1); }
-    .notification-time { font-size: 11px; color: #8899a6; margin-top: 4px; }
-    .btn-primary { background: #3b82f6; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
-    .btn-primary:hover { background: #2563eb; }
-    .btn-secondary { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid #1e2d3d; padding: 10px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
-    .btn-secondary:hover { background: rgba(59, 130, 246, 0.2); }
-    .btn-gold { background: #d4a843; color: #0a1628; border: none; padding: 10px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
-    .btn-gold:hover { background: #e5b960; }
-    .main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-    .content { flex: 1; overflow-y: auto; padding: 32px; background: linear-gradient(135deg, #0a1628 0%, #0d1520 100%); }
-    .content::-webkit-scrollbar { width: 8px; }
-    .content::-webkit-scrollbar-track { background: transparent; }
-    .content::-webkit-scrollbar-thumb { background: #1e2d3d; border-radius: 4px; }
-    .content::-webkit-scrollbar-thumb:hover { background: #2a3a4d; }
-    .page { display: none; opacity: 0; transition: opacity 0.3s ease; }
-    .page.active { display: block; opacity: 1; }
-    .card { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 24px; transition: all 0.2s ease; }
-    .card:hover { border-color: #2a3a4d; }
-    .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
-    .metric-card { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 20px; text-align: center; }
-    .metric-value { font-size: 32px; font-weight: 700; color: #3b82f6; margin: 8px 0; }
-    .metric-label { font-size: 13px; color: #8899a6; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-    .section { margin-bottom: 32px; }
-    .section-title { font-size: 18px; font-weight: 600; color: #f0f4f8; margin-bottom: 16px; }
-    .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
-    .badge-success { background: rgba(78, 205, 196, 0.2); color: #4ecdc4; }
-    .badge-primary { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
-    .badge-warning { background: rgba(212, 168, 67, 0.2); color: #d4a843; }
-    .badge-danger { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
-    .verified-badge { background: rgba(78, 205, 196, 0.2); color: #4ecdc4; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
-    .activity-item { padding: 16px; border-bottom: 1px solid #1e2d3d; display: flex; gap: 12px; align-items: flex-start; }
-    .activity-item:last-child { border-bottom: none; }
-    .activity-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
-    .activity-dot.completed { background: #4ecdc4; }
-    .activity-dot.generated { background: #3b82f6; }
-    .activity-dot.new { background: #d4a843; }
-    .activity-dot.cheat { background: #ff6b6b; }
-    .activity-content { flex: 1; min-width: 0; }
-    .activity-text { font-size: 14px; color: #f0f4f8; margin-bottom: 2px; }
-    .activity-time { font-size: 12px; color: #8899a6; }
-    .challenge-card { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 24px; margin-bottom: 24px; }
-    .challenge-title { font-size: 18px; font-weight: 600; color: #f0f4f8; margin-bottom: 8px; }
-    .challenge-meta { display: flex; gap: 16px; font-size: 13px; color: #8899a6; margin-bottom: 16px; }
-    .challenge-section { margin-bottom: 20px; }
-    .challenge-section-title { font-size: 13px; font-weight: 600; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px; }
-    .challenge-brief { font-size: 14px; color: #f0f4f8; line-height: 1.6; }
-    .criteria-list { font-size: 14px; color: #f0f4f8; line-height: 1.7; list-style: disc; margin-left: 20px; }
-    .pivot-spec { background: rgba(255, 107, 107, 0.1); border: 1px solid #ff6b6b; border-radius: 6px; padding: 12px 16px; margin: 12px 0; color: #f0f4f8; font-size: 14px; line-height: 1.6; }
-    .pivot-label { color: #ff6b6b; font-weight: 600; font-size: 12px; text-transform: uppercase; margin-bottom: 4px; }
+    .sidebar-bottom { padding: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+    .user-card { padding: 16px; background: rgba(59, 130, 246, 0.08); border-radius: 12px; text-align: center; }
+    .sidebar.collapsed .user-card { padding: 12px; }
+    .user-card-name { font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 4px; }
+    .sidebar.collapsed .user-card-name { display: none; }
+    .user-card-org { font-size: 12px; color: #64748B; }
+    .sidebar.collapsed .user-card-org { display: none; }
+    .toggle-sidebar {
+      width: 100%;
+      padding: 8px;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+    .toggle-sidebar:hover { color: #f0f4f8; background: rgba(255, 255, 255, 0.05); }
+
+    /* ===== MAIN CONTENT ===== */
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .topbar {
+      padding: 16px 28px;
+      background: rgba(13, 17, 23, 0.7);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+    .topbar-title { font-size: 20px; font-weight: 700; color: #f0f4f8; }
+    .topbar-actions { display: flex; gap: 12px; align-items: center; }
+    .topbar-search {
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      color: #f0f4f8;
+      width: 240px;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    .topbar-search:focus { outline: none; background: rgba(255, 255, 255, 0.08); border-color: rgba(75, 147, 255, 0.3); }
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .icon-btn:hover { background: rgba(59, 130, 246, 0.15); color: #4B93FF; }
+    .content { flex: 1; overflow-y: auto; padding: 28px; }
+    .page { display: none; }
+    .page.active { display: block; animation: slideIn 0.3s ease; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== DASHBOARD PAGE ===== */
+    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .metric-card {
+      padding: 24px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      transition: all 0.2s ease;
+    }
+    .metric-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(75, 147, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    .metric-label { font-size: 12px; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; font-weight: 600; }
+    .metric-value { font-size: 32px; font-weight: 700; color: #4B93FF; margin-bottom: 8px; }
+    .metric-change { font-size: 13px; color: #5CD6C8; }
+    .activity-feed { margin-bottom: 32px; }
+    .activity-title { font-size: 16px; font-weight: 700; color: #f0f4f8; margin-bottom: 16px; }
+    .activity-item {
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .activity-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(75, 147, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .activity-icon.success { background: rgba(92, 214, 200, 0.15); color: #5CD6C8; }
+    .activity-icon.warning { background: rgba(229, 184, 76, 0.15); color: #E5B84C; }
+    .activity-icon svg { width: 16px; height: 16px; }
+    .activity-content { flex: 1; }
+    .activity-text { font-size: 14px; color: #f0f4f8; margin-bottom: 4px; }
+    .activity-time { font-size: 12px; color: #64748B; }
+
+    /* ===== CHALLENGES PAGE ===== */
+    .challenges-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .challenge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+    .challenge-card {
+      padding: 24px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .challenge-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(75, 147, 255, 0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(75, 147, 255, 0.1);
+    }
+    .challenge-type { font-size: 12px; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .challenge-title { font-size: 18px; font-weight: 700; color: #f0f4f8; margin-bottom: 12px; }
+    .challenge-desc { font-size: 13px; color: #94a3b8; margin-bottom: 16px; line-height: 1.5; }
+    .challenge-stats { display: flex; justify-content: space-between; margin-bottom: 16px; padding: 12px 0; border-top: 1px solid rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+    .challenge-stat { text-align: center; }
+    .challenge-stat-label { font-size: 11px; color: #64748B; margin-bottom: 4px; }
+    .challenge-stat-value { font-size: 16px; font-weight: 700; color: #f0f4f8; }
+    .challenge-section { margin-bottom: 24px; }
+    .challenge-section-title { font-size: 13px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+    .challenge-section ul { list-style: none; margin-left: 0; }
+    .challenge-section li { padding: 8px 0; font-size: 14px; color: #f0f4f8; }
+    .challenge-section li:before { content: "• "; color: #4B93FF; margin-right: 8px; }
+    .pivot-spec { padding: 12px; background: rgba(229, 184, 76, 0.08); border-radius: 8px; border-left: 3px solid #E5B84C; }
+    .pivot-label { font-size: 12px; font-weight: 700; color: #E5B84C; margin-bottom: 8px; }
     .stack-tags { display: flex; gap: 8px; flex-wrap: wrap; }
-    .stack-tag { background: rgba(59, 130, 246, 0.15); color: #3b82f6; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; }
-    .challenge-stats { display: flex; gap: 32px; padding-top: 16px; border-top: 1px solid #1e2d3d; }
-    .stat { display: flex; gap: 8px; }
-    .stat-label { color: #8899a6; font-size: 12px; font-weight: 500; }
-    .stat-value { color: #f0f4f8; font-weight: 600; font-size: 14px; }
-    .action-bar { display: flex; gap: 12px; margin-top: 16px; }
-    .action-bar button { flex: 1; }
-    .candidates-table { width: 100%; border-collapse: collapse; }
-    .candidates-table th { background: #152238; padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 600; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; border-bottom: 1px solid #1e2d3d; }
-    .candidates-table td { padding: 16px; border-bottom: 1px solid #1e2d3d; font-size: 14px; color: #f0f4f8; }
-    .candidates-table tr:hover { background: rgba(59, 130, 246, 0.05); }
-    .candidate-name { display: flex; align-items: center; gap: 12px; }
-    .candidate-avatar { width: 32px; height: 32px; border-radius: 6px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 12px; }
-    .candidate-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .candidate-id { font-size: 12px; color: #8899a6; }
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); z-index: 1000; align-items: center; justify-content: center; }
-    .modal-overlay.active { display: flex; }
-    .modal { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 12px; max-width: 900px; width: 90%; max-height: 90vh; overflow-y: auto; padding: 32px; }
-    .modal.wide { max-width: 1200px; }
-    .modal-header { font-size: 20px; font-weight: 700; color: #f0f4f8; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
-    .modal-close { background: none; border: none; color: #8899a6; font-size: 24px; cursor: pointer; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
-    .modal-close:hover { color: #f0f4f8; }
+    .stack-tag {
+      padding: 6px 12px;
+      background: rgba(75, 147, 255, 0.15);
+      border-radius: 100px;
+      font-size: 12px;
+      color: #4B93FF;
+      font-weight: 600;
+    }
+    .action-bar { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+
+    /* ===== BUTTONS ===== */
+    .btn-primary {
+      padding: 12px 24px;
+      background: #4B93FF;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .btn-primary:hover {
+      background: #3a82ff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(75, 147, 255, 0.3);
+    }
+    .btn-secondary {
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #f0f4f8;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(75, 147, 255, 0.3);
+    }
+
+    /* ===== FORMS ===== */
     .form-group { margin-bottom: 20px; }
-    .form-label { display: block; font-size: 13px; font-weight: 600; color: #f0f4f8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.3px; }
-    .form-input, .form-textarea, .form-select { width: 100%; background: #0a1628; border: 1px solid #1e2d3d; border-radius: 6px; padding: 10px 12px; color: #f0f4f8; font-size: 14px; font-family: 'Inter', sans-serif; transition: all 0.2s ease; }
-    .form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: #3b82f6; background: #0d1520; }
-    .form-textarea { resize: vertical; min-height: 80px; }
-    .checkbox-group { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .form-label { display: block; font-size: 13px; font-weight: 600; color: #f0f4f8; margin-bottom: 8px; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      color: #f0f4f8;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(75, 147, 255, 0.3);
+      box-shadow: 0 0 0 3px rgba(75, 147, 255, 0.1);
+    }
+    .form-textarea { resize: vertical; min-height: 100px; }
+    .checkbox-group { display: flex; align-items: center; gap: 8px; cursor: pointer; }
     .checkbox-input { width: 18px; height: 18px; cursor: pointer; }
-    .slider-container { display: flex; align-items: center; gap: 12px; }
-    .slider { flex: 1; }
-    .slider-value { min-width: 40px; text-align: right; font-weight: 600; color: #3b82f6; }
-    .tabs { display: flex; gap: 16px; border-bottom: 1px solid #1e2d3d; margin-bottom: 24px; }
-    .tab { padding: 12px 0; border-bottom: 2px solid transparent; color: #8899a6; cursor: pointer; font-weight: 500; transition: all 0.2s ease; }
+
+    /* ===== MODALS ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: rgba(13, 17, 23, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      animation: modalIn 0.3s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .modal-header {
+      padding: 28px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-title { font-size: 20px; font-weight: 700; color: #f0f4f8; }
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover { background: rgba(255, 255, 255, 0.1); color: #f0f4f8; }
+    .modal-body { padding: 28px; }
+    .modal-footer {
+      padding: 20px 28px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    /* ===== TABS ===== */
+    .tabs { display: flex; gap: 4px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 24px; }
+    .tab {
+      padding: 12px 16px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .tab.active {
+      color: #4B93FF;
+      border-bottom-color: #4B93FF;
+    }
     .tab:hover { color: #f0f4f8; }
-    .tab.active { color: #3b82f6; border-bottom-color: #3b82f6; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-    .rubric-dimension { margin-bottom: 24px; }
-    .dimension-label { font-size: 13px; font-weight: 600; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 12px; }
-    .dimension-scale { display: flex; gap: 12px; font-size: 12px; color: #8899a6; margin-top: 8px; }
-    .progress-bar { width: 100%; height: 6px; background: #0a1628; border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
-    .progress-fill { height: 100%; background: #3b82f6; border-radius: 3px; transition: width 0.3s ease; }
-    .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: #8899a6; margin-bottom: 8px; }
-    .toast { position: fixed; top: 16px; right: 16px; background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 16px 20px; font-size: 14px; z-index: 2000; animation: slideIn 0.3s ease; }
-    .toast.success { border-color: #4ecdc4; color: #4ecdc4; }
-    .toast.error { border-color: #ff6b6b; color: #ff6b6b; }
-    .toast.info { border-color: #3b82f6; color: #3b82f6; }
-    .toast.warning { border-color: #d4a843; color: #d4a843; }
-    @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-    @keyframes shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }
-    .skeleton { background: linear-gradient(90deg, #152238 25%, #1e2d3d 50%, #152238 75%); background-size: 1000px 100%; animation: shimmer 2s infinite; border-radius: 6px; }
-    .skeleton-text { height: 16px; margin-bottom: 8px; }
-    .skeleton-line { height: 12px; margin-bottom: 6px; }
-    .commitment-flow { display: flex; align-items: center; gap: 8px; }
-    .commitment-step { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
-    .commitment-step.complete { background: #4ecdc4; color: #0a1628; }
-    .commitment-step.pending { background: #1e2d3d; color: #8899a6; }
-    .pivot-timeline { display: flex; align-items: center; gap: 16px; margin: 20px 0; }
-    .pivot-line { flex: 1; height: 2px; background: #1e2d3d; }
-    .pivot-marker { width: 12px; height: 12px; border-radius: 50%; background: #ff6b6b; }
-    .commit-feed { max-height: 400px; overflow-y: auto; border: 1px solid #1e2d3d; border-radius: 8px; padding: 0; }
-    .commit-item { padding: 16px; border-bottom: 1px solid #1e2d3d; display: flex; gap: 12px; }
-    .commit-item:last-child { border-bottom: none; }
-    .commit-item.pivot-marker { background: rgba(255, 107, 107, 0.1); }
-    .commit-marker { width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; flex-shrink: 0; margin-top: 6px; }
-    .commit-item.pivot-marker .commit-marker { background: #ff6b6b; }
+
+    /* ===== BADGES ===== */
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-primary { background: rgba(75, 147, 255, 0.15); color: #4B93FF; }
+    .badge-success { background: rgba(92, 214, 200, 0.15); color: #5CD6C8; }
+    .badge-warning { background: rgba(229, 184, 76, 0.15); color: #E5B84C; }
+    .verified-badge {
+      padding: 8px 16px;
+      background: rgba(92, 214, 200, 0.15);
+      color: #5CD6C8;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ===== CHAT PANEL ===== */
+    .ai-chat-panel {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      max-height: 400px;
+      margin-top: 20px;
+    }
+    .chat-header {
+      padding: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 13px;
+      font-weight: 700;
+      color: #f0f4f8;
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .chat-message {
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .chat-message.user {
+      background: rgba(75, 147, 255, 0.15);
+      color: #f0f4f8;
+      text-align: right;
+      margin-left: 40px;
+    }
+    .chat-message.ai {
+      background: rgba(255, 255, 255, 0.05);
+      color: #94a3b8;
+      margin-right: 40px;
+    }
+    .chat-message.thinking {
+      color: #64748B;
+      font-style: italic;
+      text-align: center;
+    }
+    .chat-input-group {
+      padding: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      gap: 8px;
+    }
+    .chat-input {
+      flex: 1;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      color: #f0f4f8;
+      font-size: 13px;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .chat-input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(75, 147, 255, 0.3);
+    }
+    .chat-btn {
+      padding: 10px 16px;
+      background: #4B93FF;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .chat-btn:hover { background: #3a82ff; }
+
+    /* ===== LIVE SESSION ===== */
+    .candidate-header {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .candidate-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      background: rgba(75, 147, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #4B93FF;
+      flex-shrink: 0;
+    }
+    .anti-cheat-panel {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+    .anti-cheat-title { font-size: 13px; font-weight: 700; color: #f0f4f8; margin-bottom: 16px; }
+    .anti-cheat-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .anti-cheat-item {
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .anti-cheat-item.verified { border-color: rgba(92, 214, 200, 0.2); }
+    .anti-cheat-item.pending { border-color: rgba(229, 184, 76, 0.2); }
+    .anti-cheat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #64748B;
+    }
+    .anti-cheat-item.verified .anti-cheat-dot { background: #5CD6C8; }
+    .anti-cheat-item.pending .anti-cheat-dot { background: #E5B84C; }
+    .anti-cheat-text { font-size: 13px; color: #f0f4f8; }
+    .pivot-timeline {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+    }
+    .pivot-line { flex: 1; height: 2px; background: rgba(255, 255, 255, 0.1); }
+    .pivot-marker { width: 12px; height: 12px; border-radius: 50%; background: #4B93FF; }
+
+    /* ===== SESSION STATS ===== */
+    .session-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-box {
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+    }
+    .stat-box-label { font-size: 11px; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600; }
+    .stat-box-value { font-size: 24px; font-weight: 700; color: #4B93FF; }
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4B93FF, #5CD6C8);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    /* ===== COMMIT FEED ===== */
+    .commit-feed { display: flex; flex-direction: column; gap: 12px; }
+    .commit-item {
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      display: flex;
+      gap: 12px;
+    }
+    .commit-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(75, 147, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #4B93FF;
+      font-size: 14px;
+    }
+    .commit-item.pivot .commit-icon { background: rgba(229, 184, 76, 0.15); color: #E5B84C; }
     .commit-content { flex: 1; }
-    .pivot-label { color: #ff6b6b; font-weight: 700; font-size: 12px; text-transform: uppercase; margin-bottom: 4px; }
-    .commit-time { font-size: 12px; color: #8899a6; }
-    .commit-msg { font-size: 14px; color: #f0f4f8; margin: 4px 0; font-weight: 500; }
-    .commit-stats { font-size: 12px; color: #8899a6; margin-top: 4px; }
-    .session-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-    .stat-box { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 16px; }
-    .stat-box-label { font-size: 12px; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px; }
-    .stat-box-value { font-size: 24px; font-weight: 700; color: #f0f4f8; }
-    .anti-cheat-panel { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 16px; margin-bottom: 24px; }
-    .anti-cheat-title { font-size: 13px; font-weight: 600; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 12px; }
-    .anti-cheat-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    .anti-cheat-item { padding: 12px; background: #0a1628; border: 1px solid #1e2d3d; border-radius: 6px; display: flex; align-items: center; gap: 8px; }
-    .anti-cheat-item.verified { border-color: #4ecdc4; background: rgba(78, 205, 196, 0.1); }
-    .anti-cheat-item.pending { border-color: #d4a843; background: rgba(212, 168, 67, 0.1); }
-    .anti-cheat-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .anti-cheat-item.verified .anti-cheat-dot { background: #4ecdc4; }
-    .anti-cheat-item.pending .anti-cheat-dot { background: #d4a843; }
-    .anti-cheat-text { font-size: 12px; }
-    .fitfolio-header { text-align: center; margin-bottom: 24px; }
-    .fitfolio-avatar { width: 64px; height: 64px; border-radius: 8px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 24px; margin: 0 auto 16px; }
-    .fitfolio-name { font-size: 18px; font-weight: 700; color: #f0f4f8; margin-bottom: 8px; }
-    .fitfolio-headline { font-size: 14px; color: #8899a6; }
-    .skill-radar { background: #0a1628; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
-    .skill-bar { margin-bottom: 16px; }
-    .skill-label { font-size: 12px; font-weight: 600; color: #8899a6; margin-bottom: 6px; display: flex; justify-content: space-between; }
-    .skill-value { color: #3b82f6; font-weight: 700; }
-    .skill-bar-fill { width: 100%; height: 8px; background: #152238; border-radius: 4px; overflow: hidden; }
-    .skill-bar-progress { height: 100%; background: linear-gradient(90deg, #3b82f6, #8b5cf6); border-radius: 4px; }
-    .filter-bar { display: flex; gap: 16px; margin-bottom: 24px; align-items: center; }
-    .filter-item { display: flex; align-items: center; gap: 8px; }
-    .filter-label { font-size: 13px; font-weight: 600; color: #8899a6; text-transform: uppercase; }
-    .batch-actions { display: flex; gap: 12px; margin-bottom: 16px; padding: 12px 16px; background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; }
+    .commit-message { font-size: 14px; color: #f0f4f8; margin-bottom: 4px; }
+    .commit-meta { font-size: 12px; color: #64748B; }
+
+    /* ===== CANDIDATES TABLE ===== */
+    .filter-bar {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+    .filter-item { display: flex; flex-direction: column; gap: 6px; }
+    .filter-label { font-size: 12px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+    .batch-actions {
+      padding: 16px;
+      background: rgba(75, 147, 255, 0.1);
+      border: 1px solid rgba(75, 147, 255, 0.2);
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 12px;
+    }
     .batch-actions.hidden { display: none; }
-    .widener-tag { background: rgba(78, 205, 196, 0.15); color: #4ecdc4; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; display: inline-block; margin-right: 4px; margin-bottom: 4px; }
-    .proof-stack { font-size: 13px; font-weight: 700; color: #3b82f6; }
-    .action-buttons { display: flex; gap: 8px; }
-    .btn-small { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid #1e2d3d; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
-    .btn-small:hover { background: rgba(59, 130, 246, 0.2); }
-    .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-    .compare-card { background: #0a1628; border: 1px solid #1e2d3d; border-radius: 8px; padding: 20px; }
-    .compare-card-header { border-bottom: 1px solid #1e2d3d; padding-bottom: 12px; margin-bottom: 12px; }
-    .compare-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 12px; }
-    .compare-label { color: #8899a6; }
-    .compare-value { color: #f0f4f8; font-weight: 600; }
-    .kpi-panel { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
-    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .kpi-item { text-align: center; }
-    .kpi-value { font-size: 24px; font-weight: 700; color: #3b82f6; margin-bottom: 4px; }
-    .kpi-label { font-size: 12px; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; }
-    .button-group { display: flex; gap: 12px; }
-    .button-group button { flex: 1; }
-    @media (max-width: 1200px) { .sidebar.collapsed { width: 64px; } .metrics-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 768px) { .sidebar { display: none; } .topbar { padding: 0 16px; } .content { padding: 16px; } .metrics-grid { grid-template-columns: 1fr; } .two-column { grid-template-columns: 1fr; } }
+    .candidates-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .candidates-table thead {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .candidates-table th {
+      padding: 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .candidates-table td {
+      padding: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+      font-size: 14px;
+      color: #f0f4f8;
+    }
+    .candidates-table tbody tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* ===== SCORING ===== */
+    .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    @media (max-width: 1400px) { .two-column { grid-template-columns: 1fr; } }
+    .rubric-dimension { margin-bottom: 32px; }
+    .dimension-label { display: block; font-size: 13px; font-weight: 600; color: #f0f4f8; margin-bottom: 12px; }
+    .slider { width: 100%; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.05); outline: none; accent-color: #4B93FF; }
+    .dimension-scale {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #64748B;
+      margin-top: 8px;
+    }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 16px 20px;
+      background: #0a1628;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #f0f4f8;
+      font-size: 14px;
+      z-index: 2000;
+      animation: slideUp 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .toast.success { border-color: rgba(92, 214, 200, 0.3); }
+    .toast.error { border-color: rgba(255, 100, 100, 0.3); }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); }
   </style>
 </head>
 <body>
   <div id="app">
-    <div class="sidebar">
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
       <div class="sidebar-top">
-        <div class="logo">◆ MendelHire</div>
-      </div>
-      <div class="nav">
-        <div class="nav-item active" data-page="dashboard"><span class="nav-icon">📊</span><span class="nav-text">Dashboard</span></div>
-        <div class="nav-item" data-page="challenges"><span class="nav-icon">⚙️</span><span class="nav-text">Challenges</span></div>
-        <div class="nav-item" data-page="live-session"><span class="nav-icon">▶️</span><span class="nav-text">Live Session</span></div>
-        <div class="nav-item" data-page="candidates"><span class="nav-icon">👥</span><span class="nav-text">Candidates</span></div>
-        <div class="nav-item" data-page="scoring"><span class="nav-icon">🎯</span><span class="nav-text">Scoring</span></div>
-        <div class="nav-item" data-page="settings"><span class="nav-icon">⚙️</span><span class="nav-text">Settings</span></div>
-      </div>
-      <div class="sidebar-bottom">
-        <div class="user-avatar">CA</div>
-        <div class="user-info">
-          <div class="user-name">Charbel A.</div>
-          <div class="user-org">Talent Gurus</div>
+        <div class="logo">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z" fill="#4B93FF"/>
+          </svg>
+          <span style="display: flex; align-items: center;">MendelHire</span>
         </div>
+      </div>
+      <nav class="nav">
+        <div class="nav-item active" onclick="showPage('dashboard')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+              <path d="M3 3h7v7H3V3zm11 0h7v7h-7V3zM3 14h7v7H3v-7zm11 0h7v7h-7v-7z"/>
+            </svg>
+          </div>
+          <span class="nav-text">Dashboard</span>
+        </div>
+        <div class="nav-item" onclick="showPage('challenges')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+              <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>
+            </svg>
+          </div>
+          <span class="nav-text">Challenges</span>
+        </div>
+        <div class="nav-item" onclick="showPage('live-session')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+          <span class="nav-text">Live Session</span>
+        </div>
+        <div class="nav-item" onclick="showPage('candidates')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <span class="nav-text">Candidates</span>
+        </div>
+        <div class="nav-item" onclick="showPage('scoring')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="currentColor">
+              <polygon points="12 2 15.09 10.26 24 10.26 17.55 16.52 19.64 24 12 18.74 4.36 24 6.45 16.52 0 10.26 8.91 10.26"/>
+            </svg>
+          </div>
+          <span class="nav-text">Scoring</span>
+        </div>
+        <div class="nav-item" onclick="showPage('settings')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+              <circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m6.08 0l4.24-4.24M1 12h6m6 0h6m-5.78 7.78l-4.24-4.24m-6.08 0L3.46 19.78"/>
+            </svg>
+          </div>
+          <span class="nav-text">Settings</span>
+        </div>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="user-card">
+          <div class="user-card-name">Sarah Chen</div>
+          <div class="user-card-org">MendelHire</div>
+        </div>
+        <button class="toggle-sidebar" onclick="toggleSidebar()">Collapse</button>
       </div>
     </div>
 
-    <div class="main-container">
+    <!-- MAIN CONTENT -->
+    <div class="main">
       <div class="topbar">
-        <div class="topbar-left">
-          <div class="page-title" id="pageTitle">Dashboard</div>
-          <input type="text" class="search-box" id="searchBox" placeholder="Search candidates, challenges...">
-        </div>
-        <div class="topbar-right">
-          <div class="icon-btn notification" id="notificationBtn">
-            🔔
-            <div class="notification-dot"></div>
-          </div>
-          <div class="notification-dropdown" id="notificationDropdown">
-            <div class="notification-item">✓ Sarah Chen completed proof<span class="notification-time">2 min ago</span></div>
-            <div class="notification-item">📋 FitFolio generated for MH-2844<span class="notification-time">15 min ago</span></div>
-            <div class="notification-item">🎯 New score submitted: 4.2<span class="notification-time">28 min ago</span></div>
-            <div class="notification-item">📧 Invite sent to 3 candidates<span class="notification-time">1 hour ago</span></div>
-            <div class="notification-item">💰 Stipend paid to MH-2841<span class="notification-time">3 hours ago</span></div>
-          </div>
-          <button class="btn-primary">+ Create Challenge</button>
+        <h1 class="topbar-title" id="topbarTitle">Dashboard</h1>
+        <div class="topbar-actions">
+          <input type="text" class="topbar-search" placeholder="Search challenges, candidates...">
+          <button class="icon-btn" title="Notifications">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          </button>
+          <button class="icon-btn" title="Help">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+              <circle cx="12" cy="12" r="10"/><path d="M12 16v.01M12 12a1 1 0 0 1 .5-.866"/>
+            </svg>
+          </button>
         </div>
       </div>
 
       <div class="content">
         <!-- DASHBOARD PAGE -->
         <div id="dashboard" class="page active">
-          <div style="margin-bottom: 24px;">
-            <div style="font-size: 14px; color: #8899a6; margin-bottom: 8px;">Good morning, Charbel A.</div>
-            <div style="font-size: 14px; color: #8899a6;" id="dateDisplay"></div>
-          </div>
-
           <div class="metrics-grid">
             <div class="metric-card">
-              <div class="metric-label">Active Challenges</div>
-              <div class="metric-value">2</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Candidates in Pipeline</div>
+              <div class="metric-label">Total Challenges</div>
               <div class="metric-value">8</div>
+              <div class="metric-change">+1 this week</div>
             </div>
             <div class="metric-card">
-              <div class="metric-label">Proofs Completed</div>
-              <div class="metric-value">5</div>
+              <div class="metric-label">Active Candidates</div>
+              <div class="metric-value">24</div>
+              <div class="metric-change">+4 this week</div>
             </div>
             <div class="metric-card">
               <div class="metric-label">Avg Score</div>
-              <div class="metric-value">4.0</div>
+              <div class="metric-value">3.8</div>
+              <div class="metric-change">+0.2 vs last month</div>
             </div>
             <div class="metric-card">
               <div class="metric-label">Completion Rate</div>
-              <div class="metric-value">62%</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Median Review Time</div>
-              <div class="metric-value">3.2h</div>
+              <div class="metric-value">87%</div>
+              <div class="metric-change">+5% vs last month</div>
             </div>
           </div>
 
-          <div class="kpi-panel">
-            <div style="font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 16px;">Weekly KPIs</div>
-            <div class="kpi-grid">
-              <div class="kpi-item">
-                <div class="kpi-value">847</div>
-                <div class="kpi-label">Visits</div>
+          <div class="activity-feed">
+            <div class="activity-title">Recent Activity</div>
+            <div class="activity-item">
+              <div class="activity-icon success">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
               </div>
-              <div class="kpi-item">
-                <div class="kpi-value">12.3%</div>
-                <div class="kpi-label">CTR</div>
-              </div>
-              <div class="kpi-item">
-                <div class="kpi-value">8.1%</div>
-                <div class="kpi-label">Conversion Rate</div>
-              </div>
-              <div class="kpi-item">
-                <div class="kpi-value">87%</div>
-                <div class="kpi-label">Proof Completion</div>
+              <div class="activity-content">
+                <div class="activity-text">Challenge "Frontend React" completed by Marcus Johnson</div>
+                <div class="activity-time">2 hours ago</div>
               </div>
             </div>
-          </div>
-
-          <div class="section">
-            <div class="section-title">Active Challenges</div>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
-              <div class="card">
-                <div style="font-size: 16px; font-weight: 600; color: #f0f4f8; margin-bottom: 12px;">Frontend React — Search + Accessibility Pivot</div>
-                <div style="font-size: 12px; color: #8899a6; margin-bottom: 16px;">React, TypeScript, CSS</div>
-                <div style="margin-bottom: 12px;">
-                  <div style="font-size: 12px; color: #8899a6; margin-bottom: 6px;">Pipeline Status</div>
-                  <div class="progress-bar">
-                    <div class="progress-fill" style="width: 60%;"></div>
-                  </div>
-                  <div style="font-size: 12px; color: #f0f4f8;">3 Scored • 2 In Progress • 1 Invited</div>
-                </div>
+            <div class="activity-item">
+              <div class="activity-icon">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+                  <path d="M12 5v14m7-7H5"/>
+                </svg>
               </div>
-              <div class="card">
-                <div style="font-size: 16px; font-weight: 600; color: #f0f4f8; margin-bottom: 12px;">Data Analysis — Retention Cohorts + Pivot</div>
-                <div style="font-size: 12px; color: #8899a6; margin-bottom: 16px;">Python, SQL, Pandas</div>
-                <div style="margin-bottom: 12px;">
-                  <div style="font-size: 12px; color: #8899a6; margin-bottom: 6px;">Pipeline Status</div>
-                  <div class="progress-bar">
-                    <div class="progress-fill" style="width: 40%;"></div>
-                  </div>
-                  <div style="font-size: 12px; color: #f0f4f8;">2 Scored • 1 In Progress • 0 Invited</div>
-                </div>
+              <div class="activity-content">
+                <div class="activity-text">New challenge generated: "AI Model Training"</div>
+                <div class="activity-time">5 hours ago</div>
               </div>
             </div>
-          </div>
-
-          <div class="section">
-            <div class="section-title">Recent Activity</div>
-            <div class="card" style="padding: 0;">
-              <div class="activity-item">
-                <div class="activity-dot completed"></div>
-                <div class="activity-content">
-                  <div class="activity-text">✓ Sarah Chen completed proof for Frontend React</div>
-                  <div class="activity-time">2 minutes ago</div>
-                </div>
+            <div class="activity-item">
+              <div class="activity-icon warning">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+                  <polygon points="12 2 15.09 10.26 24 10.26 17.55 16.52 19.64 24 12 18.74 4.36 24 6.45 16.52 0 10.26 8.91 10.26"/>
+                </svg>
               </div>
-              <div class="activity-item">
-                <div class="activity-dot generated"></div>
-                <div class="activity-content">
-                  <div class="activity-text">📋 FitFolio generated for Alex Rivera (MH-2844)</div>
-                  <div class="activity-time">15 minutes ago</div>
-                </div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot new"></div>
-                <div class="activity-content">
-                  <div class="activity-text">✓ Score submitted: Priya Patel (4.2) — Frontend React</div>
-                  <div class="activity-time">28 minutes ago</div>
-                </div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot generated"></div>
-                <div class="activity-content">
-                  <div class="activity-text">📋 Challenge published: "Backend API — Rate Limiter Pivot"</div>
-                  <div class="activity-time">1 hour ago</div>
-                </div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot new"></div>
-                <div class="activity-content">
-                  <div class="activity-text">📧 Invite sent to 3 candidates</div>
-                  <div class="activity-time">2 hours ago</div>
-                </div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot completed"></div>
-                <div class="activity-content">
-                  <div class="activity-text">💰 Stipend paid: $150 to MH-2841</div>
-                  <div class="activity-time">3 hours ago</div>
-                </div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot cheat"></div>
-                <div class="activity-content">
-                  <div class="activity-text">⚠️ Cheat flag raised: Unusual commit pattern detected for MH-2847</div>
-                  <div class="activity-time">5 hours ago</div>
-                </div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot completed"></div>
-                <div class="activity-content">
-                  <div class="activity-text">✓ Jordan Lee started live proof session</div>
-                  <div class="activity-time">6 hours ago</div>
-                </div>
+              <div class="activity-content">
+                <div class="activity-text">Elena Rodriguez scored on "Data Analysis" challenge</div>
+                <div class="activity-time">8 hours ago</div>
               </div>
             </div>
-          </div>
-
-          <div class="section">
-            <div class="section-title">Quick Actions</div>
-            <div style="display: flex; gap: 12px;">
-              <button class="btn-primary">Review Pending Proofs</button>
-              <button class="btn-secondary">Invite Candidates</button>
-              <button class="btn-secondary">View Reports</button>
+            <div class="activity-item">
+              <div class="activity-icon">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <div class="activity-text">3 new candidates invited to "Full Stack" challenge</div>
+                <div class="activity-time">1 day ago</div>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- CHALLENGES PAGE -->
         <div id="challenges" class="page">
-          <div style="margin-bottom: 24px;">
-            <button class="btn-primary" id="createChallengeBtn">+ Create New Challenge</button>
+          <div class="challenges-header">
+            <h2 style="font-size: 20px; font-weight: 700;">All Challenges</h2>
+            <button class="btn-primary" onclick="openCreateChallengeModal()">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" style="width: 16px; height: 16px;">
+                <path d="M12 5v14m7-7H5"/>
+              </svg>
+              Create Challenge
+            </button>
           </div>
 
-          <div class="challenge-card">
-            <div class="badge badge-primary" style="margin-bottom: 12px;">Published Rubric</div>
-            <div class="challenge-title">Frontend React — Search + Accessibility Pivot</div>
-            <div class="challenge-meta">
-              <span>React, TypeScript, CSS</span>
-              <span>120 min • $100 stipend</span>
-            </div>
-            <div class="challenge-section">
-              <div class="challenge-section-title">Brief</div>
-              <div class="challenge-brief">Build a product list component with client-side search and category filter. The component should handle a dataset of 50+ items with real-time filtering. At minute 60, the pivot is triggered: add full keyboard navigation and ARIA labels for all interactive controls.</div>
-            </div>
-            <div class="challenge-section">
-              <div class="challenge-section-title">Acceptance Criteria</div>
-              <ul class="criteria-list">
-                <li>Real-time search filters products by name and description</li>
-                <li>Category filter composes cleanly with search (both active simultaneously)</li>
-                <li>Keyboard navigation: Tab, Shift+Tab, Enter, Arrow keys work across all controls</li>
-                <li>ARIA labels on search input, category dropdown, and result list</li>
-                <li>Basic unit tests for filter logic and debounce function</li>
-                <li>README documents accessibility decisions and tradeoffs</li>
-              </ul>
-            </div>
-            <div class="challenge-section">
-              <div class="challenge-section-title">Pivot Specification</div>
-              <div class="pivot-spec">
-                <div class="pivot-label">⏱️ At 60 Minutes</div>
-                "Add keyboard navigation and ARIA labels for all controls. Focus on accessibility best practices. Justify your implementation choices in the README."
-              </div>
-            </div>
-            <div class="challenge-section">
-              <div class="challenge-section-title">Stack</div>
-              <div class="stack-tags">
-                <div class="stack-tag">React</div>
-                <div class="stack-tag">TypeScript</div>
-                <div class="stack-tag">CSS</div>
-              </div>
-            </div>
-            <div class="challenge-stats">
-              <div class="stat"><div class="stat-label">Candidates</div><div class="stat-value">6</div></div>
-              <div class="stat"><div class="stat-label">Scored</div><div class="stat-value">3</div></div>
-              <div class="stat"><div class="stat-label">In Progress</div><div class="stat-value">2</div></div>
-              <div class="stat"><div class="stat-label">Avg Score</div><div class="stat-value">4.0</div></div>
-            </div>
-            <div class="action-bar">
-              <button class="btn-secondary" onclick="openRubricModal('frontend')">View Full Rubric</button>
-              <button class="btn-secondary" onclick="openInviteModal('frontend')">Invite Candidates</button>
-              <button class="btn-secondary">View Pipeline</button>
-            </div>
-          </div>
-
-          <div class="challenge-card">
-            <div class="badge badge-primary" style="margin-bottom: 12px;">Published Rubric</div>
-            <div class="challenge-title">Data Analysis — Retention Cohorts + Pivot Redefinition</div>
-            <div class="challenge-meta">
-              <span>Python, SQL, Pandas</span>
-              <span>180 min • $150 stipend</span>
-            </div>
-            <div class="challenge-section">
-              <div class="challenge-section-title">Brief</div>
-              <div class="challenge-brief">Analyze a CSV of user events to produce a monthly cohort retention chart and 5 key insights. At minute 60, the pivot is triggered: redefine cohorts by first paid event instead of signup date, update all analysis.</div>
-            </div>
-            <div class="challenge-section">
-              <div class="challenge-section-title">Acceptance Criteria</div>
-              <ul class="criteria-list">
-                <li>Monthly cohort retention table and visualization</li>
-                <li>5 concise, actionable insights from the data</li>
-                <li>Reproducible analysis steps in notebook</li>
-                <li>Pivot: cohorts redefined by first paid event with delta notes</li>
-                <li>Clear documentation of methodology and assumptions</li>
-                <li>At least 1 caveat about data quality or limitations</li>
-              </ul>
-            </div>
-            <div class="challenge-section">
-              <div class="challenge-section-title">Pivot Specification</div>
-              <div class="pivot-spec">
-                <div class="pivot-label">⏱️ At 60 Minutes</div>
-                "Redefine cohorts by first paid event instead of first seen. Update the retention chart. Note what changed and what stayed the same."
-              </div>
-            </div>
-            <div class="challenge-section">
-              <div class="challenge-section-title">Stack</div>
-              <div class="stack-tags">
-                <div class="stack-tag">Python</div>
-                <div class="stack-tag">SQL</div>
-                <div class="stack-tag">Pandas</div>
-              </div>
-            </div>
-            <div class="challenge-stats">
-              <div class="stat"><div class="stat-label">Candidates</div><div class="stat-value">3</div></div>
-              <div class="stat"><div class="stat-label">Scored</div><div class="stat-value">2</div></div>
-              <div class="stat"><div class="stat-label">In Progress</div><div class="stat-value">1</div></div>
-              <div class="stat"><div class="stat-label">Avg Score</div><div class="stat-value">3.9</div></div>
-            </div>
-            <div class="action-bar">
-              <button class="btn-secondary" onclick="openRubricModal('data')">View Full Rubric</button>
-              <button class="btn-secondary" onclick="openInviteModal('data')">Invite Candidates</button>
-              <button class="btn-secondary">View Pipeline</button>
-            </div>
+          <div class="challenge-grid" id="challengeGrid">
+            <!-- Populated by JS -->
           </div>
         </div>
 
@@ -534,7 +875,7 @@
             <div class="candidate-avatar">JL</div>
             <div>
               <div style="font-size: 16px; font-weight: 600; color: #f0f4f8;">Jordan Lee (MH-2845)</div>
-              <div style="font-size: 13px; color: #8899a6;">Frontend React • Live Session</div>
+              <div style="font-size: 13px; color: #94a3b8;">Frontend React • Live Session</div>
             </div>
             <div style="margin-left: auto; display: flex; gap: 8px;">
               <span class="badge badge-success">Live ●</span>
@@ -547,8 +888,8 @@
             <div class="anti-cheat-items">
               <div class="anti-cheat-item verified">
                 <div class="anti-cheat-dot"></div>
-                <div class="anti-cheat-text">Identity ✓</div>
-              </div>
+                <div class="anti-cheat-text">Identity
+</div>
               <div class="anti-cheat-item verified">
                 <div class="anti-cheat-dot"></div>
                 <div class="anti-cheat-text">Loom Recording ● Live</div>
@@ -573,15 +914,15 @@
           </div>
 
           <div style="margin-bottom: 24px;">
-            <div style="font-size: 13px; font-weight: 600; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 12px;">Timeline & Pivot</div>
+            <div style="font-size: 13px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 12px;">Timeline & Pivot</div>
             <div class="pivot-timeline">
-              <div style="color: #8899a6; font-size: 12px;">0m</div>
+              <div style="color: #94a3b8; font-size: 12px;">0m</div>
               <div class="pivot-line"></div>
               <div class="pivot-marker"></div>
               <div class="pivot-line"></div>
-              <div style="color: #d4a843; font-size: 12px; font-weight: 600;">60m PIVOT</div>
+              <div style="color: #E5B84C; font-size: 12px; font-weight: 600;">60m PIVOT</div>
               <div class="pivot-line"></div>
-              <div style="color: #8899a6; font-size: 12px;">120m</div>
+              <div style="color: #94a3b8; font-size: 12px;">120m</div>
             </div>
           </div>
 
@@ -600,7 +941,7 @@
                 <div class="progress-bar" style="margin-bottom: 6px;">
                   <div class="progress-fill" id="liveTestCoverage" style="width: 0%;"></div>
                 </div>
-                <div style="font-size: 12px; color: #8899a6;" id="liveTestCoverageText">0%</div>
+                <div style="font-size: 12px; color: #94a3b8;" id="liveTestCoverageText">0%</div>
               </div>
             </div>
             <div class="stat-box">
@@ -618,12 +959,17 @@
           </div>
 
           <div style="margin-bottom: 24px;">
-            <div style="font-size: 13px; font-weight: 600; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 12px;">Commit Feed</div>
+            <div style="font-size: 13px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 12px;">Commit Feed</div>
             <div id="commitFeed" class="commit-feed"></div>
           </div>
 
           <div style="display: flex; gap: 12px;">
-            <button class="btn-primary" id="startSimBtn" onclick="startSimulation()">Start Simulation</button>
+            <button class="btn-primary" id="startSimBtn" onclick="startSimulation()">
+              <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" style="width: 16px; height: 16px;">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              Start Simulation
+            </button>
             <button class="btn-secondary" id="pauseSimBtn" onclick="pauseSimulation()" style="display: none;">Pause</button>
             <button class="btn-secondary" onclick="resetSimulation()">Reset</button>
           </div>
@@ -704,7 +1050,7 @@
             <div class="candidate-avatar" id="scoringAvatar"></div>
             <div>
               <div style="font-size: 16px; font-weight: 600; color: #f0f4f8;" id="scoringCandidateName"></div>
-              <div style="font-size: 13px; color: #8899a6;" id="scoringChallengeInfo"></div>
+              <div style="font-size: 13px; color: #94a3b8;" id="scoringChallengeInfo"></div>
             </div>
           </div>
 
@@ -717,7 +1063,7 @@
                   <input type="range" class="slider" id="scoreCorrectness" min="1" max="5" value="3" oninput="updateScorings()">
                   <div class="dimension-scale">
                     <span>1 • Incomplete</span>
-                    <span id="correctnessValue" style="color: #3b82f6; font-weight: 600;">3</span>
+                    <span id="correctnessValue" style="color: #4B93FF; font-weight: 600;">3</span>
                     <span>5 • Exceptional</span>
                   </div>
                 </div>
@@ -726,7 +1072,7 @@
                   <input type="range" class="slider" id="scoreAccessibility" min="1" max="5" value="3" oninput="updateScorings()">
                   <div class="dimension-scale">
                     <span>1 • Poor</span>
-                    <span id="accessibilityValue" style="color: #3b82f6; font-weight: 600;">3</span>
+                    <span id="accessibilityValue" style="color: #4B93FF; font-weight: 600;">3</span>
                     <span>5 • Exemplary</span>
                   </div>
                 </div>
@@ -735,7 +1081,7 @@
                   <input type="range" class="slider" id="scoreClarity" min="1" max="5" value="3" oninput="updateScorings()">
                   <div class="dimension-scale">
                     <span>1 • Unclear</span>
-                    <span id="clarityValue" style="color: #3b82f6; font-weight: 600;">3</span>
+                    <span id="clarityValue" style="color: #4B93FF; font-weight: 600;">3</span>
                     <span>5 • Crystal Clear</span>
                   </div>
                 </div>
@@ -748,7 +1094,7 @@
                   <input type="range" class="slider" id="scoreOwnership" min="1" max="5" value="3" oninput="updateScorings()">
                   <div class="dimension-scale">
                     <span>1 • Minimal</span>
-                    <span id="ownershipValue" style="color: #3b82f6; font-weight: 600;">3</span>
+                    <span id="ownershipValue" style="color: #4B93FF; font-weight: 600;">3</span>
                     <span>5 • Full Ownership</span>
                   </div>
                 </div>
@@ -757,7 +1103,7 @@
                   <input type="range" class="slider" id="solvingScore" min="1" max="5" value="3" oninput="updateScorings()">
                   <div class="dimension-scale">
                     <span>1 • Stuck</span>
-                    <span id="solvingValue" style="color: #3b82f6; font-weight: 600;">3</span>
+                    <span id="solvingValue" style="color: #4B93FF; font-weight: 600;">3</span>
                     <span>5 • Creative</span>
                   </div>
                 </div>
@@ -766,7 +1112,7 @@
                   <input type="range" class="slider" id="scoreComm" min="1" max="5" value="3" oninput="updateScorings()">
                   <div class="dimension-scale">
                     <span>1 • Unclear</span>
-                    <span id="commValue" style="color: #3b82f6; font-weight: 600;">3</span>
+                    <span id="commValue" style="color: #4B93FF; font-weight: 600;">3</span>
                     <span>5 • Articulate</span>
                   </div>
                 </div>
@@ -792,46 +1138,66 @@
 
             <div>
               <div style="font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 16px;">AI Pre-Score Comparison</div>
-              <div style="background: #0a1628; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
-                <div style="font-size: 12px; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 16px;">Stack Dimensions vs AI</div>
+              <div style="background: rgba(255, 255, 255, 0.02); border-radius: 12px; padding: 20px; margin-bottom: 24px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                <div style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 16px;">Stack Dimensions vs AI</div>
                 <div style="margin-bottom: 16px;">
-                  <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; color: #8899a6;">
+                  <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; color: #94a3b8;">
                     <span>Correctness</span>
                     <span><span id="aiCorrectness">3.2</span> (AI)</span>
                   </div>
                   <div class="progress-bar">
-                    <div class="progress-fill" id="aiCorrectnessBar" style="width: 64%;"></div>
+                    <div class="progress-fill" style="width: 64%; background: rgba(75, 147, 255, 0.5);"></div>
                   </div>
                 </div>
                 <div style="margin-bottom: 16px;">
-                  <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; color: #8899a6;">
+                  <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; color: #94a3b8;">
                     <span>Accessibility</span>
-                    <span><span id="aiAccessibility">2.8</span> (AI)</span>
+                    <span><span id="aiAccessibility">2.9</span> (AI)</span>
                   </div>
                   <div class="progress-bar">
-                    <div class="progress-fill" id="aiAccessibilityBar" style="width: 56%;"></div>
+                    <div class="progress-fill" style="width: 58%; background: rgba(75, 147, 255, 0.5);"></div>
                   </div>
                 </div>
                 <div style="margin-bottom: 16px;">
-                  <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; color: #8899a6;">
+                  <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; color: #94a3b8;">
                     <span>Clarity</span>
-                    <span><span id="aiClarity">3.5</span> (AI)</span>
+                    <span><span id="aiClarity">3.6</span> (AI)</span>
                   </div>
                   <div class="progress-bar">
-                    <div class="progress-fill" id="aiClarityBar" style="width: 70%;"></div>
+                    <div class="progress-fill" style="width: 72%; background: rgba(75, 147, 255, 0.5);"></div>
                   </div>
                 </div>
               </div>
 
-              <div style="background: #0a1628; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
-                <div style="font-size: 12px; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 12px;">Overall Score</div>
-                <div style="font-size: 48px; font-weight: 700; color: #3b82f6;" id="overallScore">3.0</div>
-                <div style="font-size: 12px; color: #8899a6; margin-top: 8px;">Based on 6 dimensions</div>
-              </div>
-
-              <div style="display: flex; gap: 12px;">
-                <button class="btn-secondary" onclick="saveScoringDraft()">Save Draft</button>
-                <button class="btn-gold" onclick="generateFitfolio()">Generate FitFolio →</button>
+              <div style="background: rgba(255, 255, 255, 0.02); border-radius: 12px; padding: 20px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                <div style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 16px;">Trait Dimensions vs AI</div>
+                <div style="margin-bottom: 16px;">
+                  <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; color: #94a3b8;">
+                    <span>Ownership</span>
+                    <span><span id="aiOwnership">4.1</span> (AI)</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 82%; background: rgba(92, 214, 200, 0.5);"></div>
+                  </div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; color: #94a3b8;">
+                    <span>Problem-Solving</span>
+                    <span><span id="aiSolving">3.8</span> (AI)</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 76%; background: rgba(92, 214, 200, 0.5);"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; color: #94a3b8;">
+                    <span>Communication</span>
+                    <span><span id="aiComm">3.4</span> (AI)</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 68%; background: rgba(92, 214, 200, 0.5);"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -839,161 +1205,55 @@
 
         <!-- SETTINGS PAGE -->
         <div id="settings" class="page">
-          <div class="section">
-            <div class="section-title">Team Members</div>
-            <div class="card" style="padding: 0;">
-              <div style="padding: 20px; border-bottom: 1px solid #1e2d3d; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                  <div style="font-size: 14px; font-weight: 600; color: #f0f4f8;">Charbel A.</div>
-                  <div style="font-size: 12px; color: #8899a6;">Admin • Talent Gurus</div>
-                </div>
-                <span class="badge badge-primary">Admin</span>
+          <div style="max-width: 600px;">
+            <div style="margin-bottom: 40px;">
+              <h3 style="font-size: 16px; font-weight: 700; color: #f0f4f8; margin-bottom: 16px;">Team</h3>
+              <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                <button class="btn-primary" onclick="showInviteMemberModal()">
+                  <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" style="width: 16px; height: 16px;">
+                    <path d="M12 5v14m7-7H5"/>
+                  </svg>
+                  Invite Team Member
+                </button>
               </div>
-              <div style="padding: 20px; border-bottom: 1px solid #1e2d3d; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                  <div style="font-size: 14px; font-weight: 600; color: #f0f4f8;">Maya</div>
-                  <div style="font-size: 12px; color: #8899a6;">Senior Reviewer</div>
+              <div style="padding: 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                  <div>
+                    <div style="font-size: 14px; font-weight: 600; color: #f0f4f8;">Sarah Chen</div>
+                    <div style="font-size: 12px; color: #94a3b8;">Admin • MendelHire</div>
+                  </div>
+                  <div style="font-size: 12px; color: #64748B;">You</div>
                 </div>
-                <span class="badge badge-success">Reviewer</span>
               </div>
-              <div style="padding: 20px; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                  <div style="font-size: 14px; font-weight: 600; color: #f0f4f8;">David</div>
-                  <div style="font-size: 12px; color: #8899a6;">Technical Reviewer</div>
-                </div>
-                <span class="badge badge-success">Reviewer</span>
-              </div>
-            </div>
-            <button class="btn-secondary" style="margin-top: 16px;" onclick="showInviteMemberModal()">Invite Team Member</button>
-          </div>
-
-          <div class="section">
-            <div class="section-title">Integrations</div>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
-              <div class="card">
+              <div style="padding: 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                   <div>
-                    <div style="font-size: 14px; font-weight: 600; color: #f0f4f8;">GitHub OAuth</div>
-                    <div style="font-size: 12px; color: #8899a6; margin-top: 4px;">Connect for repo analysis</div>
+                    <div style="font-size: 14px; font-weight: 600; color: #f0f4f8;">Alex Thompson</div>
+                    <div style="font-size: 12px; color: #94a3b8;">Member • MendelHire</div>
                   </div>
-                  <span class="badge badge-success">Connected</span>
-                </div>
-                <div style="margin-top: 12px; display: flex; gap: 8px;">
-                  <button class="btn-small">Disconnect</button>
-                </div>
-              </div>
-              <div class="card">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <div>
-                    <div style="font-size: 14px; font-weight: 600; color: #f0f4f8;">Stripe Payouts</div>
-                    <div style="font-size: 12px; color: #8899a6; margin-top: 4px;">Stipend automation</div>
-                  </div>
-                  <span class="badge badge-success">Connected</span>
-                </div>
-                <div style="margin-top: 12px; display: flex; gap: 8px;">
-                  <button class="btn-small">Manage</button>
-                </div>
-              </div>
-              <div class="card">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <div>
-                    <div style="font-size: 14px; font-weight: 600; color: #f0f4f8;">Slack Notifications</div>
-                    <div style="font-size: 12px; color: #8899a6; margin-top: 4px;">Get alerts in Slack</div>
-                  </div>
-                  <span class="badge badge-warning">Not Connected</span>
-                </div>
-                <div style="margin-top: 12px; display: flex; gap: 8px;">
-                  <button class="btn-primary" style="flex: 1;">Connect</button>
-                </div>
-              </div>
-              <div class="card">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <div>
-                    <div style="font-size: 14px; font-weight: 600; color: #f0f4f8;">Greenhouse ATS</div>
-                    <div style="font-size: 12px; color: #8899a6; margin-top: 4px;">Sync candidates</div>
-                  </div>
-                  <span class="badge badge-warning">Not Connected</span>
-                </div>
-                <div style="margin-top: 12px; display: flex; gap: 8px;">
-                  <button class="btn-primary" style="flex: 1;">Connect</button>
+                  <button class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">Remove</button>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="section">
-            <div class="section-title">Anti-Cheat Settings</div>
-            <div class="card">
-              <div style="margin-bottom: 20px;">
-                <label class="checkbox-group">
-                  <input type="checkbox" class="checkbox-input" checked>
-                  <span style="font-size: 14px; color: #f0f4f8; flex: 1;">Identity Check (required)</span>
-                </label>
-              </div>
-              <div style="margin-bottom: 20px;">
-                <label class="checkbox-group">
-                  <input type="checkbox" class="checkbox-input" checked>
-                  <span style="font-size: 14px; color: #f0f4f8; flex: 1;">Repo Diff Analysis</span>
-                </label>
-              </div>
-              <div style="margin-bottom: 20px;">
-                <label class="checkbox-group">
-                  <input type="checkbox" class="checkbox-input" checked>
-                  <span style="font-size: 14px; color: #f0f4f8; flex: 1;">Mid-Task Pivot Verification</span>
-                </label>
-              </div>
-              <div style="margin-bottom: 20px;">
-                <label class="checkbox-group">
-                  <input type="checkbox" class="checkbox-input" checked>
-                  <span style="font-size: 14px; color: #f0f4f8; flex: 1;">Loom Recording Required</span>
-                </label>
-              </div>
-              <div style="margin-bottom: 16px;">
-                <label class="form-label">Cheat Flag Threshold</label>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                  <input type="range" class="slider" min="0" max="100" value="75" style="flex: 1;">
-                  <span style="color: #3b82f6; font-weight: 600; min-width: 40px;">75%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="section">
-            <div class="section-title">Stipend Settings</div>
-            <div class="card">
+            <div>
+              <h3 style="font-size: 16px; font-weight: 700; color: #f0f4f8; margin-bottom: 16px;">Preferences</h3>
               <div class="form-group">
-                <label class="form-label">120 Minute Challenge</label>
-                <input type="text" class="form-input" value="$100" readonly>
+                <label class="checkbox-group">
+                  <input type="checkbox" class="checkbox-input" checked>
+                  <span style="font-size: 14px; color: #f0f4f8;">Email notifications for new results</span>
+                </label>
               </div>
               <div class="form-group">
-                <label class="form-label">180 Minute Challenge</label>
-                <input type="text" class="form-input" value="$150" readonly>
-              </div>
-              <div style="padding: 12px; background: rgba(78, 205, 196, 0.1); border-radius: 6px; font-size: 12px; color: #8899a6;">
-                Payment method: Stripe connected • Automatic payouts enabled
-              </div>
-            </div>
-          </div>
-
-          <div class="section">
-            <div class="section-title">Notification Preferences</div>
-            <div class="card">
-              <div style="margin-bottom: 16px;">
                 <label class="checkbox-group">
                   <input type="checkbox" class="checkbox-input" checked>
-                  <span style="font-size: 14px; color: #f0f4f8;">Email notifications (proofs, scores, invites)</span>
+                  <span style="font-size: 14px; color: #f0f4f8;">Weekly summary report</span>
                 </label>
               </div>
-              <div style="margin-bottom: 16px;">
+              <div class="form-group">
                 <label class="checkbox-group">
-                  <input type="checkbox" class="checkbox-input" checked>
-                  <span style="font-size: 14px; color: #f0f4f8;">Slack alerts (urgent issues only)</span>
-                </label>
-              </div>
-              <div style="margin-bottom: 0;">
-                <label class="checkbox-group">
-                  <input type="checkbox" class="checkbox-input" checked>
-                  <span style="font-size: 14px; color: #f0f4f8;">Weekly digest (summary report)</span>
+                  <input type="checkbox" class="checkbox-input">
+                  <span style="font-size: 14px; color: #f0f4f8;">Slack integration</span>
                 </label>
               </div>
             </div>
@@ -1004,1011 +1264,421 @@
   </div>
 
   <!-- MODALS -->
-  <div id="rubricModal" class="modal-overlay">
-    <div class="modal wide">
+  <div id="challengeDetailModal" class="modal-overlay">
+    <div class="modal" style="max-width: 900px;">
       <div class="modal-header">
-        <div>Full Rubric</div>
-        <button class="modal-close" onclick="document.getElementById('rubricModal').classList.remove('active')">×</button>
+        <h2 class="modal-title" id="detailModalTitle">Challenge Details</h2>
+        <button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('active')">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" style="width: 20px; height: 20px;">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
       </div>
-      <div id="rubricContent"></div>
-    </div>
-  </div>
-
-  <div id="fitfolioModal" class="modal-overlay">
-    <div class="modal wide">
-      <div class="modal-header">
-        <div id="fitfolioModalTitle">FitFolio</div>
-        <button class="modal-close" onclick="document.getElementById('fitfolioModal').classList.remove('active')">×</button>
-      </div>
-      <div class="fitfolio-header">
-        <div class="fitfolio-avatar" id="fitfolioAvatar"></div>
-        <div class="fitfolio-name" id="fitfolioName"></div>
-        <div class="verified-badge" style="display: inline-block;">✓ VERIFIED CRAFT</div>
-        <div class="fitfolio-headline" id="fitfolioHeadline"></div>
-      </div>
-      <div id="fitfolioTabs" class="tabs">
-        <div class="tab active" onclick="switchFitfolioTab(event, 'tab-hm-card')">Hiring Manager Card</div>
-        <div class="tab" onclick="switchFitfolioTab(event, 'tab-ats-llm')">ATS & LLM Factsheet</div>
-        <div class="tab" onclick="switchFitfolioTab(event, 'tab-portfolio')">Portfolio Page</div>
-      </div>
-      <div id="tab-hm-card" class="tab-content active">
-        <div style="margin-bottom: 24px;">
-          <div style="font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 16px;">Skill Radar</div>
-          <div class="skill-radar" id="fitfolioSkillRadar"></div>
-        </div>
-        <div style="margin-bottom: 24px;">
-          <div style="font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 16px;">Proof Snapshot</div>
-          <div style="background: #0a1628; border-radius: 8px; padding: 16px;" id="fitfolioProofSnapshot"></div>
-        </div>
-        <div style="margin-bottom: 24px;">
-          <div style="font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 16px;">Widener Results</div>
-          <div id="fitfolioWidenerResults"></div>
-        </div>
-        <div style="background: rgba(212, 168, 67, 0.1); border: 1px solid #d4a843; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
-          <div style="font-size: 12px; font-weight: 600; color: #d4a843; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px;">Curator Note</div>
-          <div style="font-size: 14px; color: #f0f4f8;" id="fitfolioCuratorNote"></div>
-        </div>
-        <div>
-          <div style="font-size: 12px; font-weight: 600; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px;">Ask Me About</div>
-          <div id="fitfolioAskAbout"></div>
-        </div>
-      </div>
-      <div id="tab-ats-llm" class="tab-content">
-        <div style="margin-bottom: 24px;">
-          <div style="font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 16px;">Five Verifiable Facts</div>
-          <div id="fitfolioVerifiableFacts"></div>
-        </div>
-        <div style="margin-bottom: 24px;">
-          <div style="font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 16px;">JSON-LD Preview</div>
-          <pre style="background: #0a1628; border: 1px solid #1e2d3d; border-radius: 6px; padding: 12px; font-size: 12px; color: #8899a6; overflow-x: auto;" id="fitfolioJSONLD"></pre>
-        </div>
-        <div style="padding: 12px; background: rgba(78, 205, 196, 0.1); border-radius: 6px; font-size: 12px; color: #8899a6; margin-bottom: 24px;">
-          Resume-safe: Yes • Ready for LinkedIn/GitHub
-        </div>
-        <div>
-          <div style="font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 12px;">Synonym Map</div>
-          <div id="fitfolioSynonymMap"></div>
-        </div>
-      </div>
-      <div id="tab-portfolio" class="tab-content">
-        <div style="margin-bottom: 24px;">
-          <div style="font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 12px;">Portfolio</div>
-          <div id="fitfolioPortfolioHeader"></div>
-        </div>
-        <div style="margin-bottom: 24px;">
-          <div style="font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 16px;">Proof Stack Timeline</div>
-          <div id="fitfolioProofTimeline"></div>
-        </div>
-        <div style="margin-bottom: 24px;">
-          <label class="form-label">Share Link</label>
-          <div style="display: flex; gap: 8px;">
-            <input type="text" class="form-input" id="shareLink" value="mendelhire.com/portfolio/mh-2841" readonly>
-            <button class="btn-secondary" onclick="copyShareLink()">Copy</button>
-          </div>
-        </div>
-        <div style="margin-bottom: 16px;">
-          <label class="checkbox-group">
-            <input type="checkbox" class="checkbox-input" checked>
-            <span style="font-size: 13px; color: #f0f4f8;">Public • Can be shared</span>
-          </label>
-        </div>
-        <div>
-          <button class="btn-secondary" style="width: 100%;">Download as PDF</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="inviteModal" class="modal-overlay">
-    <div class="modal">
-      <div class="modal-header">
-        <div>Invite Candidates</div>
-        <button class="modal-close" onclick="document.getElementById('inviteModal').classList.remove('active')">×</button>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Challenge</label>
-        <input type="text" class="form-input" id="inviteChallenge" readonly>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email Address</label>
-        <input type="email" class="form-input" id="inviteEmail" placeholder="candidate@example.com">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Message</label>
-        <textarea class="form-textarea" id="inviteMessage" placeholder="Personalize your invite..."></textarea>
-      </div>
-      <div style="display: flex; gap: 12px; margin-top: 24px;">
-        <button class="btn-primary" style="flex: 1;" onclick="sendInvite()">Send Invite</button>
-        <button class="btn-secondary" onclick="document.getElementById('inviteModal').classList.remove('active')">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="compareModal" class="modal-overlay">
-    <div class="modal wide">
-      <div class="modal-header">
-        <div>Side-by-Side Candidate Comparison</div>
-        <button class="modal-close" onclick="document.getElementById('compareModal').classList.remove('active')">×</button>
-      </div>
-      <div class="compare-grid" id="compareGrid"></div>
+      <div class="modal-body" id="detailModalBody"></div>
     </div>
   </div>
 
   <div id="createChallengeModal" class="modal-overlay">
-    <div class="modal">
+    <div class="modal" style="max-width: 800px;">
       <div class="modal-header">
-        <div id="challengeModalTitle">Create Challenge</div>
-        <button class="modal-close" onclick="closeCreateChallengeModal()">×</button>
+        <h2 class="modal-title">Create Challenge</h2>
+        <button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('active')">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" style="width: 20px; height: 20px;">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tabs" id="createTabs">
+          <button class="tab active" onclick="switchCreateTab(0)">Select Template</button>
+          <button class="tab" onclick="switchCreateTab(1)">Configure</button>
+          <button class="tab" onclick="switchCreateTab(2)">Review & Edit</button>
+        </div>
+
+        <div class="tab-content active" id="createTab0">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+            <div style="padding: 16px; border: 1px solid rgba(75, 147, 255, 0.3); border-radius: 12px; cursor: pointer; background: rgba(75, 147, 255, 0.08);" onclick="selectTemplate('frontend')">
+              <div style="font-size: 14px; font-weight: 700; color: #f0f4f8;">Frontend Challenge</div>
+              <div style="font-size: 12px; color: #94a3b8; margin-top: 8px;">React, Vue, Angular</div>
+            </div>
+            <div style="padding: 16px; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; cursor: pointer;" onclick="selectTemplate('data')">
+              <div style="font-size: 14px; font-weight: 700; color: #f0f4f8;">Data Challenge</div>
+              <div style="font-size: 12px; color: #94a3b8; margin-top: 8px;">Python, SQL, Analytics</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="createTab1">
+          <div class="form-group">
+            <label class="form-label">Title</label>
+            <input type="text" class="form-input" id="createTitle" placeholder="e.g., React Todo App">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stack</label>
+            <input type="text" class="form-input" id="createStack" placeholder="e.g., React, TypeScript, Node.js">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Brief Description</label>
+            <textarea class="form-textarea" id="createBrief" placeholder="Describe the challenge..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Evaluation Criteria</label>
+            <textarea class="form-textarea" id="createCriteria" placeholder="How will submissions be evaluated?"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Pivot (60 min mark)</label>
+            <textarea class="form-textarea" id="createPivot" placeholder="What changes at 60 minutes?"></textarea>
+          </div>
+        </div>
+
+        <div class="tab-content" id="createTab2">
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+              <div>
+                <div style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 8px;">Title</div>
+                <input type="text" class="form-input" id="reviewTitle" placeholder="Title">
+              </div>
+              <div>
+                <div style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 8px;">Stack</div>
+                <input type="text" class="form-input" id="reviewStack" placeholder="Stack">
+              </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <div style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 8px;">Brief</div>
+              <textarea class="form-textarea" id="reviewBrief" placeholder="Brief" style="min-height: 80px;"></textarea>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <div style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 8px;">Evaluation Criteria</div>
+              <textarea class="form-textarea" id="reviewCriteria" placeholder="Criteria" style="min-height: 80px;"></textarea>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <div style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 8px;">Pivot Specification</div>
+              <textarea class="form-textarea" id="reviewPivot" placeholder="Pivot" style="min-height: 80px;"></textarea>
+            </div>
+
+            <!-- AI CHAT PANEL -->
+            <div class="ai-chat-panel">
+              <div class="chat-header">AI Editing Assistant</div>
+              <div class="chat-messages" id="aiChatMessages"></div>
+              <div class="chat-input-group">
+                <input type="text" class="chat-input" id="aiChatInput" placeholder="e.g., make the pivot harder, add React requirement...">
+                <button class="chat-btn" onclick="sendAIChat()">
+                  <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" style="width: 16px; height: 16px;">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div id="challengeStep1">
-        <div class="form-group">
-          <label class="form-label">Role / Function</label>
-          <select class="form-select" id="roleSelect">
-            <option value="">Select a role...</option>
-            <option value="frontend">Frontend Engineer</option>
-            <option value="backend">Backend Engineer</option>
-            <option value="fullstack">Full-Stack Engineer</option>
-            <option value="data">Data Analyst / Scientist</option>
-            <option value="devops">DevOps / Infrastructure</option>
-            <option value="ai-ml">AI/ML Engineer</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Focus (optional)</label>
-          <input type="text" class="form-input" id="focusInput" placeholder="e.g., React, PostgreSQL, Kubernetes...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Duration</label>
-          <select class="form-select" id="durationSelect">
-            <option value="120">120 minutes ($100 stipend)</option>
-            <option value="180">180 minutes ($150 stipend)</option>
-          </select>
-        </div>
-        <div style="display: flex; gap: 12px; margin-top: 24px;">
-          <button class="btn-primary" style="flex: 1;" onclick="generateChallengeStep2()">Generate with AI →</button>
-          <button class="btn-secondary" onclick="closeCreateChallengeModal()">Cancel</button>
-        </div>
-      </div>
-
-      <div id="challengeStep2" style="display: none;">
-        <div style="text-align: center; padding: 32px;">
-          <div style="width: 40px; height: 40px; border: 3px solid #3b82f6; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite; margin: 0 auto 16px;"></div>
-          <div style="font-size: 14px; color: #f0f4f8;" id="aiStatusText">Analyzing role requirements</div>
-        </div>
-        <style>
-          @keyframes spin { to { transform: rotate(360deg); } }
-        </style>
-      </div>
-
-      <div id="challengeStep3" style="display: none;">
-        <div class="form-group">
-          <label class="form-label">Challenge Title</label>
-          <input type="text" class="form-input" id="genTitle" readonly>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Tech Stack</label>
-          <input type="text" class="form-input" id="genStack" readonly>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Duration & Stipend</label>
-          <input type="text" class="form-input" id="genMeta" readonly>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Brief</label>
-          <textarea class="form-textarea" id="genBrief" readonly></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Acceptance Criteria</label>
-          <textarea class="form-textarea" id="genCriteria" readonly style="min-height: 120px;"></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Pivot Specification (60 min)</label>
-          <textarea class="form-textarea" id="genPivot" readonly style="min-height: 80px;"></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Rubric Stack Dimensions</label>
-          <div id="genRubricStack" style="background: #0a1628; border: 1px solid #1e2d3d; border-radius: 6px; padding: 12px; font-size: 14px; color: #f0f4f8; line-height: 1.6;"></div>
-        </div>
-        <div style="display: flex; gap: 12px; margin-top: 24px;">
-          <button class="btn-primary" style="flex: 1;" onclick="publishChallenge()">Publish Challenge</button>
-          <button class="btn-secondary" onclick="resetChallengeModal()">Edit</button>
-        </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="this.closest('.modal-overlay').classList.remove('active')">Cancel</button>
+        <button class="btn-primary" onclick="previousCreateTab()" id="prevTabBtn" style="display: none;">Previous</button>
+        <button class="btn-primary" onclick="nextCreateTab()" id="nextTabBtn">Next</button>
+        <button class="btn-primary" onclick="saveChallenge()" id="saveBtn" style="display: none;">Create Challenge</button>
       </div>
     </div>
   </div>
 
-  <div id="fitfolioGenerateModal" class="modal-overlay">
-    <div class="modal" style="text-align: center;">
-      <div style="font-size: 48px; margin-bottom: 16px;">✓</div>
-      <div style="font-size: 18px; font-weight: 700; color: #f0f4f8; margin-bottom: 8px;">FitFolio Generated!</div>
-      <div style="font-size: 14px; color: #8899a6; margin-bottom: 24px;">Candidate profile is ready for review</div>
-      <button class="btn-primary" style="width: 100%;" onclick="closeFitfolioGenerateModal()">View FitFolio →</button>
+  <div id="rubricModal" class="modal-overlay">
+    <div class="modal" style="max-width: 700px;">
+      <div class="modal-header">
+        <h2 class="modal-title">Full Rubric</h2>
+        <button class="modal-close" onclick="this.closest('.modal-overlay').classList.remove('active')">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" style="width: 20px; height: 20px;">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" id="rubricModalBody"></div>
     </div>
   </div>
-
-  <!-- Toast Container -->
-  <div id="toastContainer"></div>
 
   <script>
-    // ===== APP STATE =====
-    const appState = {
-      anonMode: true,
-      currentPage: 'dashboard',
-      selectedCandidates: new Set(),
-      proofTime: 0,
-      isProfRunning: false,
-      simulationInterval: null,
-      scoreChanges: {},
-      candidateScores: {
-        'MH-2841': { correctness: 4, accessibility: 4, clarity: 4, ownership: 4, solving: 4, comm: 4 },
-        'MH-2842': { correctness: 4, accessibility: 3, clarity: 4, ownership: 3, solving: 4, comm: 3 },
-        'MH-2844': { correctness: 5, accessibility: 4, clarity: 5, ownership: 5, solving: 5, comm: 4 },
-        'MH-2846': { correctness: 3, accessibility: 3, clarity: 4, ownership: 3, solving: 3, comm: 3 },
-        'MH-2848': { correctness: 4, accessibility: 4, clarity: 4, ownership: 4, solving: 4, comm: 3 }
+    // ===== STATE =====
+    let currentTab = 0;
+    let selectedTemplate = null;
+    let chatHistory = [];
+
+    const challengeData = {
+      frontend: {
+        title: 'Frontend React Challenge',
+        stack: 'React, TypeScript, Node.js',
+        brief: 'Build a responsive dashboard component that displays real-time data with filtering and sorting capabilities.',
+        criteria: '- Correct implementation of filtering logic\n- Responsive design (mobile, tablet, desktop)\n- Code organization and clarity\n- Test coverage (minimum 80%)',
+        pivot: 'At 60 minutes: Add real-time updates via WebSocket and implement multi-select filtering with performance optimization.'
+      },
+      data: {
+        title: 'Data Python/SQL Challenge',
+        stack: 'Python, SQL, Pandas',
+        brief: 'Analyze a dataset of user behavior, build retention cohorts, and create insightful visualizations.',
+        criteria: '- Accurate SQL queries\n- Data cleaning and validation\n- Statistical analysis correctness\n- Visualization quality and insights',
+        pivot: 'At 60 minutes: Redefine cohorts by first paid event instead of first seen. Update retention chart and document changes.'
       }
     };
 
     const candidates = [
-      { id: 'MH-2841', name: 'Sarah Chen', challenge: 'Frontend React', status: 'FitFolio Ready', score: 4.2, wideners: ['Product Sense', 'Communication'], stack: 3, verified: true, avatar: 'SC', pivotTime: 5, commits: 18, lines: 1094 },
-      { id: 'MH-2842', name: 'Marcus Johnson', challenge: 'Frontend React', status: 'Scored', score: 3.8, wideners: ['Collaboration', 'Diagnostics'], stack: 1, verified: true, avatar: 'MJ', pivotTime: 8, commits: 14, lines: 876 },
-      { id: 'MH-2843', name: 'Priya Patel', challenge: 'Frontend React', status: 'In Progress', score: null, wideners: ['Customer Empathy', 'Communication'], stack: 2, verified: false, avatar: 'PP', pivotTime: null, commits: 0, lines: 0 },
-      { id: 'MH-2844', name: 'Alex Rivera', challenge: 'Data Python/SQL', status: 'FitFolio Ready', score: 4.5, wideners: ['Product Sense', 'Diagnostics'], stack: 2, verified: true, avatar: 'AR', pivotTime: 4, commits: 16, lines: 942 },
-      { id: 'MH-2845', name: 'Jordan Lee', challenge: 'Frontend React', status: 'In Progress (Live)', score: null, wideners: ['Communication', 'Collaboration'], stack: 1, verified: false, avatar: 'JL', pivotTime: null, commits: 0, lines: 0 },
-      { id: 'MH-2846', name: 'Tanya Williams', challenge: 'Data Python/SQL', status: 'Scored', score: 3.5, wideners: ['Customer Empathy', 'Product Sense'], stack: 1, verified: true, avatar: 'TW', pivotTime: 12, commits: 11, lines: 654 },
-      { id: 'MH-2847', name: 'Raj Krishnamurthy', challenge: 'Frontend React', status: 'Invited', score: null, wideners: [], stack: 0, verified: false, avatar: 'RK', pivotTime: null, commits: 0, lines: 0 },
-      { id: 'MH-2848', name: 'Elena Volkova', challenge: 'Data Python/SQL', status: 'FitFolio Ready', score: 4.0, wideners: ['Diagnostics', 'Collaboration'], stack: 3, verified: true, avatar: 'EV', pivotTime: 6, commits: 15, lines: 812 }
+      { id: 'MH-2841', name: 'Marcus Johnson', challenge: 'Frontend React', status: 'Scored', score: 4.2, wideners: 2, stack: 'React', verified: true },
+      { id: 'MH-2842', name: 'Elena Rodriguez', challenge: 'Data Python/SQL', status: 'In Progress', score: null, wideners: 1, stack: 'Python', verified: true },
+      { id: 'MH-2843', name: 'James Chen', challenge: 'Frontend React', status: 'Scored', score: 3.9, wideners: 0, stack: 'Vue', verified: true },
+      { id: 'MH-2844', name: 'Aisha Patel', challenge: 'Data Python/SQL', status: 'Scored', score: 4.5, wideners: 3, stack: 'SQL', verified: true },
+      { id: 'MH-2845', name: 'Jordan Lee', challenge: 'Frontend React', status: 'In Progress', score: null, wideners: 1, stack: 'React', verified: true }
     ];
 
-    const commits = [
-      { time: 3, msg: 'Init project with vite', lines: 45, files: 3 },
-      { time: 7, msg: 'Add product list component', lines: 120, files: 2 },
-      { time: 12, msg: 'Implement search functionality', lines: 89, files: 2 },
-      { time: 18, msg: 'Add category filter', lines: 76, files: 1 },
-      { time: 25, msg: 'Style product cards', lines: 143, files: 2 },
-      { time: 32, msg: 'Add debounce to search', lines: 34, files: 1 },
-      { time: 38, msg: 'Write unit tests', lines: 156, files: 1 },
-      { time: 45, msg: 'Refactor filter logic', lines: 45, files: 1 },
-      { time: 52, msg: 'Add loading states', lines: 67, files: 2 },
-      { time: 58, msg: 'Final UI polish', lines: 32, files: 1 },
-      { time: 60, msg: 'Pivot: Add ARIA labels', lines: 0, files: 0, isPivot: true },
-      { time: 67, msg: 'Implement keyboard navigation', lines: 98, files: 2 },
-      { time: 75, msg: 'Add focus management', lines: 54, files: 1 },
-      { time: 82, msg: 'Write accessibility tests', lines: 178, files: 1 },
-      { time: 89, msg: 'Update README with a11y docs', lines: 56, files: 1 },
-      { time: 97, msg: 'Fix tabindex order', lines: 22, files: 1 },
-      { time: 104, msg: 'Add skip links', lines: 34, files: 1 },
-      { time: 112, msg: 'Final accessibility audit', lines: 19, files: 1 },
-      { time: 118, msg: 'Commit: all tests passing', lines: 5, files: 1 }
-    ];
+    // ===== UI FUNCTIONS =====
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('collapsed');
+    }
 
-    // ===== UTILITY FUNCTIONS =====
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      event.target.closest('.nav-item').classList.add('active');
+
+      const titles = {
+        dashboard: 'Dashboard',
+        challenges: 'Challenges',
+        'live-session': 'Live Session',
+        candidates: 'Candidates',
+        scoring: 'Scoring',
+        settings: 'Settings'
+      };
+      document.getElementById('topbarTitle').textContent = titles[pageId];
+
+      if (pageId === 'challenges') renderChallenges();
+      if (pageId === 'candidates') renderCandidatesTable();
+      if (pageId === 'scoring') renderScoringPage();
+    }
+
+    function renderChallenges() {
+      const grid = document.getElementById('challengeGrid');
+      grid.innerHTML = `
+        <div class="challenge-card" onclick="openChallengeDetail('frontend')">
+          <div class="challenge-type">Frontend</div>
+          <div class="challenge-title">Frontend React</div>
+          <div class="challenge-desc">Build a responsive dashboard component with real-time data.</div>
+          <div class="challenge-stats">
+            <div class="challenge-stat"><div class="challenge-stat-label">Candidates</div><div class="challenge-stat-value">4</div></div>
+            <div class="challenge-stat"><div class="challenge-stat-label">Avg Score</div><div class="challenge-stat-value">4.0</div></div>
+            <div class="challenge-stat"><div class="challenge-stat-label">Completion</div><div class="challenge-stat-value">75%</div></div>
+          </div>
+        </div>
+        <div class="challenge-card" onclick="openChallengeDetail('data')">
+          <div class="challenge-type">Data</div>
+          <div class="challenge-title">Data Python/SQL</div>
+          <div class="challenge-desc">Analyze user behavior data and build retention cohorts.</div>
+          <div class="challenge-stats">
+            <div class="challenge-stat"><div class="challenge-stat-label">Candidates</div><div class="challenge-stat-value">5</div></div>
+            <div class="challenge-stat"><div class="challenge-stat-label">Avg Score</div><div class="challenge-stat-value">3.8</div></div>
+            <div class="challenge-stat"><div class="challenge-stat-label">Completion</div><div class="challenge-stat-value">60%</div></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function openChallengeDetail(type) {
+      const modal = document.getElementById('challengeDetailModal');
+      const data = challengeData[type];
+      const body = document.getElementById('detailModalBody');
+
+      body.innerHTML = `
+        <div class="challenge-section">
+          <div class="challenge-section-title">Brief</div>
+          <p style="font-size: 14px; color: #f0f4f8; line-height: 1.6;">${data.brief}</p>
+        </div>
+        <div class="challenge-section">
+          <div class="challenge-section-title">Evaluation Criteria</div>
+          <ul style="margin-left: 0;">
+            ${data.criteria.split('\n').map(c => c.trim()).filter(c => c).map(c => `<li style="font-size: 14px; color: #f0f4f8; padding: 8px 0;">${c}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="challenge-section">
+          <div class="challenge-section-title">Stack</div>
+          <div class="stack-tags">
+            ${data.stack.split(', ').map(s => `<div class="stack-tag">${s}</div>`).join('')}
+          </div>
+        </div>
+        <div class="challenge-section">
+          <div class="challenge-section-title">Pivot Specification</div>
+          <div class="pivot-spec">
+            <div class="pivot-label">At 60 Minutes</div>
+            ${data.pivot}
+          </div>
+        </div>
+      `;
+      modal.classList.add('active');
+    }
+
+    function openCreateChallengeModal() {
+      document.getElementById('createChallengeModal').classList.add('active');
+      currentTab = 0;
+      updateCreateTabs();
+      chatHistory = [];
+      document.getElementById('aiChatMessages').innerHTML = '';
+    }
+
+    function selectTemplate(type) {
+      selectedTemplate = type;
+      const data = challengeData[type];
+      document.getElementById('createTitle').value = data.title;
+      document.getElementById('createStack').value = data.stack;
+      document.getElementById('createBrief').value = data.brief;
+      document.getElementById('createCriteria').value = data.criteria;
+      document.getElementById('createPivot').value = data.pivot;
+      nextCreateTab();
+    }
+
+    function switchCreateTab(index) {
+      currentTab = index;
+      updateCreateTabs();
+    }
+
+    function nextCreateTab() {
+      if (currentTab < 2) {
+        if (currentTab === 1) {
+          document.getElementById('reviewTitle').value = document.getElementById('createTitle').value;
+          document.getElementById('reviewStack').value = document.getElementById('createStack').value;
+          document.getElementById('reviewBrief').value = document.getElementById('createBrief').value;
+          document.getElementById('reviewCriteria').value = document.getElementById('createCriteria').value;
+          document.getElementById('reviewPivot').value = document.getElementById('createPivot').value;
+        }
+        currentTab++;
+      }
+      updateCreateTabs();
+    }
+
+    function previousCreateTab() {
+      if (currentTab > 0) currentTab--;
+      updateCreateTabs();
+    }
+
+    function updateCreateTabs() {
+      document.querySelectorAll('.tab').forEach((tab, i) => {
+        tab.classList.toggle('active', i === currentTab);
+      });
+      document.querySelectorAll('.tab-content').forEach((content, i) => {
+        content.classList.toggle('active', i === currentTab);
+      });
+
+      document.getElementById('prevTabBtn').style.display = currentTab > 0 ? 'flex' : 'none';
+      document.getElementById('nextTabBtn').style.display = currentTab < 2 ? 'flex' : 'none';
+      document.getElementById('saveBtn').style.display = currentTab === 2 ? 'flex' : 'none';
+    }
+
+    function sendAIChat() {
+      const input = document.getElementById('aiChatInput');
+      const message = input.value.trim();
+      if (!message) return;
+
+      const messages = document.getElementById('aiChatMessages');
+
+      // User message
+      const userMsg = document.createElement('div');
+      userMsg.className = 'chat-message user';
+      userMsg.textContent = message;
+      messages.appendChild(userMsg);
+
+      // Thinking state
+      const thinkingMsg = document.createElement('div');
+      thinkingMsg.className = 'chat-message thinking';
+      thinkingMsg.textContent = 'Thinking...';
+      messages.appendChild(thinkingMsg);
+
+      input.value = '';
+      messages.scrollTop = messages.scrollHeight;
+
+      // Simulate AI response
+      setTimeout(() => {
+        thinkingMsg.remove();
+
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'chat-message ai';
+
+        // Parse the user request and update fields
+        const lowerMessage = message.toLowerCase();
+
+        if (lowerMessage.includes('harder') || lowerMessage.includes('difficult')) {
+          document.getElementById('reviewPivot').value += '\n\nAdditional requirement: Implement advanced error handling and edge case management.';
+          aiMsg.textContent = 'Updated pivot to be more challenging with advanced requirements.';
+        } else if (lowerMessage.includes('react') || lowerMessage.includes('typescript')) {
+          document.getElementById('reviewStack').value += ', TypeScript';
+          aiMsg.textContent = 'Added TypeScript to the stack requirements.';
+        } else if (lowerMessage.includes('time') || lowerMessage.includes('minutes')) {
+          document.getElementById('reviewPivot').value = 'At 45 minutes: ' + document.getElementById('reviewPivot').value.split(': ')[1];
+          aiMsg.textContent = 'Changed pivot timing from 60 to 45 minutes.';
+        } else {
+          aiMsg.textContent = 'Got it! I\'ve updated the challenge based on your feedback.';
+        }
+
+        messages.appendChild(aiMsg);
+        messages.scrollTop = messages.scrollHeight;
+      }, 800);
+
+      chatHistory.push({ role: 'user', message });
+    }
+
+    function saveChallenge() {
+      showToast('Challenge created successfully!', 'success');
+      document.getElementById('createChallengeModal').classList.remove('active');
+    }
+
+    function renderCandidatesTable() {
+      const tbody = document.getElementById('candidatesTableBody');
+      tbody.innerHTML = candidates.map(c => `
+        <tr>
+          <td><input type="checkbox"></td>
+          <td style="font-weight: 500;">${c.name}</td>
+          <td>${c.challenge}</td>
+          <td><span class="badge badge-primary">${c.status}</span></td>
+          <td>${c.score ? c.score.toFixed(1) : '-'}</td>
+          <td>${c.wideners}</td>
+          <td><span class="stack-tag">${c.stack}</span></td>
+          <td>${c.verified ? '✓' : '-'}</td>
+          <td><button class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">View</button></td>
+        </tr>
+      `).join('');
+    }
+
+    function renderScoringPage() {
+      const select = document.getElementById('scoringCandidateSelect');
+      select.innerHTML = '<option value="">Select a candidate...</option>' +
+        candidates.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
+      select.onchange = function() {
+        if (this.value) {
+          const cand = candidates.find(c => c.id === this.value);
+          document.getElementById('scoringCandidateHeader').style.display = 'flex';
+          document.getElementById('scoringCandidateName').textContent = cand.name;
+          document.getElementById('scoringChallengeInfo').textContent = cand.challenge;
+          document.getElementById('scoringContent').style.display = 'grid';
+        }
+      };
+    }
+
+    function updateScorings() {
+      document.getElementById('correctnessValue').textContent = document.getElementById('scoreCorrectness').value;
+      document.getElementById('accessibilityValue').textContent = document.getElementById('scoreAccessibility').value;
+      document.getElementById('clarityValue').textContent = document.getElementById('scoreClarity').value;
+      document.getElementById('ownershipValue').textContent = document.getElementById('scoreOwnership').value;
+      document.getElementById('solvingValue').textContent = document.getElementById('solvingScore').value;
+      document.getElementById('commValue').textContent = document.getElementById('scoreComm').value;
+    }
+
     function showToast(message, type = 'info') {
       const toast = document.createElement('div');
       toast.className = `toast ${type}`;
       toast.textContent = message;
-      document.getElementById('toastContainer').appendChild(toast);
+      document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 3000);
     }
 
-    function formatDate() {
-      const now = new Date();
-      const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      return now.toLocaleDateString('en-US', opts);
-    }
-
-    // ===== PAGE NAVIGATION =====
-    function navigateToPage(page) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(page).classList.add('active');
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      document.querySelector(`[data-page="${page}"]`).classList.add('active');
-      appState.currentPage = page;
-      document.getElementById('pageTitle').textContent = page.charAt(0).toUpperCase() + page.slice(1).replace('-', ' ');
-      if (page === 'candidates') renderCandidatesTable();
-      if (page === 'scoring') populateScoringDropdown();
-    }
-
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const page = item.getAttribute('data-page');
-        window.location.hash = page;
-        navigateToPage(page);
-      });
-    });
-
-    window.addEventListener('hashchange', () => {
-      const page = location.hash.slice(1) || 'dashboard';
-      navigateToPage(page);
-    });
-
-    // ===== INITIALIZATION =====
-    document.getElementById('dateDisplay').textContent = formatDate();
-
-    document.getElementById('createChallengeBtn').addEventListener('click', () => {
-      document.getElementById('createChallengeModal').classList.add('active');
-      resetChallengeModal();
-    });
-
-    document.querySelector('.btn-primary').addEventListener('click', () => {
-      document.getElementById('createChallengeModal').classList.add('active');
-      resetChallengeModal();
-    });
-
-    document.getElementById('notificationBtn').addEventListener('click', () => {
-      const dropdown = document.getElementById('notificationDropdown');
-      dropdown.classList.toggle('active');
-    });
-
-    document.addEventListener('click', (e) => {
-      const dropdown = document.getElementById('notificationDropdown');
-      if (!e.target.closest('#notificationBtn') && !e.target.closest('#notificationDropdown')) {
-        dropdown.classList.remove('active');
-      }
-    });
-
-    // ===== ANONYMIZED MODE =====
-    document.getElementById('anonModeToggle').addEventListener('change', (e) => {
-      appState.anonMode = e.target.checked;
-      renderCandidatesTable();
-    });
-
-    // ===== CANDIDATES TABLE =====
-    function renderCandidatesTable() {
-      const tbody = document.getElementById('candidatesTableBody');
-      tbody.innerHTML = '';
-      candidates.forEach(c => {
-        const displayName = appState.anonMode ? c.id : c.name;
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td><input type="checkbox" class="candidate-checkbox" data-id="${c.id}"></td>
-          <td><div class="candidate-name"><div class="candidate-avatar">${c.avatar}</div><div><div>${displayName}</div><div class="candidate-id">${c.id}</div></div></div></td>
-          <td>${c.challenge}</td>
-          <td><span class="badge badge-primary">${c.status}</span></td>
-          <td>${c.score ? c.score.toFixed(1) : '-'}</td>
-          <td>${c.wideners.map(w => `<div class="widener-tag">${w}</div>`).join('')}</td>
-          <td><span class="proof-stack">${c.stack}</span></td>
-          <td>${c.verified ? '<span class="badge badge-success">✓</span>' : '-'}</td>
-          <td>
-            <div class="action-buttons">
-              <button class="btn-small" onclick="openFitfolio('${c.id}', '${c.name}', '${c.avatar}', '${c.challenge}', ${c.score})">View</button>
-              ${c.score ? `<button class="btn-small" onclick="goToScoring('${c.id}')">Score</button>` : ''}
-              <button class="btn-small" onclick="addToComparison('${c.id}')">Compare</button>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(row);
-      });
-
-      // Add checkbox listeners
-      document.querySelectorAll('.candidate-checkbox').forEach(cb => {
-        cb.addEventListener('change', () => {
-          if (cb.checked) {
-            appState.selectedCandidates.add(cb.dataset.id);
-          } else {
-            appState.selectedCandidates.delete(cb.dataset.id);
-          }
-          updateBatchActions();
-        });
-      });
-
-      document.getElementById('selectAllCheckbox').addEventListener('change', (e) => {
-        document.querySelectorAll('.candidate-checkbox').forEach(cb => {
-          cb.checked = e.target.checked;
-          if (e.target.checked) {
-            appState.selectedCandidates.add(cb.dataset.id);
-          } else {
-            appState.selectedCandidates.delete(cb.dataset.id);
-          }
-        });
-        updateBatchActions();
-      });
-    }
-
-    function updateBatchActions() {
-      const batchActions = document.getElementById('batchActions');
-      const compareBtn = document.getElementById('compareBtn');
-      if (appState.selectedCandidates.size > 0) {
-        batchActions.classList.remove('hidden');
-        compareBtn.textContent = `Compare Selected (${appState.selectedCandidates.size})`;
-      } else {
-        batchActions.classList.add('hidden');
-      }
-    }
-
-    document.getElementById('compareBtn').addEventListener('click', () => {
-      const selected = Array.from(appState.selectedCandidates);
-      if (selected.length >= 2 && selected.length <= 3) {
-        showComparisonModal(selected);
-      } else {
-        showToast('Select 2-3 candidates to compare', 'warning');
-      }
-    });
-
-    // ===== FITFOLIO MODAL =====
-    function openFitfolio(id, name, avatar, challenge, score) {
-      const displayName = appState.anonMode ? id : name;
-      document.getElementById('fitfolioModalTitle').textContent = 'FitFolio — ' + displayName;
-      document.getElementById('fitfolioAvatar').textContent = avatar;
-      document.getElementById('fitfolioName').textContent = displayName;
-      document.getElementById('fitfolioHeadline').textContent = 'Senior ' + (challenge.includes('Frontend') ? 'Frontend' : challenge.includes('Data') ? 'Data' : 'Software') + ' Engineer';
-
-      // Skill Radar
-      const cand = candidates.find(c => c.id === id);
-      const scores = appState.candidateScores[id] || { correctness: 3, accessibility: 3, clarity: 3, ownership: 3, solving: 3, comm: 3 };
-      let skillHTML = '';
-      ['Correctness', 'Accessibility', 'Clarity', 'Ownership', 'Problem-Solving', 'Communication'].forEach((label, i) => {
-        const dims = ['correctness', 'accessibility', 'clarity', 'ownership', 'solving', 'comm'];
-        const val = scores[dims[i]] || 3;
-        skillHTML += `
-          <div class="skill-bar">
-            <div class="skill-label">${label}<span class="skill-value">${val}/5</span></div>
-            <div class="skill-bar-fill">
-              <div class="skill-bar-progress" style="width: ${val * 20}%;"></div>
-            </div>
-          </div>
-        `;
-      });
-      document.getElementById('fitfolioSkillRadar').innerHTML = skillHTML;
-
-      // Proof Snapshot
-      let proofHTML = `
-        <div style="margin-bottom: 12px;"><strong>Challenge:</strong> ${challenge}</div>
-        <div style="margin-bottom: 12px;"><strong>Duration:</strong> ${cand.stack * 40 + 40} minutes (${cand.commits} commits)</div>
-        <div style="margin-bottom: 12px;"><strong>Lines Changed:</strong> ${cand.lines.toLocaleString()}</div>
-        <div style="margin-bottom: 12px;"><strong>Pivot Response:</strong> ${cand.pivotTime}m into session</div>
-        <div style="margin-bottom: 12px;"><strong>Repo:</strong> <a href="#" style="color: #3b82f6;">github.com/${cand.name.replace(/\s/g, '').toLowerCase()}/proof</a></div>
-        <div><strong>Recording:</strong> <a href="#" style="color: #3b82f6;">loom.com/share/xyz</a></div>
-      `;
-      document.getElementById('fitfolioProofSnapshot').innerHTML = proofHTML;
-
-      // Widener Results
-      let widenerHTML = cand.wideners.map((w, i) => `
-        <div style="margin-bottom: 12px; padding: 12px; background: rgba(78, 205, 196, 0.1); border-radius: 6px;">
-          <div style="font-weight: 600; color: #f0f4f8;">${w}</div>
-          <div style="font-size: 12px; color: #8899a6; margin-top: 4px;">Score: ${4 + Math.random() * 0.5}</div>
-        </div>
-      `).join('');
-      document.getElementById('fitfolioWidenerResults').innerHTML = widenerHTML;
-
-      // Curator Note
-      document.getElementById('fitfolioCuratorNote').textContent = 'Strong ownership and exceptional communication. Navigated pivot flawlessly. Minor: could improve test coverage.';
-
-      // Ask Me About
-      document.getElementById('fitfolioAskAbout').innerHTML = ['React Patterns', 'Accessibility Best Practices', 'Problem-Solving Process'].map(t => `<div class="widener-tag">${t}</div>`).join('');
-
-      // Verifiable Facts
-      let factsHTML = [
-        '1. Built and shipped 18 commits in ' + (cand.commits * 6) + ' minutes',
-        '2. Achieved ' + (Math.random() * 40 + 70).toFixed(0) + '% test coverage',
-        '3. Responded to mid-task pivot in under ' + (cand.pivotTime + 2) + ' minutes',
-        '4. Code follows ' + (score > 4 ? 'exceptional' : 'solid') + ' accessibility standards',
-        '5. Demonstrated clear communication in commit messages and README'
-      ].map(f => `<div style="margin-bottom: 8px; padding: 8px; background: #0a1628; border-radius: 4px; font-size: 13px;">${f}</div>`).join('');
-      document.getElementById('fitfolioVerifiableFacts').innerHTML = factsHTML;
-
-      // JSON-LD
-      document.getElementById('fitfolioJSONLD').textContent = JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": name,
-        "jobTitle": "Senior Engineer",
-        "skills": ["React", "TypeScript", "Accessibility"],
-        "proofStack": cand.stack
-      }, null, 2);
-
-      // Synonym Map
-      document.getElementById('fitfolioSynonymMap').innerHTML = `
-        <div style="font-size: 12px; color: #8899a6; line-height: 1.8;">
-          <div>• "Search functionality" → React hooks, debouncing, state management</div>
-          <div>• "Keyboard navigation" → ARIA, focus management, semantic HTML</div>
-          <div>• "Problem-solving" → Pivot adaptation, debugging, refactoring</div>
-        </div>
-      `;
-
-      // Portfolio
-      document.getElementById('fitfolioPortfolioHeader').innerHTML = `<div style="font-size: 14px; color: #f0f4f8; line-height: 1.6;">${cand.name} - Public Portfolio</div>`;
-      document.getElementById('fitfolioProofTimeline').innerHTML = `
-        <div style="font-size: 12px; color: #8899a6; line-height: 1.8;">
-          <div style="margin-bottom: 12px;"><strong style="color: #f0f4f8;">Proof 1:</strong> ${challenge} — ${score ? score.toFixed(1) : 'In Progress'} (${new Date().toLocaleDateString()})</div>
-        </div>
-      `;
-
-      document.getElementById('fitfolioModal').classList.add('active');
-    }
-
-    function switchFitfolioTab(e, tabId) {
-      document.querySelectorAll('#fitfolioTabs .tab').forEach(t => t.classList.remove('active'));
-      e.target.classList.add('active');
-      document.querySelectorAll('#fitfolioModal .tab-content').forEach(c => c.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-    }
-
-    function copyShareLink() {
-      const link = document.getElementById('shareLink');
-      navigator.clipboard.writeText(link.value);
-      showToast('Link copied!', 'success');
-    }
-
-    // ===== RUBRIC MODAL =====
-    function openRubricModal(challengeType) {
-      const rubricContent = document.getElementById('rubricContent');
-      rubricContent.innerHTML = `
-        <div style="margin-bottom: 32px;">
-          <div style="font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 16px;">Stack Dimensions (Technical Skills)</div>
-          <div style="margin-bottom: 16px;">
-            <div style="font-weight: 600; color: #f0f4f8; margin-bottom: 8px;">Correctness & Edge-Case Handling</div>
-            <div style="font-size: 13px; color: #8899a6; line-height: 1.6;">
-              <div>1. Incomplete • Does not handle basic cases</div>
-              <div>2. Basic • Handles happy path, misses edge cases</div>
-              <div>3. Solid • Most edge cases handled correctly</div>
-              <div>4. Strong • Comprehensive handling, minor gaps</div>
-              <div>5. Exceptional • All cases handled with elegance</div>
-            </div>
-          </div>
-          <div style="margin-bottom: 16px;">
-            <div style="font-weight: 600; color: #f0f4f8; margin-bottom: 8px;">Accessibility Quality / Data Quality</div>
-            <div style="font-size: 13px; color: #8899a6; line-height: 1.6;">
-              <div>1. Poor • No ARIA/labels; inaccessible or dirty data</div>
-              <div>2. Basic • Minimal effort; some ARIA or data issues</div>
-              <div>3. Adequate • Functional accessibility; reasonable data quality</div>
-              <div>4. Strong • Good practices; well-structured data</div>
-              <div>5. Exemplary • Full accessibility; pristine data quality</div>
-            </div>
-          </div>
-          <div>
-            <div style="font-weight: 600; color: #f0f4f8; margin-bottom: 8px;">Code Clarity & Organization</div>
-            <div style="font-size: 13px; color: #8899a6; line-height: 1.6;">
-              <div>1. Unclear • Cryptic variable names; no structure</div>
-              <div>2. Readable • Basic structure; some clarity issues</div>
-              <div>3. Clear • Well-organized; easy to follow</div>
-              <div>4. Very Clear • Strong patterns; minimal cognitive load</div>
-              <div>5. Crystal Clear • Exemplary readability and organization</div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div style="font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 16px;">Trait Dimensions (Soft Skills & Problem-Solving)</div>
-          <div style="margin-bottom: 16px;">
-            <div style="font-weight: 600; color: #f0f4f8; margin-bottom: 8px;">Ownership</div>
-            <div style="font-size: 13px; color: #8899a6; line-height: 1.6;">
-              <div>1. Minimal • Completes assignment with little care</div>
-              <div>2. Basic • Follows instructions; limited initiative</div>
-              <div>3. Solid • Proactive refinements; takes responsibility</div>
-              <div>4. Strong • Drives quality; anticipates needs</div>
-              <div>5. Full Ownership • Exceptional quality; deep investment</div>
-            </div>
-          </div>
-          <div style="margin-bottom: 16px;">
-            <div style="font-weight: 600; color: #f0f4f8; margin-bottom: 8px;">Problem-Solving Approach</div>
-            <div style="font-size: 13px; color: #8899a6; line-height: 1.6;">
-              <div>1. Stuck • Unable to progress without help</div>
-              <div>2. Struggles • Makes slow progress; misses obvious solutions</div>
-              <div>3. Effective • Finds solutions; may miss optimizations</div>
-              <div>4. Strong • Creative approaches; good trade-off analysis</div>
-              <div>5. Creative • Novel solutions; expert-level problem decomposition</div>
-            </div>
-          </div>
-          <div>
-            <div style="font-weight: 600; color: #f0f4f8; margin-bottom: 8px;">Communication & Documentation</div>
-            <div style="font-size: 13px; color: #8899a6; line-height: 1.6;">
-              <div>1. Unclear • Minimal documentation; hard to understand</div>
-              <div>2. Basic • Bare-minimum READMEs; vague explanations</div>
-              <div>3. Adequate • Clear READMEs; explains key decisions</div>
-              <div>4. Strong • Thoughtful docs; clear trade-off explanations</div>
-              <div>5. Articulate • Exceptional communication; philosophy shared</div>
-            </div>
-          </div>
-        </div>
-      `;
-      document.getElementById('rubricModal').classList.add('active');
-    }
-
-    document.addEventListener('click', (e) => {
-      if (e.target.classList.contains('modal-overlay')) {
-        e.target.classList.remove('active');
-      }
-    });
-
-    // ===== INVITE MODAL =====
-    function openInviteModal(challengeType) {
-      const challengeMap = { frontend: 'Frontend React', backend: 'Backend API', data: 'Data Python/SQL' };
-      document.getElementById('inviteChallenge').value = challengeMap[challengeType] || '';
-      document.getElementById('inviteEmail').value = '';
-      document.getElementById('inviteMessage').value = '';
-      document.getElementById('inviteModal').classList.add('active');
-    }
-
-    function sendInvite() {
-      const email = document.getElementById('inviteEmail').value;
-      if (!email) {
-        showToast('Please enter an email address', 'error');
-        return;
-      }
-      showToast('Invite sent to ' + email, 'success');
-      document.getElementById('inviteModal').classList.remove('active');
-    }
-
-    // ===== COMPARISON =====
-    function addToComparison(id) {
-      if (!appState.selectedCandidates.has(id)) {
-        appState.selectedCandidates.add(id);
-      }
-      if (appState.selectedCandidates.size > 3) {
-        appState.selectedCandidates.delete(Array.from(appState.selectedCandidates)[0]);
-      }
-      updateBatchActions();
-      showToast('Added to comparison', 'info');
-    }
-
-    function showComparisonModal(selectedIds) {
-      const compareGrid = document.getElementById('compareGrid');
-      compareGrid.innerHTML = '';
-      selectedIds.forEach(id => {
-        const cand = candidates.find(c => c.id === id);
-        const displayName = appState.anonMode ? cand.id : cand.name;
-        const scores = appState.candidateScores[id] || {};
-        compareGrid.innerHTML += `
-          <div class="compare-card">
-            <div class="compare-card-header">
-              <div style="font-weight: 600; color: #f0f4f8;">${displayName}</div>
-              <div style="font-size: 12px; color: #8899a6; margin-top: 4px;">${cand.id}</div>
-            </div>
-            <div class="compare-row">
-              <span class="compare-label">Challenge</span>
-              <span class="compare-value">${cand.challenge}</span>
-            </div>
-            <div class="compare-row">
-              <span class="compare-label">Status</span>
-              <span class="compare-value">${cand.status}</span>
-            </div>
-            <div class="compare-row">
-              <span class="compare-label">Score</span>
-              <span class="compare-value">${cand.score ? cand.score.toFixed(1) : '-'}</span>
-            </div>
-            <div class="compare-row">
-              <span class="compare-label">Commits</span>
-              <span class="compare-value">${cand.commits}</span>
-            </div>
-            <div class="compare-row">
-              <span class="compare-label">Lines Changed</span>
-              <span class="compare-value">${cand.lines}</span>
-            </div>
-            <div class="compare-row">
-              <span class="compare-label">Verified</span>
-              <span class="compare-value">${cand.verified ? '✓' : '-'}</span>
-            </div>
-          </div>
-        `;
-      });
-      document.getElementById('compareModal').classList.add('active');
-    }
-
-    // ===== SCORING PAGE =====
-    function populateScoringDropdown() {
-      const select = document.getElementById('scoringCandidateSelect');
-      select.innerHTML = '<option value="">Select a candidate...</option>';
-      candidates.forEach(c => {
-        const displayName = appState.anonMode ? c.id : c.name;
-        select.innerHTML += `<option value="${c.id}">${displayName} - ${c.challenge}</option>`;
-      });
-      select.addEventListener('change', (e) => {
-        if (e.target.value) loadCandidateForScoring(e.target.value);
-      });
-    }
-
-    function loadCandidateForScoring(id) {
-      const cand = candidates.find(c => c.id === id);
-      const displayName = appState.anonMode ? cand.id : cand.name;
-      document.getElementById('scoringCandidateHeader').style.display = 'flex';
-      document.getElementById('scoringAvatar').textContent = cand.avatar;
-      document.getElementById('scoringCandidateName').textContent = displayName;
-      document.getElementById('scoringChallengeInfo').textContent = `${cand.id} • ${cand.challenge} • ${cand.status}`;
-      document.getElementById('scoringContent').style.display = 'grid';
-
-      // Load previous scores if exist
-      const scores = appState.candidateScores[id] || { correctness: 3, accessibility: 3, clarity: 3, ownership: 3, solving: 3, comm: 3 };
-      document.getElementById('scoreCorrectness').value = scores.correctness;
-      document.getElementById('scoreAccessibility').value = scores.accessibility;
-      document.getElementById('scoreClarity').value = scores.clarity;
-      document.getElementById('scoreOwnership').value = scores.ownership;
-      document.getElementById('solvingScore').value = scores.solving;
-      document.getElementById('scoreComm').value = scores.comm;
-
-      updateScorings();
-
-      // Show widener scores if applicable
-      if (cand.wideners.length > 0) {
-        document.getElementById('widenerScoresDiv').style.display = 'block';
-        let widenerHTML = '';
-        cand.wideners.forEach(w => {
-          widenerHTML += `
-            <div class="rubric-dimension">
-              <label class="dimension-label">${w}</label>
-              <input type="range" class="slider" min="1" max="5" value="3" oninput="updateScorings()">
-              <div class="dimension-scale">
-                <span>1</span>
-                <span style="color: #3b82f6; font-weight: 600;">3</span>
-                <span>5</span>
-              </div>
-            </div>
-          `;
-        });
-        document.getElementById('widenerScoresContainer').innerHTML = widenerHTML;
-      } else {
-        document.getElementById('widenerScoresDiv').style.display = 'none';
-      }
-    }
-
-    function updateScorings() {
-      const vals = [
-        parseFloat(document.getElementById('scoreCorrectness').value),
-        parseFloat(document.getElementById('scoreAccessibility').value),
-        parseFloat(document.getElementById('scoreClarity').value),
-        parseFloat(document.getElementById('scoreOwnership').value),
-        parseFloat(document.getElementById('solvingScore').value),
-        parseFloat(document.getElementById('scoreComm').value)
-      ];
-
-      document.getElementById('correctnessValue').textContent = vals[0];
-      document.getElementById('accessibilityValue').textContent = vals[1];
-      document.getElementById('clarityValue').textContent = vals[2];
-      document.getElementById('ownershipValue').textContent = vals[3];
-      document.getElementById('solvingValue').textContent = vals[4];
-      document.getElementById('commValue').textContent = vals[5];
-
-      const avg = (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1);
-      document.getElementById('overallScore').textContent = avg;
-    }
-
-    function goToScoring(id) {
-      window.location.hash = 'scoring';
-      navigateToPage('scoring');
-      document.getElementById('scoringCandidateSelect').value = id;
-      loadCandidateForScoring(id);
-    }
-
-    function saveScoringDraft() {
-      showToast('Scoring saved as draft', 'success');
-    }
-
-    function generateFitfolio() {
-      document.getElementById('fitfolioGenerateModal').classList.add('active');
-      showToast('FitFolio generated successfully', 'success');
-    }
-
-    function closeFitfolioGenerateModal() {
-      document.getElementById('fitfolioGenerateModal').classList.remove('active');
-    }
-
-    // ===== CHALLENGE CREATION =====
-    function resetChallengeModal() {
-      document.getElementById('challengeStep1').style.display = 'block';
-      document.getElementById('challengeStep2').style.display = 'none';
-      document.getElementById('challengeStep3').style.display = 'none';
-      document.getElementById('roleSelect').value = '';
-      document.getElementById('focusInput').value = '';
-    }
-
-    function closeCreateChallengeModal() {
-      document.getElementById('createChallengeModal').classList.remove('active');
-      resetChallengeModal();
-    }
-
-    function generateChallengeStep2() {
-      const role = document.getElementById('roleSelect').value;
-      if (!role) {
-        showToast('Please select a role', 'error');
-        return;
-      }
-      document.getElementById('challengeStep1').style.display = 'none';
-      document.getElementById('challengeStep2').style.display = 'block';
-      simulateAIGeneration(role);
-    }
-
-    const challengeTemplates = {
-      frontend: {
-        title: 'Frontend React — Search + Accessibility Pivot',
-        stack: 'React, TypeScript, CSS',
-        brief: 'Build a product list component with client-side search and category filter. The component should handle a dataset of 50+ items with real-time filtering. At minute 60, the pivot is triggered: add full keyboard navigation and ARIA labels for all interactive controls.',
-        criteria: '• Real-time search filters products by name and description\n• Category filter composes cleanly with search (both active simultaneously)\n• Keyboard navigation: Tab, Shift+Tab, Enter, Arrow keys work across all controls\n• ARIA labels on search input, category dropdown, and result list\n• Basic unit tests for filter logic and debounce function\n• README documents accessibility decisions and tradeoffs',
-        pivot: 'At 60 minutes: "Add keyboard navigation and ARIA labels for all controls. Focus on accessibility best practices. Justify your implementation choices in the README."',
-        rubricStack: ['Correctness & edge-case handling', 'Accessibility quality (ARIA, keyboard nav)', 'Code clarity and component structure']
-      },
-      backend: {
-        title: 'Backend API — Rate Limiter + Auth Pivot',
-        stack: 'Node.js, Express, PostgreSQL',
-        brief: 'Design and implement a RESTful API for a task management system with CRUD operations, input validation, and error handling. At minute 60, the pivot is triggered: add token-based rate limiting per user with configurable thresholds.',
-        criteria: '• CRUD endpoints for tasks (create, read, update, delete)\n• Input validation with clear error messages and proper HTTP status codes\n• Rate limiter tracks requests per token with sliding window\n• Configurable rate limits (requests per minute, burst allowance)\n• Integration tests for happy path and rate limit scenarios\n• README documents API design decisions',
-        pivot: 'At 60 minutes: "Implement token-based rate limiting. Each API token gets 100 requests per minute with a burst allowance of 20. Return 429 with Retry-After header when exceeded."',
-        rubricStack: ['API design and REST conventions', 'Rate limiting correctness', 'Error handling and validation quality']
-      },
-      fullstack: {
-        title: 'Full-Stack — Real-time Dashboard + WebSocket Pivot',
-        stack: 'React, Node.js, WebSocket',
-        brief: 'Build a metrics dashboard that displays data from an API with charts and filters. Start with polling-based updates. At minute 60, the pivot is triggered: migrate to WebSocket for real-time streaming updates.',
-        criteria: '• Dashboard displays at least 3 metric types with visual charts\n• Filters allow narrowing by date range and metric type\n• WebSocket connection with automatic reconnection on disconnect\n• Real-time updates reflect in charts within 500ms\n• Loading states and error boundaries handle edge cases\n• README compares polling vs WebSocket tradeoffs',
-        pivot: 'At 60 minutes: "Replace polling with WebSocket for real-time updates. Handle connection drops gracefully with exponential backoff reconnection. Show connection status indicator."',
-        rubricStack: ['Frontend component architecture', 'WebSocket implementation quality', 'Data flow and state management']
-      },
-      data: {
-        title: 'Data Analysis — Retention Cohorts + Pivot Redefinition',
-        stack: 'Python, SQL, Pandas',
-        brief: 'Analyze a CSV of user events to produce a monthly cohort retention chart and 5 key insights. At minute 60, the pivot is triggered: redefine cohorts by first paid event instead of signup date, update all analysis.',
-        criteria: '• Monthly cohort retention table and visualization\n• 5 concise, actionable insights from the data\n• Reproducible analysis steps in notebook\n• Pivot: cohorts redefined by first paid event with delta notes\n• Clear documentation of methodology and assumptions\n• At least 1 caveat about data quality or limitations',
-        pivot: 'At 60 minutes: "Redefine cohorts by first paid event instead of first seen. Update the retention chart. Note what changed and what stayed the same."',
-        rubricStack: ['Data cleaning and analysis quality', 'Visualization clarity', 'Insight depth and actionability']
-      },
-      devops: {
-        title: 'Infrastructure — CI Pipeline + Rollback Pivot',
-        stack: 'Docker, GitHub Actions, Terraform',
-        brief: 'Set up a CI/CD pipeline for a microservice: containerize the app, write a multi-stage Dockerfile, and create GitHub Actions workflow for build/test/deploy. At minute 60, add automated rollback on health check failure.',
-        criteria: '• Multi-stage Dockerfile with optimized image size\n• GitHub Actions workflow: lint, test, build, deploy stages\n• Health check endpoint and automated verification\n• Rollback mechanism triggers on failed health check\n• Pipeline runs in under 5 minutes end-to-end\n• README documents deployment strategy and rollback behavior',
-        pivot: 'At 60 minutes: "Add automated rollback. If the health check fails within 2 minutes of deployment, automatically revert to the previous version and alert via webhook."',
-        rubricStack: ['Container and pipeline design', 'Rollback mechanism correctness', 'Infrastructure-as-code quality']
-      },
-      'ai-ml': {
-        title: 'AI/ML — Classification Pipeline + Drift Detection Pivot',
-        stack: 'Python, scikit-learn, Pandas',
-        brief: 'Build a text classification pipeline: data preprocessing, feature extraction, model training, and evaluation. At minute 60, add a data drift detection module that flags when incoming data distribution shifts beyond a configurable threshold.',
-        criteria: '• End-to-end classification pipeline with train/test split\n• At least 2 model comparisons with metrics (precision, recall, F1)\n• Drift detector uses statistical test (KS, PSI, or chi-squared)\n• Configurable threshold with clear alerting mechanism\n• Notebook documents model selection rationale\n• Reproducible with pinned dependencies',
-        pivot: 'At 60 minutes: "Add drift detection. Monitor incoming feature distributions against training data. Flag drift when PSI > 0.2 or KS test p-value < 0.05. Log drift reports."',
-        rubricStack: ['ML pipeline correctness', 'Drift detection implementation', 'Evaluation methodology and documentation']
-      }
-    };
-
-    function simulateAIGeneration(role) {
-      const template = challengeTemplates[role];
-      if (!template) return;
-
-      const statusTexts = [
-        'Analyzing role requirements',
-        'Designing challenge brief',
-        'Calibrating difficulty for seniority',
-        'Generating acceptance criteria',
-        'Crafting pivot specification',
-        'Building rubric dimensions',
-        'Finalizing challenge'
-      ];
-      let statusIndex = 0;
-      const statusInterval = setInterval(() => {
-        statusIndex++;
-        if (statusIndex < statusTexts.length) {
-          document.getElementById('aiStatusText').textContent = statusTexts[statusIndex];
-        }
-      }, 400);
-
-      setTimeout(() => {
-        clearInterval(statusInterval);
-        const focus = document.getElementById('focusInput').value;
-        const duration = document.getElementById('durationSelect').value;
-        const stipend = duration === '120' ? '$100' : '$150';
-        const timeCap = duration + ' min';
-
-        let title = template.title;
-        if (focus) {
-          title = title.split('—')[0].trim() + ' — ' + focus.charAt(0).toUpperCase() + focus.slice(1) + ' Focus';
-        }
-        document.getElementById('genTitle').value = title;
-        document.getElementById('genStack').value = template.stack;
-        document.getElementById('genMeta').value = timeCap + ' • ' + stipend + ' stipend';
-        document.getElementById('genBrief').value = template.brief;
-        document.getElementById('genCriteria').value = template.criteria;
-        document.getElementById('genPivot').value = template.pivot;
-
-        const rubricEl = document.getElementById('genRubricStack');
-        rubricEl.innerHTML = template.rubricStack.map(d => '<div>• ' + d + '</div>').join('');
-
-        document.getElementById('challengeStep2').style.display = 'none';
-        document.getElementById('challengeStep3').style.display = 'block';
-      }, 2800);
-    }
-
-    function publishChallenge() {
-      showToast('Challenge published successfully', 'success');
-      closeCreateChallengeModal();
-    }
-
-    // ===== LIVE SESSION SIMULATION =====
-    function startSimulation() {
-      if (appState.isProfRunning) return;
-      appState.isProfRunning = true;
-      document.getElementById('startSimBtn').style.display = 'none';
-      document.getElementById('pauseSimBtn').style.display = 'block';
-
-      appState.simulationInterval = setInterval(() => {
-        appState.proofTime += 0.4;
-        if (appState.proofTime > 120) {
-          appState.proofTime = 120;
-          clearInterval(appState.simulationInterval);
-          showProofCompleted();
-          appState.isProfRunning = false;
-          document.getElementById('startSimBtn').style.display = 'block';
-          document.getElementById('pauseSimBtn').style.display = 'none';
-          return;
-        }
-
-        updateLiveSession();
-      }, 100);
-    }
-
-    function pauseSimulation() {
-      appState.isProfRunning = false;
-      clearInterval(appState.simulationInterval);
-      document.getElementById('startSimBtn').style.display = 'block';
-      document.getElementById('pauseSimBtn').style.display = 'none';
-    }
-
-    function resetSimulation() {
-      appState.proofTime = 0;
-      appState.isProfRunning = false;
-      clearInterval(appState.simulationInterval);
-      document.getElementById('startSimBtn').style.display = 'block';
-      document.getElementById('pauseSimBtn').style.display = 'none';
-      updateLiveSession();
-    }
-
-    function updateLiveSession() {
-      const timeRem = 120 - appState.proofTime;
-      document.getElementById('liveTimeRemaining').textContent = Math.max(0, Math.ceil(timeRem)) + 'm';
-
-      const currentCommitIdx = commits.findIndex(c => c.time > appState.proofTime) - 1;
-      const displayedCommits = commits.slice(0, Math.max(1, currentCommitIdx + 1));
-
-      let totalLines = 0;
-      let totalFiles = new Set();
-      displayedCommits.forEach(c => {
-        if (!c.isPivot) {
-          totalLines += c.lines;
-          totalFiles.add(c.files);
-        }
-      });
-
-      document.getElementById('liveCommitCount').textContent = displayedCommits.length - (displayedCommits.some(c => c.isPivot) ? 1 : 0);
-      document.getElementById('liveLineCount').textContent = totalLines;
-      document.getElementById('liveFileCount').textContent = totalFiles.size;
-
-      const testCov = Math.min(100, appState.proofTime * 0.8);
-      document.getElementById('liveTestCoverage').style.width = testCov + '%';
-      document.getElementById('liveTestCoverageText').textContent = Math.round(testCov) + '%';
-
-      const phase = appState.proofTime >= 60 ? 'Post-Pivot' : 'Pre-Pivot';
-      document.getElementById('livePhase').textContent = phase;
-
-      const feed = document.getElementById('commitFeed');
-      feed.innerHTML = '';
-      displayedCommits.forEach(commit => {
-        const item = document.createElement('div');
-        item.className = 'commit-item' + (commit.isPivot ? ' pivot-marker' : '');
-        const statsText = !commit.isPivot ? `+${commit.lines} lines • ${commit.files} files` : '';
-        item.innerHTML = `
-          <div class="commit-marker"></div>
-          <div class="commit-content">
-            ${commit.isPivot ? '<div class="pivot-label">🔄 Pivot Triggered</div>' : ''}
-            <div class="commit-time">${commit.time}m</div>
-            <div class="commit-msg">${commit.msg}</div>
-            <div class="commit-stats">${statsText}</div>
-          </div>
-        `;
-        feed.appendChild(item);
-      });
-    }
-
-    function showProofCompleted() {
-      const feed = document.getElementById('commitFeed');
-      feed.innerHTML = `
-        <div style="padding: 32px; text-align: center; background: rgba(78, 205, 196, 0.1); border-radius: 8px;">
-          <div style="font-size: 48px; margin-bottom: 16px;">✓</div>
-          <div style="font-size: 18px; font-weight: 700; color: #f0f4f8; margin-bottom: 8px;">Proof Completed</div>
-          <div style="font-size: 13px; color: #8899a6; margin-bottom: 24px;">19 commits • 1,247 lines • 100% test coverage • Pivot handled perfectly</div>
-          <div class="verified-badge" style="display: inline-block; margin-bottom: 24px;">✓ VERIFIED CRAFT</div>
-          <button class="btn-primary" onclick="window.location.hash='scoring'">Proceed to Scoring →</button>
-        </div>
-      `;
-    }
-
-    // ===== SETTINGS PAGE =====
     function showInviteMemberModal() {
       const email = prompt('Enter team member email:');
       if (email) {
@@ -2016,16 +1686,82 @@
       }
     }
 
-    // ===== INITIALIZE PAGE =====
-    renderCandidatesTable();
-    updateLiveSession();
+    // ===== LIVE SESSION SIMULATION =====
+    let simInterval = null;
+    let simTime = 0;
 
-    // Prevent modal overlay clicks from propagating
+    function startSimulation() {
+      document.getElementById('startSimBtn').style.display = 'none';
+      document.getElementById('pauseSimBtn').style.display = 'flex';
+
+      simInterval = setInterval(() => {
+        simTime += 5;
+
+        if (simTime > 120) {
+          simTime = 120;
+          pauseSimulation();
+          return;
+        }
+
+        document.getElementById('liveTimeRemaining').textContent = (120 - simTime) + 'm';
+        document.getElementById('liveCommitCount').textContent = Math.floor(simTime / 6);
+        document.getElementById('liveLineCount').textContent = Math.floor(simTime * 12);
+        document.getElementById('liveFileCount').textContent = Math.floor(simTime / 15);
+
+        const coverage = Math.min(100, Math.floor(simTime * 0.7));
+        document.getElementById('liveTestCoverage').style.width = coverage + '%';
+        document.getElementById('liveTestCoverageText').textContent = coverage + '%';
+
+        if (simTime >= 60) {
+          document.getElementById('livePhase').textContent = 'Pivot Complete';
+        }
+
+        if (Math.random() < 0.2) {
+          const commitFeed = document.getElementById('commitFeed');
+          const commit = document.createElement('div');
+          const messages = ['Fix: Handle edge case in data processing', 'Feat: Add error boundaries', 'Test: Coverage improvements'];
+          const isPivot = simTime >= 60;
+          commit.className = `commit-item ${isPivot ? 'pivot' : ''}`;
+          commit.innerHTML = `
+            <div class="commit-icon">${isPivot ? '⚡' : '●'}</div>
+            <div class="commit-content">
+              <div class="commit-message">${messages[Math.floor(Math.random() * messages.length)]}</div>
+              <div class="commit-meta">${Math.floor(Math.random() * 10) + 1} files • ${Math.floor(Math.random() * 100) + 10} lines</div>
+            </div>
+          `;
+          commitFeed.insertBefore(commit, commitFeed.firstChild);
+          if (commitFeed.children.length > 8) commitFeed.removeChild(commitFeed.lastChild);
+        }
+      }, 1000);
+    }
+
+    function pauseSimulation() {
+      clearInterval(simInterval);
+      document.getElementById('startSimBtn').style.display = 'flex';
+      document.getElementById('pauseSimBtn').style.display = 'none';
+    }
+
+    function resetSimulation() {
+      pauseSimulation();
+      simTime = 0;
+      document.getElementById('liveCommitCount').textContent = '0';
+      document.getElementById('liveLineCount').textContent = '0';
+      document.getElementById('liveFileCount').textContent = '0';
+      document.getElementById('liveTimeRemaining').textContent = '120m';
+      document.getElementById('livePhase').textContent = 'Pre-Pivot';
+      document.getElementById('liveTestCoverage').style.width = '0%';
+      document.getElementById('liveTestCoverageText').textContent = '0%';
+      document.getElementById('commitFeed').innerHTML = '';
+    }
+
+    // ===== INITIALIZE =====
+    renderChallenges();
+    renderCandidatesTable();
+
+    // Modal overlays
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
       overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-          overlay.classList.remove('active');
-        }
+        if (e.target === overlay) overlay.classList.remove('active');
       });
     });
   </script>
