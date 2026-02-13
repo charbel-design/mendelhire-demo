@@ -2301,8 +2301,12 @@
         phaseEl.style.color = proofTime >= (pivotTime * 60) ? '#E5B84C' : '#5CD6C8';
       }
 
-      // Update code editor based on progress
-      const codePhaseIndex = Math.min(Math.floor(pct / (100 / codePhases.length)), codePhases.length - 1);
+      // Update code editor at specific proof-time thresholds (seconds)
+      const codeThresholds = [0, 60, 180, 360, 540, 600];
+      let codePhaseIndex = 0;
+      for (let i = codeThresholds.length - 1; i >= 0; i--) {
+        if (proofTime >= codeThresholds[i]) { codePhaseIndex = i; break; }
+      }
       updateCodeEditor(codePhaseIndex);
 
       if (proofTime < totalSeconds) {
