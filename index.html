@@ -3,92 +3,3937 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  
-  
-  
-  
-   #��SarMn: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; overflow: hidden; }
-    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a1628; color: #f0f4f8; line-height: 1.6; }
-    .container { width: 100%; height: 100%; display: flex; flex-direction: column; position: relative; }
-    .sections-wrapper { flex: 1; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
-    .section { display: none; position: absolute; width: 100%; height: 100%; padding: 60px 40px 120px; overflow-y: auto; opacity: 0; transform: translateY(20px); transition: opacity 0.35s ease-out, transform 0.35s ease-out; }
-    .section.active { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; opacity: 1; transform: translateY(0); }
-5px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
-    .proof-controls { display: flex; gap: 15px; justify-content: center; margin-bottom: 30px; }
-    .proof-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: 100%; max-width: 1100px; margin-bottom: 30px; }
-    .proof-panel { background: #111d2e; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; }
-    .proof-panel h4 { font-size: 1rem; margin-bottom: 20px; color: #f0f4f8; }
-    .commit-feed { flex: 1; max-height: 400px; overflow-y: auto; font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 0.85rem; }
-    .commit-item { padding: 12px; margin-bottom: 10px; background: rgba(30, 58, 95, 0.3); border-left: 3px solid #3b82f6; border-radius: 4px; opacity: 0; animation: fadeInLeft 0.4s ease-out forwards; }
-    .commit-item.pivot { background: rgba(212, 168, 67, 0.15); border-left-color: #d4a843; }
-    .commit-time { color: #8899a6; font-size: 0.8rem; margin-bottom: 4px; }
-    .commit-msg { color: #f0f4f8; }
-    @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-    .stat-item { padding: 15px; background: rgba(78, 205, 196, 0.1); border-radius: 8px; border-left: 3px solid #4ecdc4; }
-    .stat-label { color: #8899a6; font-size: 0.85rem; margin-bottom: 5px; }
-.stat-value-large { color: #4ecdc4; font-size: 1.5rem; font-weight: 700; }
-    .timeline-container { width: 100%; max-width: 1100px; margin-bottom: 30px; }
-    .timeline-bar { width: 100%; height: 30px; background: #1e3a5f; border-radius: 8px; position: relative; cursor: pointer; overflow: hidden; margin-bottom: 15px; }
-    .timeline-fill { height: 100%; background: #3b82f6; transition: width 0.1s linear; position: relative; }
-    .timeline-pivot { position: absolute; left: 50%; top: 0; width: 2px; height: 100%; background: #d4a843; transform: translateX(-1px); }
-    .timeline-labels { display: flex; justify-content: space-between; font-size: 0.85rem; color: #8899a6; padding: 0 5px; }iew rounds per hire</div></div>
-          </div>
-          <div class="comparison-grid">
-            <div class="comparison-column">
-              <h3>Traditional Take-Home</h3>
-              <div class="comparison-item fail"><div class="comparison-icon">✗</div><div>No verification of identity</div></div>
-              <div class="comparison-item fail"><div class="comparison-icon">✗</div><div>No time limit, unpaid work</div></div>
-              <div class="comparison-item fail"><div class="comparison-icon">✗</div><div>No pivot, no adaptability signal</div></div>
-              <div class="comparison-item fail"><div class="comparison-icon">✗</div><div>No rubric, subjective scoring</div></div>
+  <title>MendelHire — Proof-First Hiring Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #0a1628;
+      color: #f0f4f8;
+      line-height: 1.6;
+    }
+
+    /* Container structure */
+    .viewport {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .sections-container {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow-y: auto;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+      padding: 60px 80px;
+    }
+
+    .section.active {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Animated background for title section */
+    .animated-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.03;
+      pointer-events: none;
+    }
+
+    .animated-bg svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ==================== SECTION 1: TITLE ==================== */
+    #section-1 {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(135deg, #0a1628 0%, #111d2e 100%);
+      position: relative;
+    }
+
+    .title-content {
+      max-width: 900px;
+      z-index: 2;
+    }
+
+    .title-content h1 {
+      font-size: 72px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #f0f4f8 0%, #8899a6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .title-content .subtitle {
+      font-size: 32px;
+      font-weight: 600;
+      color: #3b82f6;
+      margin-bottom: 24px;
+    }
+
+    .title-content .tagline {
+      font-size: 18px;
+      color: #8899a6;
+      margin-bottom: 32px;
+      line-height: 1.8;
+    }
+
+    .title-content .founder-note {
+      font-size: 14px;
+      color: #8899a6;
+      margin-bottom: 48px;
+      line-height: 1.8;
+      font-style: italic;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 40px;
+      background-color: #3b82f6;
+      color: #f0f4f8;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .cta-button:hover {
+      background-color: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(59, 130, 246, 0.3);
+    }
+
+    .cta-button:active {
+      transform: translateY(0);
+    }
+
+    /* ==================== SECTION 2: PROBLEM ==================== */
+    #section-2 {
+      padding-top: 40px;
+    }
+
+    .section-headline {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 48px;
+      color: #f0f4f8;
+    }
+
+    .problem-section {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    /* Before/After Comparison */
+    .before-after-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .before-after-card {
+      background-color: #152238;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 32px;
+      position: relative;
+    }
+
+    .before-after-card.fake {
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .before-after-card.verified {
+      border-color: rgba(78, 205, 196, 0.3);
+    }
+
+    .before-after-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .before-after-card.fake .before-after-label {
+      color: #ef4444;
+    }
+
+    .before-after-card.verified .before-after-label {
+      color: #4ecdc4;
+    }
+
+    .code-snippet {
+      background-color: #0a1628;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 20px;
+      font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      overflow-x: auto;
+      color: #8899a6;
+      margin: 16px 0;
+    }
+
+    .code-snippet .line {
+      display: flex;
+      gap: 8px;
+    }
+
+    .code-snippet .line-num {
+      color: #3f5166;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    .code-snippet .keyword { color: #3b82f6; }
+    .code-snippet .string { color: #4ecdc4; }
+    .code-snippet .function { color: #f0f4f8; }
+
+    .fake-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background-color: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+
+    .verified-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background-color: rgba(78, 205, 196, 0.15);
+      color: #4ecdc4;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+
+    /* Stats Row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-bottom: 48px;
+      padding: 32px;
+      background-color: #111d2e;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #3b82f6;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #8899a6;
+      line-height: 1.6;
+    }
+
+    /* Comparison Table */
+    .comparison-visual {
+      background-color: #111d2e;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      margin: 32px 0;
+    }
+
+    .comparison-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      background-color: #0a1628;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .comparison-header-cell {
+      padding: 24px;
+      font-weight: 600;
+      font-size: 14px;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .comparison-header-cell:last-child {
+      border-right: none;
+    }
+
+    .comparison-header-cell.traditional {
+      color: #ef4444;
+    }
+
+    .comparison-header-cell.mendelhire {
+      color: #4ecdc4;
+    }
+
+    .comparison-feature {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .comparison-feature:last-child {
+      border-bottom: none;
+    }
+
+    .comparison-feature-label {
+      padding: 24px;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 14px;
+      color: #8899a6;
+    }
+
+    .comparison-feature-cell {
+      padding: 24px;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .comparison-feature-cell:last-child {
+      border-right: none;
+      background-color: rgba(78, 205, 196, 0.05);
+    }
+
+    .check-icon {
+      color: #4ecdc4;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .x-icon {
+      color: #ef4444;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .positioning-statement {
+      padding: 32px;
+      background-color: #152238;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      color: #f0f4f8;
+      line-height: 1.8;
+    }
+
+    /* ==================== SECTION 3: LIVE PROOF SIMULATION ==================== */
+    #section-3 {
+      padding-top: 40px;
+    }
+
+    .simulation-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .challenge-brief {
+      background-color: #152238;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 32px;
+    }
+
+    .challenge-brief h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #f0f4f8;
+    }
+
+    .acceptance-criteria {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+
+    .acceptance-criteria li {
+      padding: 12px 0;
+      color: #8899a6;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .acceptance-criteria li:before {
+      content: "✓";
+      color: #3b82f6;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .acceptance-criteria li:last-child {
+      border-bottom: none;
+    }
+
+    .challenge-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .meta-item {
+      text-align: center;
+    }
+
+    .meta-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #3b82f6;
+      margin-bottom: 4px;
+    }
+
+    .meta-label {
+      font-size: 12px;
+      color: #8899a6;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .challenge-actions {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+
+    .start-simulation-btn {
+      padding: 16px 32px;
+      background-color: #3b82f6;
+      color: #f0f4f8;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .start-simulation-btn:hover:not(:disabled) {
+      background-color: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(59, 130, 246, 0.3);
+    }
+
+    .start-simulation-btn:disabled {
+      background-color: #1e3a5f;
+      color: #8899a6;
+      cursor: not-allowed;
+    }
+
+    /* Simulation Active State */
+    .simulation-container {
+      display: none;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .simulation-container.active {
+      display: flex;
+    }
+
+    .timeline-container {
+      background-color: #111d2e;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .timeline-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #8899a6;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .timeline-bar {
+      position: relative;
+      width: 100%;
+      height: 40px;
+      background-color: #0a1628;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .timeline-progress {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+      width: 0%;
+      transition: width 0.1s linear;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .timeline-pivot-marker {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 3px;
+      height: 100%;
+      background-color: #d4a843;
+      transform: translateX(-50%);
+      box-shadow: 0 0 12px rgba(212, 168, 67, 0.4);
+    }
+
+    .timeline-label-pivot {
+      position: absolute;
+      top: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      font-weight: 600;
+      color: #d4a843;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .timeline-commit-dot {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: #3b82f6;
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 2px solid #0a1628;
+    }
+
+    .timeline-commit-dot.pivot {
+      background-color: #d4a843;
+      box-shadow: 0 0 8px rgba(212, 168, 67, 0.6);
+    }
+
+    .timeline-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      font-size: 12px;
+      color: #8899a6;
+      font-weight: 500;
+    }
+
+    /* Simulation Content Grid */
+    .simulation-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .commit-feed {
+      background-color: #0a1628;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 24px;
+      font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      color: #8899a6;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .commit-item {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      gap: 12px;
+      animation: slideInLeft 0.4s ease-out forwards;
+      opacity: 0;
+    }
+
+    .commit-item:last-child {
+      border-bottom: none;
+    }
+
+    .commit-item.pivot {
+      border-left: 3px solid #d4a843;
+      padding-left: 12px;
+      background-color: rgba(212, 168, 67, 0.08);
+      margin: 8px -12px 8px 0;
+      padding: 12px 0 12px 12px;
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .commit-time {
+      color: #3b82f6;
+      font-weight: 600;
+      flex-shrink: 0;
+      width: 50px;
+    }
+
+    .commit-message {
+      color: #f0f4f8;
+    }
+
+    .commit-message .emoji {
+      margin-right: 4px;
+    }
+
+    .simulation-stats {
+      background-color: #152238;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .stat-block {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .stat-block:last-child {
+      border-bottom: none;
+    }
+
+    .stat-block-label {
+      font-size: 14px;
+      color: #8899a6;
+      font-weight: 500;
+    }
+
+    .stat-block-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #3b82f6;
+      font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    }
+
+    .stat-block-bar {
+      width: 100%;
+      height: 6px;
+      background-color: #0a1628;
+      border-radius: 3px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .stat-block-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 3px;
+    }
+
+    /* Simulation Controls */
+    .simulation-controls {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .control-btn {
+      padding: 12px 28px;
+      background-color: #152238;
+      color: #f0f4f8;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .control-btn:hover {
+      background-color: #1e3a5f;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .control-btn.primary {
+      background-color: #3b82f6;
+      border-color: #3b82f6;
+    }
+
+    .control-btn.primary:hover {
+      background-color: #2563eb;
+      border-color: #2563eb;
+    }
+
+    .control-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Verification Section */
+    .verification-section {
+      display: none;
+      flex-direction: column;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .verification-section.active {
+      display: flex;
+    }
+
+    .verification-checklist {
+      background-color: #152238;
+      border: 1px solid rgba(78, 205, 196, 0.3);
+      border-radius: 12px;
+      padding: 32px;
+    }
+
+    .verification-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: #4ecdc4;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .verification-check {
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #f0f4f8;
+      font-size: 14px;
+    }
+
+    .verification-check:last-child {
+      border-bottom: none;
+    }
+
+    .verification-check-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #4ecdc4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0a1628;
+      font-weight: 700;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .verified-badge-container {
+      text-align: center;
+      margin: 32px 0;
+    }
+
+    .verified-craft-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 40px;
+      background-color: transparent;
+      border: 2px solid #d4a843;
+      border-radius: 12px;
+      font-size: 24px;
+      font-weight: 700;
+      color: #d4a843;
+      animation: badgeFadeIn 0.6s ease-out;
+    }
+
+    @keyframes badgeFadeIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .verified-craft-badge.filled {
+      background-color: #d4a843;
+      color: #0a1628;
+      animation: badgeFill 0.8s ease-out 0.3s forwards;
+    }
+
+    @keyframes badgeFill {
+      from {
+        background-color: transparent;
+        color: #d4a843;
+      }
+      to {
+        background-color: #d4a843;
+        color: #0a1628;
+      }
+    }
+
+    .loom-thumbnail {
+      background-color: #111d2e;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      overflow: hidden;
+    }
+
+    .loom-thumbnail:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .loom-play-button {
+      width: 80px;
+      height: 80px;
+      background-color: #3b82f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 40px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 2;
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+    }
+
+    .loom-play-button:hover {
+      background-color: #2563eb;
+      transform: scale(1.1);
+    }
+
+    .loom-duration {
+      position: relative;
+      z-index: 2;
+      font-size: 16px;
+      font-weight: 600;
+      color: #f0f4f8;
+    }
+
+    .loom-caption {
+      position: relative;
+      z-index: 2;
+      font-size: 13px;
+      color: #8899a6;
+      margin-top: 12px;
+    }
+
+    /* ==================== SECTION 4: SOLUTION ==================== */
+    #section-4 {
+      padding-top: 40px;
+    }
+
+    .solution-content {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    /* Feature Cards Grid */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .feature-card {
+      background-color: #152238;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 40px 32px;
+      text-align: center;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(59, 130, 246, 0.3);
+      box-shadow: 0 16px 32px rgba(59, 130, 246, 0.1);
+    }
+
+    .feature-icon {
+      font-size: 48px;
+      line-height: 1;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feature-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #f0f4f8;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: #8899a6;
+      line-height: 1.8;
+    }
+
+    /* Why Candidates Show Up */
+    .value-callout {
+      background-color: #111d2e;
+      border: 2px solid rgba(212, 168, 67, 0.3);
+      border-radius: 12px;
+      padding: 40px;
+      margin-bottom: 32px;
+    }
+
+    .value-callout-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 28px;
+      color: #f0f4f8;
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    .value-items {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .value-item {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .value-item-icon {
+      font-size: 40px;
+      line-height: 1;
+    }
+
+    .value-item-heading {
+      font-size: 16px;
+      font-weight: 600;
+      color: #3b82f6;
+    }
+
+    .value-item-text {
+      font-size: 14px;
+      color: #8899a6;
+      line-height: 1.6;
+    }
+
+    /* Candidate Journey */
+    .candidate-journey {
+      background-color: #152238;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 40px;
+      margin-bottom: 32px;
+    }
+
+    .journey-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 32px;
+      color: #f0f4f8;
+      text-align: center;
+    }
+
+    .journey-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .journey-step {
+      flex: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .journey-step-icon {
+      font-size: 36px;
+      line-height: 1;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    .journey-step-text {
+      font-size: 13px;
+      color: #8899a6;
+      font-weight: 500;
+      line-height: 1.6;
+    }
+
+    .journey-arrow {
+      font-size: 24px;
+      color: #3b82f6;
+      margin-bottom: 32px;
+    }
+
+    /* Verification Approach */
+    .verification-approach {
+      background-color: #152238;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .verification-approach p {
+      font-size: 18px;
+      font-weight: 600;
+      color: #f0f4f8;
+      line-height: 1.8;
+    }
+
+    /* Fairness Pillar */
+    .fairness-section {
+      background-color: #111d2e;
+      border: 2px solid rgba(78, 205, 196, 0.3);
+      border-radius: 12px;
+      padding: 48px 40px;
+    }
+
+    .fairness-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 32px;
+      color: #4ecdc4;
+      text-align: center;
+    }
+
+    .fairness-items {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .fairness-item {
+      padding: 24px;
+      background-color: #152238;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .fairness-item h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #f0f4f8;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .fairness-item p {
+      font-size: 13px;
+      color: #8899a6;
+      line-height: 1.7;
+    }
+
+    .fairness-statement {
+      text-align: center;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 16px;
+      font-weight: 600;
+      color: #4ecdc4;
+      line-height: 1.8;
+    }
+
+    /* ==================== SECTION 5: ROLE BUILDER ==================== */
+    #section-5 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+      background: linear-gradient(135deg, #0a1628 0%, #111d2e 50%, #0a1628 100%);
+    }
+
+    #section-5 .headline {
+      font-size: 48px;
+      font-weight: 700;
+      color: #f0f4f8;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    #section-5 .subtitle {
+      font-size: 18px;
+      color: #8899a6;
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .role-input-container {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 32px;
+    }
+
+    .role-input {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      background: #152238;
+      color: #f0f4f8;
+      transition: all 200ms ease;
+    }
+
+    .role-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      background: #1a2a3e;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .role-input::placeholder {
+      color: #8899a6;
+    }
+
+    .type-ahead-preview {
+      margin-top: 16px;
+      font-size: 14px;
+      color: #8899a6;
+      text-align: center;
+      min-height: 20px;
+      opacity: 0;
+      transition: opacity 200ms ease;
+    }
+
+    .type-ahead-preview.visible {
+      opacity: 1;
+    }
+
+    .challenge-card {
+      width: 100%;
+      max-width: 600px;
+      background: #152238;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 32px;
+      margin-top: 32px;
+      animation: fadeInUp 400ms ease forwards;
+      opacity: 0;
+    }
+
+    .challenge-card.hidden {
+      display: none;
+    }
+
+    .challenge-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #f0f4f8;
+      margin-bottom: 20px;
+      animation: fadeInUp 400ms ease 400ms forwards;
+      opacity: 0;
+    }
+
+    .challenge-criteria {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+
+    .challenge-criteria li {
+      padding: 12px 0;
+      padding-left: 28px;
+      position: relative;
+      color: #8899a6;
+      font-size: 14px;
+      animation: fadeInUp 400ms ease forwards;
+      opacity: 0;
+    }
+
+    .challenge-criteria li:nth-child(1) { animation-delay: 800ms; }
+    .challenge-criteria li:nth-child(2) { animation-delay: 1200ms; }
+    .challenge-criteria li:nth-child(3) { animation-delay: 1600ms; }
+    .challenge-criteria li:nth-child(4) { animation-delay: 2000ms; }
+
+    .challenge-criteria li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: #3b82f6;
+      font-weight: 600;
+    }
+
+    .challenge-meta {
+      display: flex;
+      gap: 32px;
+      padding: 20px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #8899a6;
+      animation: fadeInUp 400ms ease 2400ms forwards;
+      opacity: 0;
+    }
+
+    .challenge-meta-item {
+      display: flex;
+      gap: 8px;
+    }
+
+    .challenge-meta-item strong {
+      color: #f0f4f8;
+    }
+
+    .difficulty-context {
+      font-size: 13px;
+      color: #8899a6;
+      font-style: italic;
+      padding: 16px;
+      background: rgba(59, 130, 246, 0.05);
+      border-left: 3px solid #3b82f6;
+      border-radius: 8px;
+      animation: fadeInUp 400ms ease 2800ms forwards;
+      opacity: 0;
+    }
+
+    .custom-note {
+      font-size: 13px;
+      color: #8899a6;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      animation: fadeInUp 400ms ease 2800ms forwards;
+      opacity: 0;
+    }
+
+    .widener-section {
+      width: 100%;
+      max-width: 600px;
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      animation: fadeInUp 400ms ease 3200ms forwards;
+      opacity: 0;
+    }
+
+    .widener-section.hidden {
+      display: none;
+    }
+
+    .widener-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f0f4f8;
+      margin-bottom: 16px;
+    }
+
+    .widener-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .widener-chip {
+      padding: 10px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      background: #1a2a3e;
+      color: #8899a6;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 200ms ease;
+      user-select: none;
+    }
+
+    .widener-chip:hover {
+      border-color: rgba(59, 130, 246, 0.5);
+      background: rgba(59, 130, 246, 0.05);
+      color: #f0f4f8;
+    }
+
+    .widener-chip.selected {
+      background: #4ecdc4;
+      border-color: #4ecdc4;
+      color: #0a1628;
+      font-weight: 600;
+    }
+
+    .widener-chip.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .widener-description {
+      font-size: 13px;
+      color: #8899a6;
+      line-height: 1.6;
+    }
+
+    /* ==================== SECTION 6: INTERACTIVE SCORING ==================== */
+    #section-6 {
+      display: flex;
+      flex-direction: column;
+      padding: 60px 40px;
+      overflow-y: auto;
+      background: linear-gradient(135deg, #0a1628 0%, #111d2e 50%, #0a1628 100%);
+    }
+
+    #section-6 .headline {
+      font-size: 48px;
+      font-weight: 700;
+      color: #f0f4f8;
+      margin-bottom: 48px;
+    }
+
+    .scoring-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      max-width: 1200px;
+    }
+
+    .code-preview {
+      background: #152238;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 24px;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      color: #8899a6;
+      overflow-x: auto;
+    }
+
+    .code-keyword { color: #3b82f6; font-weight: 600; }
+    .code-string { color: #4ecdc4; }
+    .code-comment { color: #5a7a8a; font-style: italic; }
+
+    .scoring-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .scoring-dimension {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .dimension-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f0f4f8;
+    }
+
+    .dimension-description {
+      font-size: 13px;
+      color: #8899a6;
+    }
+
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .slider {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.08);
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #3b82f6;
+      cursor: pointer;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+      transition: all 200ms ease;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #3b82f6;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+      transition: all 200ms ease;
+    }
+
+    .slider:hover::-webkit-slider-thumb {
+      box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.3);
+    }
+
+    .slider-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #3b82f6;
+      min-width: 40px;
+      text-align: right;
+    }
+
+    .compare-button {
+      margin-top: 16px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border: none;
+      border-radius: 8px;
+      color: #f0f4f8;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 200ms ease;
+    }
+
+    .compare-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+    }
+
+    .compare-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .ai-comparison {
+      margin-top: 32px;
+      padding: 24px;
+      background: rgba(78, 205, 196, 0.05);
+      border: 1px solid rgba(78, 205, 196, 0.2);
+      border-radius: 12px;
+      display: none;
+      animation: fadeInUp 400ms ease;
+    }
+
+    .ai-comparison.visible {
+      display: block;
+    }
+
+    .ai-comparison-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #4ecdc4;
+      margin-bottom: 16px;
+    }
+
+    .ai-score-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    .ai-score-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .ai-score-label {
+      color: #8899a6;
+    }
+
+    .ai-score-bar {
+      height: 24px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .ai-score-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4ecdc4, #3b82f6);
+      border-radius: 4px;
+      animation: slideIn 600ms ease;
+      width: 0;
+    }
+
+    .ai-score-value {
+      color: #f0f4f8;
+      font-weight: 600;
+      min-width: 40px;
+    }
+
+    .divergence-note {
+      margin-top: 16px;
+      padding: 12px;
+      background: rgba(212, 168, 67, 0.1);
+      border-left: 3px solid #d4a843;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #8899a6;
+      font-style: italic;
+    }
+
+    .curator-note {
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(59, 130, 246, 0.05);
+      border-left: 3px solid #3b82f6;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #8899a6;
+      font-style: italic;
+    }
+
+    .curator-note strong {
+      color: #f0f4f8;
+      font-style: normal;
+    }
+
+    .summary-line {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #4ecdc4;
+      font-weight: 500;
+    }
+
+    /* ==================== SECTION 7: DASHBOARD ==================== */
+    #section-7 {
+      display: flex;
+      flex-direction: column;
+      padding: 60px 40px;
+      overflow-y: auto;
+      background: linear-gradient(135deg, #0a1628 0%, #111d2e 50%, #0a1628 100%);
+    }
+
+    .section-7-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 48px;
+    }
+
+    #section-7 .headline {
+      font-size: 48px;
+      font-weight: 700;
+      color: #f0f4f8;
+      margin: 0;
+    }
+
+    .anon-toggle {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      background: #152238;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 200ms ease;
+    }
+
+    .anon-toggle:hover {
+      border-color: rgba(59, 130, 246, 0.5);
+      background: rgba(59, 130, 246, 0.05);
+    }
+
+    .anon-toggle-text {
+      font-size: 13px;
+      color: #8899a6;
+      font-weight: 500;
+    }
+
+    .toggle-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 200ms ease;
+    }
+
+    .toggle-checkbox.checked {
+      background: #4ecdc4;
+      border-color: #4ecdc4;
+    }
+
+    .toggle-checkbox.checked::after {
+      content: '✓';
+      color: #0a1628;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .candidates-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .candidate-card {
+      background: #152238;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 200ms ease;
+      position: relative;
+    }
+
+    .candidate-card:hover {
+      border-color: rgba(59, 130, 246, 0.5);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .candidate-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #f0f4f8;
+      margin-bottom: 16px;
+    }
+
+    .candidate-overall {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .overall-label {
+      font-size: 12px;
+      color: #8899a6;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .overall-score {
+      font-size: 24px;
+      font-weight: 700;
+      color: #3b82f6;
+    }
+
+    .candidate-wideners {
+      font-size: 12px;
+      color: #8899a6;
+      margin-bottom: 16px;
+    }
+
+    .widener-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .widener-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(78, 205, 196, 0.1);
+      border: 1px solid rgba(78, 205, 196, 0.3);
+      border-radius: 12px;
+      font-size: 11px;
+      color: #4ecdc4;
+      font-weight: 500;
+    }
+
+    .proof-stack {
+      font-size: 12px;
+      color: #8899a6;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .freshness-indicator {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    .freshness-active {
+      background: #4ecdc4;
+      animation: pulse 2s infinite;
+    }
+
+    .freshness-recent {
+      background: #f59e0b;
+    }
+
+    .quick-scores {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .quick-score {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .quick-score-label {
+      font-size: 11px;
+      color: #8899a6;
+      font-weight: 500;
+    }
+
+    .quick-score-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #3b82f6;
+    }
+
+    .expand-hint {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 18px;
+      opacity: 0;
+      transition: opacity 200ms ease;
+    }
+
+    .candidate-card:hover .expand-hint {
+      opacity: 1;
+    }
+
+    .candidate-expanded {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 22, 40, 0.95);
+      display: none;
+      z-index: 1000;
+      padding: 40px;
+      overflow-y: auto;
+      animation: fadeIn 300ms ease;
+    }
+
+    .candidate-expanded.visible {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .expanded-close {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      color: #f0f4f8;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 200ms ease;
+    }
+
+    .expanded-close:hover {
+      color: #3b82f6;
+      transform: rotate(90deg);
+    }
+
+    .expanded-content {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .expanded-header {
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .expanded-name {
+      font-size: 32px;
+      font-weight: 700;
+      color: #f0f4f8;
+      margin-bottom: 12px;
+    }
+
+    .expanded-overall {
+      font-size: 24px;
+      font-weight: 700;
+      color: #3b82f6;
+    }
+
+    .fitfolio-tabs {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 32px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .fitfolio-tab {
+      padding: 12px 0;
+      border: none;
+      background: transparent;
+      color: #8899a6;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      position: relative;
+      transition: color 200ms ease;
+    }
+
+    .fitfolio-tab:hover {
+      color: #f0f4f8;
+    }
+
+    .fitfolio-tab.active {
+      color: #3b82f6;
+    }
+
+    .fitfolio-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #3b82f6;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 300ms ease;
+    }
+
+    .tab-content.visible {
+      display: block;
+    }
+
+    .score-breakdown {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .breakdown-item {
+      padding: 16px 0;
+    }
+
+    .breakdown-label {
+      font-size: 13px;
+      color: #8899a6;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .breakdown-bar {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .breakdown-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #2563eb);
+      animation: slideIn 600ms ease;
+      width: 0;
+    }
+
+    .breakdown-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f0f4f8;
+    }
+
+    .ats-export-code {
+      background: #0a1628;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'SF Mono', monospace;
+      font-size: 12px;
+      color: #8899a6;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+
+    .ats-export-note {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #4ecdc4;
+    }
+
+    .portfolio-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .portfolio-item {
+      padding: 16px;
+      background: rgba(59, 130, 246, 0.05);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 8px;
+    }
+
+    .portfolio-item-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #f0f4f8;
+      margin-bottom: 8px;
+    }
+
+    .portfolio-item-desc {
+      font-size: 12px;
+      color: #8899a6;
+      line-height: 1.6;
+    }
+
+    .fairness-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(78, 205, 196, 0.1);
+      border: 1px solid rgba(78, 205, 196, 0.3);
+      border-radius: 20px;
+      font-size: 12px;
+      color: #4ecdc4;
+      font-weight: 600;
+      margin-top: 32px;
+    }
+
+    .fairness-badge::before {
+      content: '✓';
+      font-weight: 700;
+    }
+
+    /* ==================== SECTION 8: BRIDGE ==================== */
+    #section-8 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+      background: linear-gradient(135deg, #0a1628 0%, #111d2e 50%, #0a1628 100%);
+    }
+
+    .bridge-headline {
+      font-size: 56px;
+      font-weight: 700;
+      color: #f0f4f8;
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .bridge-statements {
+      max-width: 800px;
+      margin-bottom: 60px;
+    }
+
+    .bridge-statement {
+      font-size: 20px;
+      color: #f0f4f8;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      line-height: 1.7;
+      animation: fadeInUp 400ms ease forwards;
+      opacity: 0;
+    }
+
+    .bridge-statement:last-child {
+      border-bottom: none;
+    }
+
+    .bridge-statement:nth-child(1) { animation-delay: 0ms; }
+    .bridge-statement:nth-child(2) { animation-delay: 200ms; }
+    .bridge-statement:nth-child(3) { animation-delay: 400ms; }
+
+    .bridge-comparison {
+      width: 100%;
+      max-width: 900px;
+      margin-bottom: 40px;
+    }
+
+    .comparison-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #8899a6;
+      text-align: center;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+
+    .comparison-table {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .comparison-row {
+      display: grid;
+      grid-template-columns: 250px 1fr 250px;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .comparison-cell {
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .comparison-step {
+      background: #152238;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #f0f4f8;
+      font-weight: 500;
+    }
+
+    .comparison-problem {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+    }
+
+    .comparison-solution {
+      background: rgba(78, 205, 196, 0.1);
+      border: 1px solid rgba(78, 205, 196, 0.2);
+      color: #4ecdc4;
+      font-weight: 600;
+    }
+
+    .transition-line {
+      font-size: 18px;
+      color: #d4a843;
+      text-align: center;
+      font-weight: 600;
+      margin-top: 40px;
+      animation: fadeInUp 400ms ease 600ms forwards;
+      opacity: 0;
+    }
+
+    /* ==================== SECTION 9: CLOSE ==================== */
+    #section-9 {
+      display: flex;
+      flex-direction: column;
+      padding: 60px 40px;
+      overflow-y: auto;
+      background: linear-gradient(135deg, #0a1628 0%, #111d2e 50%, #0a1628 100%);
+    }
+
+    #section-9 .headline {
+      font-size: 48px;
+      font-weight: 700;
+      color: #f0f4f8;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    .pricing-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      max-width: 900px;
+      margin: 0 auto 48px;
+    }
+
+    .pricing-card {
+      background: #152238;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      transition: all 200ms ease;
+    }
+
+    .pricing-card:hover {
+      border-color: rgba(59, 130, 246, 0.5);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .pricing-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #f0f4f8;
+      margin-bottom: 12px;
+    }
+
+    .pricing-price {
+      font-size: 36px;
+      font-weight: 700;
+      color: #3b82f6;
+      margin-bottom: 12px;
+    }
+
+    .pricing-period {
+      font-size: 13px;
+      color: #8899a6;
+      margin-bottom: 24px;
+    }
+
+    .pricing-feature {
+      font-size: 13px;
+      color: #8899a6;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .pricing-label {
+      font-size: 11px;
+      color: #4ecdc4;
+      font-weight: 600;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .roi-section {
+      max-width: 800px;
+      margin: 0 auto 48px;
+      padding: 24px;
+      background: rgba(78, 205, 196, 0.05);
+      border: 1px solid rgba(78, 205, 196, 0.2);
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .roi-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #4ecdc4;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .roi-text {
+      font-size: 14px;
+      color: #8899a6;
+      line-height: 1.7;
+    }
+
+    .trust-signals {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .trust-signal {
+      font-size: 12px;
+      color: #8899a6;
+      font-weight: 500;
+      padding: 8px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .trust-signal::before {
+      content: '✓ ';
+      color: #4ecdc4;
+      font-weight: 700;
+    }
+
+    .social-proof {
+      max-width: 700px;
+      margin: 0 auto 48px;
+      padding: 32px;
+      background: #152238;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .quote {
+      font-size: 16px;
+      color: #f0f4f8;
+      font-style: italic;
+      margin-bottom: 16px;
+      line-height: 1.7;
+    }
+
+    .quote-author {
+      font-size: 12px;
+      color: #8899a6;
+    }
+
+    .meta-note {
+      font-size: 12px;
+      color: #8899a6;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* ==================== NAVIGATION ==================== */
+    .navigation-bar {
+      padding: 24px 80px;
+      background-color: rgba(15, 23, 42, 0.8);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-dots {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+
+    .nav-dot:hover {
+      background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .nav-dot::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 11px;
+      color: #8899a6;
+      opacity: 0;
+      transition: opacity 200ms ease;
+      pointer-events: none;
+    }
+
+    .nav-dot:hover::after {
+      opacity: 1;
+    }
+
+    .nav-dot.active {
+      width: 32px;
+      border-radius: 4px;
+      background-color: #3b82f6;
+      border-color: #3b82f6;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.2);
+      }
+    }
+
+    /* Presenter aids */
+    .speaker-notes {
+      position: fixed;
+      right: 0;
+      top: 0;
+      width: 300px;
+      height: 100%;
+      background: rgba(10, 22, 40, 0.98);
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 24px;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 300ms ease;
+      z-index: 800;
+    }
+
+    .speaker-notes.visible {
+      transform: translateX(0);
+    }
+
+    .speaker-notes-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #4ecdc4;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .speaker-notes-content {
+      font-size: 12px;
+      color: #8899a6;
+      line-height: 1.7;
+    }
+
+    .speaker-notes-content li {
+      margin-bottom: 12px;
+      margin-left: 16px;
+    }
+
+    .timer {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-family: 'SF Mono', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: #3b82f6;
+      opacity: 0;
+      transition: all 200ms ease;
+      z-index: 700;
+      pointer-events: none;
+    }
+
+    .timer.visible {
+      opacity: 1;
+    }
+
+    .timer.warning {
+      color: #f59e0b;
+    }
+
+    .timer.critical {
+      color: #ef4444;
+    }
+
+    .mode-indicator {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      font-size: 11px;
+      color: #8899a6;
+      font-weight: 600;
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity 200ms ease;
+      z-index: 700;
+      pointer-events: none;
+    }
+
+    .mode-indicator.visible {
+      opacity: 1;
+    }
+
+    /* ==================== ANIMATIONS ==================== */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { width: 0; }
+      to { width: var(--width, 100%); }
+    }
+
+    /* ==================== SCROLLBAR ==================== */
+    .section::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .section::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .section::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.3);
+      border-radius: 4px;
+    }
+
+    .section::-webkit-scrollbar-thumb:hover {
+      background: rgba(59, 130, 246, 0.5);
+    }
+
+    .commit-feed::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .commit-feed::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .commit-feed::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.2);
+      border-radius: 3px;
+    }
+
+    .commit-feed::-webkit-scrollbar-thumb:hover {
+      background: rgba(59, 130, 246, 0.4);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 1200px) {
+      .scoring-container {
+        grid-template-columns: 1fr;
+      }
+
+      .candidates-container {
+        grid-template-columns: 1fr;
+      }
+
+      .comparison-row {
+        grid-template-columns: 1fr;
+      }
+
+      .pricing-container {
+        grid-template-columns: 1fr;
+      }
+
+      .bridge-statement {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .speaker-notes {
+        display: none;
+      }
+
+      #section-5, #section-6, #section-7, #section-8, #section-9 {
+        padding: 40px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="viewport">
+    <div class="sections-container">
+
+      <!-- SECTION 1: TITLE -->
+      <section id="section-1" class="section active">
+        <div class="animated-bg">
+          <svg viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(59, 130, 246, 0.05)" stroke-width="0.5"/>
+              </pattern>
+            </defs>
+            <rect width="1280" height="720" fill="url(#grid)" />
+          </svg>
+        </div>
+        <div class="title-content">
+          <h1>MendelHire</h1>
+          <div class="subtitle">Proof-first hiring for engineering teams</div>
+          <p class="tagline">Replace resume screening with verified craft. Know the work is real.</p>
+          <p class="founder-note">Built by Charbel, founder of Talent Gurus — 10+ years placing high-trust roles where proof of character and craft is non-negotiable.</p>
+          <button class="cta-button" onclick="navigateToSection(1)">
+            Begin Demo →
+          </button>
+        </div>
+      </section>
+
+      <!-- SECTION 2: PROBLEM -->
+      <section id="section-2" class="section">
+        <h2 class="section-headline">The AI Authenticity Crisis</h2>
+
+        <div class="problem-section">
+          <!-- Before/After Recognition -->
+          <div class="before-after-container">
+            <div class="before-after-card fake">
+              <div class="before-after-label">❌ AI-Generated Take-Home (unverifiable)</div>
+              <div class="code-snippet">
+                <div class="line">
+                  <span class="line-num">1</span>
+                  <span><span class="keyword">function</span> <span class="function">filterList</span>(items, query) {</span>
+                </div>
+                <div class="line">
+                  <span class="line-num">2</span>
+                  <span>  <span class="keyword">return</span> items.filter(item =&gt;</span>
+                </div>
+                <div class="line">
+                  <span class="line-num">3</span>
+                  <span>    item.toLowerCase().includes(query.toLowerCase())</span>
+                </div>
+                <div class="line">
+                  <span class="line-num">4</span>
+                  <span>  );</span>
+                </div>
+                <div class="line">
+                  <span class="line-num">5</span>
+                  <span>}</span>
+                </div>
+              </div>
+              <div class="fake-badge">Suspiciously perfect</div>
             </div>
-            <div class="comparison-column">
-              <h3>MendelHire Proof</h3>
-              <div class="comparison-item pass"><div class="comparison-icon">✓</div><div>Identity-verified via Loom</div></div>
-              <div class="comparison-item pass"><div class="comparison-icon">✓</div><div>120 min time-capped, $100–150 stipend</div></div>
-              <div class="comparison-item pass"><div class="comparison-icon">✓</div><div>Pivot-tested at minute 60</div></div>
-              <div class="comparison-item pass"><div class="comparison-icon">✓</div><div>Rubric-scored, transparent</div></div>
+
+            <div class="before-after-card verified">
+              <div class="before-after-label">✓ Verified MendelHire Proof</div>
+              <div class="code-snippet">
+                <div class="line">
+                  <span class="line-num">1</span>
+                  <span><span class="keyword">import</span> { debounce } <span class="keyword">from</span> <span class="string">'lodash'</span>;</span>
+                </div>
+                <div class="line">
+                  <span class="line-num">2</span>
+                  <span><span class="keyword">const</span> handleSearch = debounce((q) =&gt; {</span>
+                </div>
+                <div class="line">
+                  <span class="line-num">3</span>
+                  <span>  setResults(fuzzyMatch(items, q, { threshold: 0.6 }));</span>
+                </div>
+                <div class="line">
+                  <span class="line-num">4</span>
+                  <span>}, <span class="string">300</span>);</span>
+                </div>
+              </div>
+              <div class="verified-badge">Real commit history + Loom verify</div>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="stats-row">
+            <div class="stat-item">
+              <div class="stat-value">50–300%</div>
+              <div class="stat-label">increase in AI-assisted submissions</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">72%</div>
+              <div class="stat-label">of hiring managers distrust take-home results</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">4.2</div>
+              <div class="stat-label">average interview rounds per hire</div>
+            </div>
+          </div>
+
+          <!-- Comparison Table -->
+          <div class="comparison-visual">
+            <div class="comparison-header">
+              <div class="comparison-header-cell" style="text-align: left;">Feature</div>
+              <div class="comparison-header-cell traditional">Traditional Take-Home</div>
+              <div class="comparison-header-cell mendelhire">MendelHire Proof</div>
+            </div>
+
+            <div class="comparison-feature">
+              <div class="comparison-feature-label">Identity verification</div>
+              <div class="comparison-feature-cell"><span class="x-icon">✕</span> No verification</div>
+              <div class="comparison-feature-cell"><span class="check-icon">✓</span> Loom identity-verified</div>
+            </div>
+
+            <div class="comparison-feature">
+              <div class="comparison-feature-label">Time constraints & compensation</div>
+              <div class="comparison-feature-cell"><span class="x-icon">✕</span> Unpaid, no limit</div>
+              <div class="comparison-feature-cell"><span class="check-icon">✓</span> 120 min / $100–$150</div>
+            </div>
+
+            <div class="comparison-feature">
+              <div class="comparison-feature-label">Pivot testing</div>
+              <div class="comparison-feature-cell"><span class="x-icon">✕</span> Static challenge</div>
+              <div class="comparison-feature-cell"><span class="check-icon">✓</span> Mid-task pivot @ 60 min</div>
+            </div>
+
+            <div class="comparison-feature">
+              <div class="comparison-feature-label">Scoring methodology</div>
+              <div class="comparison-feature-cell"><span class="x-icon">✕</span> Subjective / opaque</div>
+              <div class="comparison-feature-cell"><span class="check-icon">✓</span> Rubric-scored, AI + human</div>
+            </div>
+
+            <div class="comparison-feature">
+              <div class="comparison-feature-label">Comparative signal</div>
+              <div class="comparison-feature-cell"><span class="x-icon">✕</span> One-off, isolation</div>
+              <div class="comparison-feature-cell"><span class="check-icon">✓</span> Standardized rubric/conditions</div>
+            </div>
+
+            <div class="comparison-feature">
+              <div class="comparison-feature-label">Candidate value</div>
+              <div class="comparison-feature-cell"><span class="x-icon">✕</span> No portfolio benefit</div>
+              <div class="comparison-feature-cell"><span class="check-icon">✓</span> Owned FitFolio forever</div>
+            </div>
+          </div>
+
+          <!-- Positioning Statement -->
+          <div class="positioning-statement">
+            Assessment platforms give you scores. MendelHire gives you proof that the work is real.
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: LIVE PROOF SIMULATION -->
+      <section id="section-3" class="section">
+        <h2 class="section-headline">Live Proof Simulation</h2>
+
+        <!-- Challenge Brief (Pre-flight) -->
+        <div class="simulation-header" id="simulation-preflight">
+          <div class="challenge-brief">
+            <h3>Frontend Challenge: Build a SearchFilter Component</h3>
+            <ul class="acceptance-criteria">
+              <li>Handles debounced input (300ms)</li>
+              <li>Filters list in real-time</li>
+              <li>Accessible keyboard navigation</li>
+            </ul>
+            <div class="challenge-meta">
+              <div class="meta-item">
+                <div class="meta-value">120</div>
+                <div class="meta-label">Minutes</div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-value">$100</div>
+                <div class="meta-label">Stipend</div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-value">60 min</div>
+                <div class="meta-label">Pivot Point</div>
+              </div>
+            </div>
+          </div>
+          <div class="challenge-actions">
+            <button class="start-simulation-btn" onclick="startSimulation()">Start Simulation →</button>
+          </div>
+        </div>
+
+        <!-- Active Simulation -->
+        <div class="simulation-container" id="simulation-active">
+          <!-- Timeline -->
+          <div class="timeline-container">
+            <div class="timeline-label">Session Timeline (120 minutes)</div>
+            <div class="timeline-bar">
+              <div class="timeline-progress" id="timeline-progress"></div>
+              <div class="timeline-pivot-marker">
+                <div class="timeline-label-pivot">Pivot (60 min)</div>
+              </div>
+              <div id="commit-dots-container"></div>
+            </div>
+            <div class="timeline-labels">
+              <span>0 min</span>
+              <span>Pivot (60 min)</span>
+              <span>120 min</span>
+            </div>
+          </div>
+
+          <!-- Content Grid -->
+          <div class="simulation-content">
+            <div class="commit-feed" id="commit-feed">
+              <!-- Commits will be inserted here -->
+            </div>
+            <div class="simulation-stats">
+              <div class="stat-block">
+                <span class="stat-block-label">Commits</span>
+                <span class="stat-block-value" id="stats-commits">0</span>
+              </div>
+              <div class="stat-block">
+                <span class="stat-block-label">Lines Changed</span>
+                <span class="stat-block-value" id="stats-lines">0</span>
+              </div>
+              <div class="stat-block">
+                <span class="stat-block-label">Test Coverage</span>
+                <span class="stat-block-value" id="stats-coverage">0%</span>
+                <div class="stat-block-bar">
+                  <div class="stat-block-bar-fill" id="coverage-bar"></div>
+                </div>
+              </div>
+              <div class="stat-block">
+                <span class="stat-block-label">Time Remaining</span>
+                <span class="stat-block-value" id="stats-time">120:00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="simulation-controls">
+            <button class="control-btn primary" id="btn-start" onclick="toggleSimulation()">Pause</button>
+            <button class="control-btn" onclick="resetSimulation()">Reset</button>
+          </div>
+
+          <!-- Verification Section (shown after completion) -->
+          <div class="verification-section" id="verification-section">
+            <div class="verification-checklist">
+              <div class="verification-title">
+                ✓ Verification Complete
+              </div>
+              <div class="verification-check">
+                <div class="verification-check-icon">✓</div>
+                <span>Identity confirmed via Loom recording</span>
+              </div>
+              <div class="verification-check">
+                <div class="verification-check-icon">✓</div>
+                <span>Commit timestamps consistent (no pre-built code)</span>
+              </div>
+              <div class="verification-check">
+                <div class="verification-check-icon">✓</div>
+                <span>Pivot adaptation verified — 7 post-pivot commits</span>
+              </div>
+              <div class="verification-check">
+                <div class="verification-check-icon">✓</div>
+                <span>Session recording submitted and reviewed</span>
+              </div>
+            </div>
+
+            <div class="verified-badge-container">
+              <div class="verified-craft-badge" id="verified-badge">
+                ✓ Verified Craft
+              </div>
+            </div>
+
+            <div class="loom-thumbnail">
+              <div class="loom-play-button">▶</div>
+              <div class="loom-duration">Session Recording — 1:58:42</div>
+              <div class="loom-caption">Candidate walkthrough available for review</div>
             </div>
           </div>
         </div>
-      </div>
- background: rgba(212, 168, 67, 0.1); border: 1px solid rgba(212, 168, 67, 0.3); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-    .pivot-label { color: #d4a843; font-weight: 600; margin-bottom: 8px; }
-    .challenge-footer { display: flex; justify-content: space-between; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.9rem; color: #8899a6; }
-    .challenge-difficulty { color: #d4a843; }
-    .widener-label { margin-top: 20px; margin-bottom: 12px; font-size: 0.9rem; color: #f0f4f8; }
-    .widener-chips { display: flex; flex-wrap: wrap; gap: 10px; }
-    .widener-chip { padding: 8px 16px; background: transparent; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease; color: #f0f4f8; }
-    .widener-chip:hover { border-color: #4ecdc4; }
-    .widener-chip.selected { background: #4ecdc4; color: #0a1628; border-color: #4ecdc4; }
-    /* Enhancement 1: AI Chat Drawer */
-    .chat-bar { margin-top: 20px; padding: 12px 18px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.3s ease; max-width: 700px; width: 100%; }
-    .chat-bar:hover { background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.4); }
-    .chat-bar-text { flex: 1; color: #8899a6; font-size: 0.9rem; }
-    .chat-bar-chevron { color: #8899a6; transition: transform 0.3s ease; font-size: 0.8rem; }
-    .chat-bar-chevron.open { transform: rotate(180deg); }        <div class="chat-drawer" id="chatDrawer">
-          <div class="chat-history" id="chatHistory">
-            <div style="color: #8899a6; font-size: 0.85rem;">Suggest changes, e.g. "make the pivot about accessibility" or add a GraphQL requirement</div>
-           </div>
-            <div class="chat-input-row">
-              <input type="text" class="chat-input" id="chatInput" placeholder="Refine this proof…">
-              <button class="chat-send" id="chatSend" onclick="sendChatMessage()">→</button>
+      </section>
+
+      <!-- SECTION 4: SOLUTION -->
+      <section id="section-4" class="section">
+        <h2 class="section-headline">How MendelHire Works</h2>
+
+        <div class="solution-content">
+          <!-- Feature Cards -->
+          <div class="feature-grid">
+            <div class="feature-card">
+              <div class="feature-icon">🛡️</div>
+              <h3>Verified Proof</h3>
+              <p>Identity-confirmed, time-capped, session-recorded challenges that can't be faked.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">↻</div>
+              <h3>Adaptive Signal</h3>
+              <p>Mid-task pivot at minute 60. The single hardest thing for any cheat system to replicate.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">📋</div>
+              <h3>Rubric-Scored</h3>
+              <p>Published rubrics, calibrated reviewers, AI + human dual-scoring. Transparent by design.</p>
             </div>
           </div>
- icon">⏱️</div><div class="stat-value" data-count-to="4.2">0</div><div class="stat-description">average interview rounds per hire</div></div>
 
-          <div class="scoring-layout">
-            <div class="code-snippet"><span class="code-keyword">const</span> SearchFilter = ({ items, onFilter }) => {
-  <span class="code-keyword">const</span> [input, setInput] = useState('');
-  <span class="code-keyword">return</span> (
-    &lt;div className=<span class="code-string">"filter-container"</span>&gt;
-      &lt;input value={input} onChange={(e) => setInput(e.target.value)} /&gt;
-    &lt;/div&gt;
-  );
-};</div>
- class="scoring-sliders">
-              <div class="slider-group"><div class="slider-header"><div><div class="slider-label">Code Quality</div><div class="slider-sublabel">Structure, naming, patterns</div></div><div class="slider-value" data-slider="quality">3.5/5</div></div><input type="range" min="1" max="5" step="0.5" value="3.5" class="slider" data-slider="quality"></div>
- class="slider-group"><div class="slider-header"><div><div class="slider-label">Problem Solving</div><div class="slider-sublabel">Approach, algorithm choice, edge cases</div></div><div class="slider-value" data-slider="problem">3.5/5</div></div><input type="range" min="1" max="5" step="0.5" value="3.5" class="slider" data-slider="problem"></div>
- class="slider-group"><div class="slider-header"><div><div class="slider-label">Testing</div><div class="slider-sublabel">Coverage, test design, assertions</div></div><div class="slider-value" data-slider="testing">3.5/5</div></div><input type="range" min="1" max="5" step="0.5" value="3.5" class="slider" data-slider="testing"></div>
+          <!-- Why Candidates Show Up -->
+          <div class="value-callout">
+            <div class="value-callout-title">
+              We solved the supply problem by making the proof valuable to the candidate independent of whether they get the job.
+            </div>
+            <div class="value-items">
+              <div class="value-item">
+                <div class="value-item-icon">💰</div>
+                <div class="value-item-heading">Paid</div>
+                <div class="value-item-text">$100–$150 per completed proof</div>
+              </div>
+              <div class="value-item">
+                <div class="value-item-icon">📊</div>
+                <div class="value-item-heading">Feedback</div>
+                <div class="value-item-text">Scored feedback delivered within 72 hours</div>
+              </div>
+              <div class="value-item">
+                <div class="value-item-icon">🎯</div>
+                <div class="value-item-heading">Portable</div>
+                <div class="value-item-text">Candidates own their FitFolio — shareable, exportable, no lock-in</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Candidate Journey -->
+          <div class="candidate-journey">
+            <div class="journey-title">Candidate Journey</div>
+            <div class="journey-flow">
+              <div class="journey-step">
+                <div class="journey-step-icon">👁️</div>
+                <div class="journey-step-text">See challenge brief & rubric</div>
+              </div>
+              <div class="journey-arrow">→</div>
+              <div class="journey-step">
+                <div class="journey-step-icon">💻</div>
+                <div class="journey-step-text">Complete 120-min proof</div>
+              </div>
+              <div class="journey-arrow">→</div>
+              <div class="journey-step">
+                <div class="journey-step-icon">💵</div>
+                <div class="journey-step-text">Get paid on submission</div>
+              </div>
+              <div class="journey-arrow">→</div>
+              <div class="journey-step">
+                <div class="journey-step-icon">📬</div>
+                <div class="journey-step-text">Receive scored feedback in 72h</div>
+              </div>
+              <div class="journey-arrow">→</div>
+              <div class="journey-step">
+                <div class="journey-step-icon">🎓</div>
+                <div class="journey-step-text">Own your FitFolio forever</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Verification Approach -->
+          <div class="verification-approach">
+            <p>Verification, not prohibition. We don't ban AI tools — we make them irrelevant to the signal.</p>
+          </div>
+
+          <!-- Fairness Pillar -->
+          <div class="fairness-section">
+            <div class="fairness-title">Fairness by Design</div>
+            <div class="fairness-items">
+              <div class="fairness-item">
+                <h4>📋 Published rubrics</h4>
+                <p>Candidates see exactly how they'll be scored before they start</p>
+              </div>
+              <div class="fairness-item">
+                <h4>👤 Anonymized-by-default</h4>
+                <p>Names hidden until evidence reviewed</p>
+              </div>
+              <div class="fairness-item">
+                <h4>♿ Accommodations available</h4>
+                <p>Extended time, alternative formats</p>
+              </div>
+              <div class="fairness-item">
+                <h4>📊 Adverse impact monitoring</h4>
+                <p>80% rule compliance tracked</p>
+              </div>
+            </div>
+            <div class="fairness-statement">
+              Every proof is evaluated on the same criteria, under the same conditions.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5: ROLE BUILDER -->
+      <section id="section-5" class="section" style="align-items: center; justify-content: center;">
+        <h1 class="headline">Generate a Proof for Any Role</h1>
+        <p class="subtitle">Powered by your role</p>
+
+        <div class="role-input-container">
+          <input
+            type="text"
+            class="role-input"
+            id="roleInput"
+            placeholder="Type a role, e.g. Senior React Engineer..."
+            autocomplete="off"
+          >
+          <div class="type-ahead-preview" id="typeAheadPreview"></div>
+        </div>
+
+        <div class="challenge-card hidden" id="challengeCard">
+          <h2 class="challenge-title" id="challengeTitle"></h2>
+          <ul class="challenge-criteria" id="challengeCriteria"></ul>
+          <div class="challenge-meta">
+            <div class="challenge-meta-item">
+              <span>Time:</span>
+              <strong>120 min</strong>
+            </div>
+            <div class="challenge-meta-item">
+              <span>Stipend:</span>
+              <strong>$100</strong>
+            </div>
+          </div>
+          <div class="difficulty-context" id="difficultyContext"></div>
+          <div class="custom-note" id="customNote"></div>
+        </div>
+
+        <div class="widener-section hidden" id="widenerSection">
+          <p class="widener-label">Your candidates choose 2 of these Wideners:</p>
+          <div class="widener-chips" id="widenerChips"></div>
+          <p class="widener-description">Wideners reveal how engineers think and work — judgment signals that code alone can't show.</p>
+        </div>
+      </section>
+
+      <!-- SECTION 6: INTERACTIVE SCORING -->
+      <section id="section-6" class="section">
+        <h1 class="headline">Score Like a Hiring Manager</h1>
+
+        <div class="scoring-container">
+          <div class="code-preview">
+<span class="code-keyword">function</span> <span class="code-keyword">SearchFilter</span>(props) {
+  <span class="code-comment">// Handle filter changes with debounce</span>
+  <span class="code-keyword">const</span> [filters, setFilters] = useState({});
+
+  <span class="code-keyword">const</span> handleChange = (key, val) => {
+    setFilters(prev => ({ ...prev, [key]: val }));
+    props.onFilter(filters);
+  };
+
+  <span class="code-keyword">return</span> <span class="code-keyword">&lt;input</span> onChange={handleChange} />;
+}</span>
+          </div>
+
+          <div class="scoring-panel">
+            <div class="scoring-dimension">
+              <label class="dimension-label">Code Quality</label>
+              <p class="dimension-description">Structure, naming, patterns</p>
+              <div class="slider-container">
+                <input type="range" class="slider" min="1" max="5" step="0.5" value="3.5" data-dimension="quality">
+                <span class="slider-value">3.5</span>
+              </div>
+            </div>
+
+            <div class="scoring-dimension">
+              <label class="dimension-label">Problem Solving</label>
+              <p class="dimension-description">Approach, algorithm choice, edge cases</p>
+              <div class="slider-container">
+                <input type="range" class="slider" min="1" max="5" step="0.5" value="3.5" data-dimension="solving">
+                <span class="slider-value">3.5</span>
+              </div>
+            </div>
+
+            <div class="scoring-dimension">
+              <label class="dimension-label">Testing</label>
+              <p class="dimension-description">Coverage, test design, assertions</p>
+              <div class="slider-container">
+                <input type="range" class="slider" min="1" max="5" step="0.5" value="3.5" data-dimension="testing">
+                <span class="slider-value">3.5</span>
+              </div>
+            </div>
+
+            <div class="scoring-dimension">
+              <label class="dimension-label">Ownership</label>
+              <p class="dimension-description">Commit messages, docs, polish</p>
+              <div class="slider-container">
+                <input type="range" class="slider" min="1" max="5" step="0.5" value="3.5" data-dimension="ownership">
+                <span class="slider-value">3.5</span>
+              </div>
+            </div>
+
+            <button class="compare-button" id="compareButton">Compare with AI Assessment →</button>
+
+            <div class="ai-comparison" id="aiComparison">
+              <div class="ai-comparison-title">AI Pre-Scored Assessment</div>
+
+              <div class="ai-score-row">
+                <span class="ai-score-label">Code Quality</span>
+                <div class="ai-score-bar">
+                  <div class="ai-score-fill" style="--width: 70%;"></div>
+                </div>
+                <span class="ai-score-value">3.5</span>
+              </div>
+
+              <div class="ai-score-row">
+                <span class="ai-score-label">Problem Solving</span>
+                <div class="ai-score-bar">
+                  <div class="ai-score-fill" style="--width: 80%;"></div>
+                </div>
+                <span class="ai-score-value">4.0</span>
+              </div>
+
+              <div class="ai-score-row">
+                <span class="ai-score-label">Testing</span>
+                <div class="ai-score-bar">
+                  <div class="ai-score-fill" style="--width: 60%;"></div>
+                </div>
+                <span class="ai-score-value">3.0</span>
+              </div>
+
+              <div class="ai-score-row">
+                <span class="ai-score-label">Ownership</span>
+                <div class="ai-score-bar">
+                  <div class="ai-score-fill" style="--width: 90%;"></div>
+                </div>
+                <span class="ai-score-value">4.5</span>
+              </div>
+
+              <div class="divergence-note">
+                AI weighted Ownership highly — commit messages showed clear intent tracking and the README documented architecture decisions proactively.
+              </div>
+
+              <div class="curator-note">
+                <strong>Human reviewer note:</strong> "Strong pivot adaptation. Levenshtein implementation was from-scratch rather than imported — shows deep understanding. Recommend advancing."
+              </div>
+
+              <div class="summary-line">
+                Based on these scores, this candidate would rank in the top 20% of FitFolios for this role.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 7: DASHBOARD -->
+      <section id="section-7" class="section">
+        <div class="section-7-header">
+          <h1 class="headline">Your Shortlist — Evidence, Not Résumés</h1>
+          <div class="anon-toggle" id="anonToggle">
+            <span class="anon-toggle-text" id="anonText">Anonymized</span>
+            <div class="toggle-checkbox checked" id="anonCheckbox"></div>
+          </div>
+        </div>
+
+        <div class="candidates-container" id="candidatesContainer">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="fairness-badge">
+          Fairness Audited — Rubrics published, anonymized-by-default, adverse impact monitored (80% rule)
+        </div>
+      </section>
+
+      <!-- SECTION 8: BRIDGE -->
+      <section id="section-8" class="section">
+        <h1 class="bridge-headline">What You Just Saw</h1>
+
+        <div class="bridge-statements">
+          <p class="bridge-statement">Three candidates, scored on the same rubric, under the same conditions.</p>
+          <p class="bridge-statement">Verified proof of craft — not résumé claims, not AI-generated code.</p>
+          <p class="bridge-statement">That replaces your first two interview rounds.</p>
+        </div>
+
+        <div class="bridge-comparison">
+          <p class="comparison-title">Current Process vs. MendelHire</p>
+          <div class="comparison-table">
+            <div class="comparison-row">
+              <div class="comparison-cell comparison-step">Resume screening<br><span style="font-size: 11px; color: #8899a6; font-weight: 400;">30 sec × 200 applicants</span></div>
+              <div class="comparison-cell comparison-problem">100 hours + high false-positive</div>
+              <div class="comparison-cell comparison-solution">Pre-screened FitFolio shortlist</div>
+            </div>
+            <div class="comparison-row">
+              <div class="comparison-cell comparison-step">Unpaid take-home<br><span style="font-size: 11px; color: #8899a6; font-weight: 400;">3-5 day turnaround</span></div>
+              <div class="comparison-cell comparison-problem">40% completion, bias toward unemployed</div>
+              <div class="comparison-cell comparison-solution">Paid 120-min proof, 80%+ completion</div>
+            </div>
+            <div class="comparison-row">
+              <div class="comparison-cell comparison-step">Interview rounds<br><span style="font-size: 11px; color: #8899a6; font-weight: 400;">1hr × 3 interviewers</span></div>
+              <div class="comparison-cell comparison-problem">12 person-hours per candidate</div>
+              <div class="comparison-cell comparison-solution">1-2 rounds after FitFolio review</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="transition-line">Ready to see what this means for your team?</div>
+      </section>
+
+      <!-- SECTION 9: CLOSE -->
+      <section id="section-9" class="section">
+        <h1 class="headline">Start Your Pilot</h1>
+
+        <div class="pricing-container">
+          <div class="pricing-card">
+            <h3 class="pricing-title">Shortlist Plan</h3>
+            <div class="pricing-price">$2,000</div>
+            <div class="pricing-period">/month</div>
+            <div class="pricing-feature">Up to 5 proof cycles</div>
+            <div class="pricing-feature">Dashboard access</div>
+            <div class="pricing-feature">Dedicated curator</div>
+            <div class="pricing-feature" style="margin-top: 16px; color: #f0f4f8; font-weight: 500;">Best for focused hiring</div>
+            <div class="pricing-label">Founding employer rates — limited availability</div>
+          </div>
+
+          <div class="pricing-card">
+            <h3 class="pricing-title">Per-Proof</h3>
+            <div class="pricing-price">$500</div>
+            <div class="pricing-period">/proof</div>
+            <div class="pricing-feature">Single proof cycle</div>
+            <div class="pricing-feature">Full FitFolio delivery</div>
+            <div class="pricing-feature">ATS integration</div>
+            <div class="pricing-feature" style="margin-top: 16px; color: #f0f4f8; font-weight: 500;">Best for testing the model</div>
+            <div class="pricing-label">Founding employer rates — limited availability</div>
+          </div>
+        </div>
+
+        <div class="roi-section">
+          <div class="roi-title">ROI Calculation</div>
+          <div class="roi-text">
+            If one FitFolio shortlist saves you two interview rounds across three candidates, that's ~36 hours of engineering time back. At a $150/hr blended rate, that's $5,400 in value — from a single proof cycle.
+          </div>
+        </div>
+
+        <div class="trust-signals">
+          <div class="trust-signal">Rubric-published</div>
+          <div class="trust-signal">Fairness audited</div>
+          <div class="trust-signal">SOC 2 in progress</div>
+          <div class="trust-signal">Candidate-first design</div>
+        </div>
+
+        <div class="social-proof">
+          <div class="quote">"This is what I've been looking for — proof that the work is real, not just another score."</div>
+          <div class="quote-author">Engineering Leader, Series B Startup</div>
+          <div class="meta-note">What you're seeing is a live interactive demo, not slides. We build products, not decks.</div>
+        </div>
+
+        <div style="text-align: center;">
+          <button class="cta-button">Book Your Pilot Call →</button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Candidate Expanded View (overlay) -->
+    <div class="candidate-expanded" id="candidateExpanded">
+      <button class="expanded-close" id="expandedClose">×</button>
+      <div class="expanded-content" id="expandedContent">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="navigation-bar">
+      <div class="nav-dots">
+        <div class="nav-dot active" data-label="Title" onclick="navigateToSection(0)"></div>
+        <div class="nav-dot" data-label="Problem" onclick="navigateToSection(1)"></div>
+        <div class="nav-dot" data-label="Live Proof" onclick="navigateToSection(2)"></div>
+        <div class="nav-dot" data-label="Solution" onclick="navigateToSection(3)"></div>
+        <div class="nav-dot" data-label="Role Builder" onclick="navigateToSection(4)"></div>
+        <div class="nav-dot" data-label="Scoring" onclick="navigateToSection(5)"></div>
+        <div class="nav-dot" data-label="Dashboard" onclick="navigateToSection(6)"></div>
+        <div class="nav-dot" data-label="Bridge" onclick="navigateToSection(7)"></div>
+        <div class="nav-dot" data-label="Close" onclick="navigateToSection(8)"></div>
+      </div>
+    </div>
+
+    <!-- Presenter aids -->
+    <div class="speaker-notes" id="speakerNotes">
+      <div class="speaker-notes-title">Speaker Notes</div>
+      <div class="speaker-notes-content" id="speakerNotesContent">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <div class="timer" id="timer">00:00</div>
+    <div class="mode-indicator" id="modeIndicator">Presenter Mode</div>
+  </div>
+
+  <script>
+    // ==================== STATE MANAGEMENT ====================
+    let currentSection = 0;
+    const totalSections = 9;
+    const sectionNames = ['Title','Problem','Live Proof','Solution','Role Builder','Scoring','Dashboard','Bridge','Close'];
+
+    let simulationRunning = false;
+    let simulationTime = 0;
+    const simulationDuration = 120 * 60;
+
+    let prospectMode = false;
+    let anonymized = true;
+    let selectedWideners = [];
+    let timerStarted = false;
+    let timerSeconds = 0;
+    let userScores = { quality: 3.5, solving: 3.5, testing: 3.5, ownership: 3.5 };
+    let candidateExpanded = null;
+    let roleTyped = '';
+    let roleChallengeGenerated = false;
+    let roleConfig = {};
+
+    const commits = [
+      { time: 3, message: 'Initial setup: React + TypeScript scaffold', pivot: false },
+      { time: 12, message: 'feat: basic input component with onChange handler', pivot: false },
+      { time: 24, message: 'feat: implement debounce utility (300ms)', pivot: false },
+      { time: 31, message: 'feat: connect filter logic to list rendering', pivot: false },
+      { time: 42, message: 'test: add unit tests for debounce behavior', pivot: false },
+      { time: 51, message: 'feat: keyboard navigation with arrow keys + Enter', pivot: false },
+      { time: 58, message: 'refactor: extract FilterContext for state management', pivot: false },
+      { time: 60, message: '⚡ PIVOT: New requirement — add fuzzy matching with typo tolerance', pivot: true },
+      { time: 62.25, message: 'feat: research fuzzy matching approaches', pivot: false },
+      { time: 68.5, message: 'feat: implement Levenshtein distance utility', pivot: false },
+      { time: 75.75, message: 'feat: integrate fuzzy matching into filter pipeline', pivot: false },
+      { time: 82, message: 'fix: handle edge case — empty input returns full list', pivot: false },
+      { time: 90.33, message: 'test: add fuzzy matching test suite', pivot: false },
+      { time: 98.67, message: 'docs: add README with architecture decisions', pivot: false },
+      { time: 108, message: 'refactor: optimize for large lists (virtualization)', pivot: false },
+      { time: 115.5, message: 'feat: add loading state and error boundary', pivot: false },
+      { time: 119, message: 'final: cleanup, lint, submission ready', pivot: false }
+    ];
+
+    const config = {
+      roles: {
+        frontend: {
+          keywords: ['react', 'frontend', 'ui', 'css', 'next'],
+          title: 'Build a Real-Time Dashboard Component',
+          criteria: [
+            'Responsive layout that adapts to 3+ breakpoints without media queries',
+            'Real-time data binding with sub-100ms update latency',
+            'Accessibility compliance: WCAG 2.1 Level AA minimum',
+            'Unit test coverage exceeding 85% with edge case validation'
+          ]
+        },
+        backend: {
+          keywords: ['backend', 'api', 'python', 'node', 'go', 'java', 'server'],
+          title: 'Design a Scalable Authentication Service',
+          criteria: [
+            'Support 10k concurrent sessions with token refresh strategy',
+            'Rate limiting and brute-force protection with adaptive thresholds',
+            'Audit logging for security compliance and forensics',
+            'Graceful degradation and circuit breaker patterns for dependencies'
+          ]
+        },
+        data: {
+          keywords: ['data', 'analytics', 'ml', 'machine learning', 'etl', 'sql'],
+          title: 'Build a Data Pipeline for Real-Time Analytics',
+          criteria: [
+            'Ingest streaming data with exactly-once processing semantics',
+            'Transform and aggregate across multiple data sources',
+            'Query optimization for sub-second response times on TB-scale datasets',
+            'Data quality validation and lineage tracking'
+          ]
+        },
+        fullstack: {
+          keywords: ['full-stack', 'fullstack'],
+          title: 'Build a Collaborative Document Editor',
+          criteria: [
+            'Concurrent editing with conflict resolution and operational transforms',
+            'Persistent state management with real-time sync across clients',
+            'Rich text formatting with extensible plugin architecture',
+            'Performance optimization for documents with 50k+ edits'
+          ]
+        },
+        default: {
+          title: 'Design a System for [Role]',
+          criteria: [
+            'Architect a system meeting the technical requirements for this role',
+            'Document tradeoffs in approach, scalability, and maintainability',
+            'Justify technology choices for team context and constraints',
+            'Plan for future evolution and operational excellence'
+          ]
+        }
+      },
+      wideners: [
+        { name: 'Technical Writing', desc: 'README, architecture docs' },
+        { name: 'Product Sense', desc: 'user-facing tradeoff analysis' },
+        { name: 'Code Review', desc: 'review a PR with constructive feedback' },
+        { name: 'Diagnostics', desc: 'debug a failing test suite' },
+        { name: 'Customer Empathy', desc: 'write user-facing error messages' }
+      ]
+    };
+
+    const candidates = [
+      {
+        id: 'a',
+        anon: 'Candidate A',
+        name: 'Sarah Chen',
+        overall: 4.2,
+        wideners: ['Technical Writing', 'Product Sense'],
+        proofs: 3,
+        latest: '2 weeks ago',
+        freshness: 'active',
+        scores: { quality: 4.0, solving: 4.5, testing: 4.0, ownership: 4.5 }
+      },
+      {
+        id: 'b',
+        anon: 'Candidate B',
+        name: 'Marcus Johnson',
+        overall: 3.8,
+        wideners: ['Diagnostics', 'Code Review'],
+        proofs: 1,
+        latest: '1 month ago',
+        freshness: 'recent',
+        scores: { quality: 4.0, solving: 3.5, testing: 3.5, ownership: 4.0 }
+      },
+      {
+        id: 'c',
+        anon: 'Candidate C',
+        name: 'Priya Patel',
+        overall: 4.5,
+        wideners: ['Customer Empathy', 'Technical Writing'],
+        proofs: 5,
+        latest: '1 week ago',
+        freshness: 'active',
+        scores: { quality: 4.5, solving: 4.5, testing: 4.5, ownership: 4.5 }
+      }
+    ];
+
+    const speakerNotes = {
+      0: ["Welcome, set context: 12 min interactive demo", "You'll see a live proof simulation, role-specific challenges, and candidate dashboard"],
+      1: ["Ask: What's your current screening process? How many rounds?", "The comparison visual: take-homes vs MendelHire", "Assessment platforms give you scores. We give you proof."],
+      2: ["Narrate the commits. Point out the pivot drop.", "This is the moment that separates real craft from generated output", "No take-home, no AI tool, and no assessment platform tests this"],
+      3: ["Emphasize: candidates get paid, get feedback, own their FitFolio", "Supply problem is solved — proof is valuable independent of the hire", "Fairness section: anonymized-by-default, published rubrics"],
+      4: ["Ask prospect what role they're hiring for. Type it live.", "Highlight Wideners — more signal than behavioral interviews", "Show how proof is customizable by role"],
+      5: ["Let prospect interact with sliders. Note the Ownership divergence.", "AI weighted ownership highly — great conversation hook", "Human judgment + AI signal = better decisions"],
+      6: ["This is the money screen. Pause here.", "Ask: At what point did you need to know their name?", "Show FitFolio tabs, comparisons, fairness badge"],
+      7: ["Bridge to close. Connect evidence to their pain.", "This replaces your first two interview rounds", "Quantify: 100+ hours saved, 80%+ completion"],
+      8: ["Frame as founding employer pricing — limited availability", "ROI: 36 hours saved = $5,400 value per cycle", "Close: Book a pilot, see it on their data"]
+    };
+
+    // ==================== NAVIGATION ====================
+    function navigateToSection(sectionIndex) {
+      if (simulationRunning) {
+        simulationRunning = false;
+        document.getElementById('btn-start').textContent = 'Start';
+      }
+
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(`section-${sectionIndex + 1}`).classList.add('active');
+
+      document.querySelectorAll('.nav-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === sectionIndex);
+      });
+
+      currentSection = sectionIndex;
+      updateSpeakerNotes();
+
+      if (!timerStarted) {
+        timerStarted = true;
+      }
+    }
+
+    function updateSpeakerNotes() {
+      const notes = speakerNotes[currentSection];
+      if (!notes) return;
+
+      const content = document.getElementById('speakerNotesContent');
+      content.innerHTML = '<ul>' + notes.map(note => `<li>${note}</li>`).join('') + '</ul>';
+    }
+
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function toggleProspectMode() {
+      prospectMode = !prospectMode;
+      document.getElementById('speakerNotes').classList.toggle('visible', !prospectMode);
+      document.getElementById('timer').classList.toggle('visible', !prospectMode);
+      document.getElementById('modeIndicator').classList.toggle('visible', true);
+      document.getElementById('modeIndicator').textContent = prospectMode ? 'Prospect Mode' : 'Presenter Mode';
+    }
+
+    function updateTimer() {
+      if (!timerStarted) return;
+
+      timerSeconds++;
+      const timer = document.getElementById('timer');
+      timer.textContent = formatTime(timerSeconds);
+
+      timer.classList.remove('warning', 'critical');
+      if (timerSeconds >= 720) {
+        timer.classList.add('critical');
+      } else if (timerSeconds >= 600) {
+        timer.classList.add('warning');
+      }
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (document.activeElement.tagName === 'INPUT' ||
+          document.activeElement.tagName === 'TEXTAREA' ||
+          document.activeElement.getAttribute('type') === 'range') {
+        return;
+      }
+
+      if (e.key === 'ArrowRight' && currentSection < totalSections - 1) {
+        navigateToSection(currentSection + 1);
+      } else if (e.key === 'ArrowLeft' && currentSection > 0) {
+        navigateToSection(currentSection - 1);
+      } else if (e.key === 'n' || e.key === 'N') {
+        document.getElementById('speakerNotes').classList.toggle('visible');
+      } else if (e.key === 'p' || e.key === 'P') {
+        toggleProspectMode();
+      } else if (e.key === 'Escape') {
+        document.getElementById('candidateExpanded').classList.remove('visible');
+      }
+    });
+
+    // ==================== SIMULATION ====================
+    function startSimulation() {
+      document.getElementById('simulation-preflight').style.display = 'none';
+      document.getElementById('simulation-active').classList.add('active');
+
+      resetSimulation();
+      simulationRunning = true;
+      document.getElementById('btn-start').textContent = 'Pause';
+
+      simulateProgress();
+    }
+
+    function toggleSimulation() {
+      simulationRunning = !simulationRunning;
+      document.getElementById('btn-start').textContent = simulationRunning ? 'Pause' : 'Start';
+
+      if (simulationRunning && simulationTime < simulationDuration) {
+        simulateProgress();
+      }
+    }
+
+    function resetSimulation() {
+      simulationTime = 0;
+      simulationRunning = false;
+      document.getElementById('btn-start').textContent = 'Start';
+      document.getElementById('commit-feed').innerHTML = '';
+      document.getElementById('commit-dots-container').innerHTML = '';
+      document.getElementById('verification-section').classList.remove('active');
+
+      document.getElementById('stats-commits').textContent = '0';
+      document.getElementById('stats-lines').textContent = '0';
+      document.getElementById('stats-coverage').textContent = '0%';
+      document.getElementById('stats-time').textContent = '120:00';
+      document.getElementById('timeline-progress').style.width = '0%';
+      document.getElementById('coverage-bar').style.width = '0%';
+    }
+
+    function simulateProgress() {
+      if (!simulationRunning || simulationTime >= simulationDuration) {
+        if (simulationTime >= simulationDuration) {
+          simulationRunning = false;
+          showVerificationSection();
+        }
+        return;
+      }
+
+      simulationTime += 1;
+
+      const progress = (simulationTime / simulationDuration) * 100;
+      document.getElementById('timeline-progress').style.width = progress + '%';
+
+      const newCommits = commits.filter(c => Math.floor(c.time * 60) === simulationTime && !document.querySelector(`[data-time="${c.time}"]`));
+
+      newCommits.forEach(commit => {
+        const commitEl = document.createElement('div');
+        commitEl.className = `commit-item ${commit.pivot ? 'pivot' : ''}`;
+        commitEl.setAttribute('data-time', commit.time);
+
+        const minutes = Math.floor(commit.time);
+        const seconds = Math.round((commit.time % 1) * 60);
+
+        commitEl.innerHTML = `
+          <span class="commit-time">${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}</span>
+          <span class="commit-message">${commit.message}</span>
+        `;
+
+        document.getElementById('commit-feed').appendChild(commitEl);
+        document.getElementById('commit-feed').scrollTop = document.getElementById('commit-feed').scrollHeight;
+      });
+
+      newCommits.forEach(commit => {
+        const dot = document.createElement('div');
+        dot.className = `timeline-commit-dot ${commit.pivot ? 'pivot' : ''}`;
+        dot.style.left = ((commit.time / 120) * 100) + '%';
+        document.getElementById('commit-dots-container').appendChild(dot);
+      });
+
+      const totalCommits = commits.filter(c => c.time * 60 <= simulationTime).length;
+      document.getElementById('stats-commits').textContent = totalCommits;
+
+      const linesChanged = Math.floor(totalCommits * 45 + Math.random() * 50);
+      document.getElementById('stats-lines').textContent = linesChanged;
+
+      const coverage = Math.min(87, Math.floor((totalCommits / commits.length) * 87));
+      document.getElementById('stats-coverage').textContent = coverage + '%';
+      document.getElementById('coverage-bar').style.width = coverage + '%';
+
+      const timeRemaining = simulationDuration - simulationTime;
+      const mins = Math.floor(timeRemaining / 60);
+      const secs = timeRemaining % 60;
+      document.getElementById('stats-time').textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+      setTimeout(simulateProgress, 100);
+    }
+
+    function showVerificationSection() {
+      const verificationEl = document.getElementById('verification-section');
+      verificationEl.classList.add('active');
+
+      setTimeout(() => {
+        document.getElementById('verified-badge').classList.add('filled');
+      }, 300);
+    }
+
+    // ==================== SECTION 5: ROLE BUILDER ====================
+    function initSection5() {
+      const input = document.getElementById('roleInput');
+      const preview = document.getElementById('typeAheadPreview');
+      const card = document.getElementById('challengeCard');
+      const widenerSection = document.getElementById('widenerSection');
+
+      roleConfig = config.roles;
+
+      input.addEventListener('input', (e) => {
+        const role = e.target.value.trim();
+        roleTyped = role;
+        roleChallengeGenerated = false;
+
+        if (role.length > 0) {
+          preview.textContent = `Generating proof for: ${role}...`;
+          preview.classList.add('visible');
+        } else {
+          preview.classList.remove('visible');
+          card.classList.add('hidden');
+          widenerSection.classList.add('hidden');
+        }
+      });
+
+      input.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter' && roleTyped.length > 0) {
+          generateChallenge();
+        }
+      });
+
+      let debounceTimer;
+      input.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          if (roleTyped.length > 0 && !roleChallengeGenerated) {
+            generateChallenge();
+          }
+        }, 1500);
+      });
+    }
+
+    function getChallengeForRole(role) {
+      role = role.toLowerCase().trim();
+
+      for (let [key, cfg] of Object.entries(roleConfig)) {
+        if (key === 'default') continue;
+        if (cfg.keywords.some(kw => role.includes(kw))) {
+          return cfg;
+        }
+      }
+
+      return {
+        ...roleConfig.default,
+        title: `Design a System for ${role.charAt(0).toUpperCase() + role.slice(1)}`,
+        isCustom: true,
+        customRole: role
+      };
+    }
+
+    function generateChallenge() {
+      if (roleChallengeGenerated) return;
+      roleChallengeGenerated = true;
+
+      const challengeConfig = getChallengeForRole(roleTyped);
+      const card = document.getElementById('challengeCard');
+      const widenerSection = document.getElementById('widenerSection');
+
+      document.getElementById('challengeTitle').textContent = challengeConfig.title;
+
+      const criteriaList = document.getElementById('challengeCriteria');
+      criteriaList.innerHTML = challengeConfig.criteria
+        .map(c => `<li>${c}</li>`)
+        .join('');
+
+      const diffContext = document.getElementById('difficultyContext');
+      diffContext.textContent = 'Calibrated for senior-level. Mid-level and staff challenges adjust complexity.';
+
+      const customNote = document.getElementById('customNote');
+      if (challengeConfig.isCustom) {
+        customNote.textContent = `Custom proof design available — we'll build a challenge specific to ${challengeConfig.customRole}.`;
+        customNote.classList.remove('hidden');
+      } else {
+        customNote.classList.add('hidden');
+      }
+
+      card.classList.remove('hidden');
+
+      selectedWideners = [];
+      populateWideners();
+      widenerSection.classList.remove('hidden');
+    }
+
+    function populateWideners() {
+      const container = document.getElementById('widenerChips');
+      container.innerHTML = config.wideners
+        .map((w, i) => `
+          <div
+            class="widener-chip"
+            data-index="${i}"
+            onclick="toggleWidener(${i})"
+          >
+            ${w.name}
+          </div>
+        `)
+        .join('');
+    }
+
+    function toggleWidener(index) {
+      const chip = document.querySelector(`[data-index="${index}"]`);
+      const selected = selectedWideners.includes(index);
+
+      if (selected) {
+        selectedWideners = selectedWideners.filter(i => i !== index);
+        chip.classList.remove('selected');
+      } else if (selectedWideners.length < 2) {
+        selectedWideners.push(index);
+        chip.classList.add('selected');
+      } else {
+        chip.classList.add('disabled');
+        setTimeout(() => chip.classList.remove('disabled'), 200);
+      }
+
+      document.querySelectorAll('.widener-chip').forEach((c, i) => {
+        c.classList.toggle('disabled', !selectedWideners.includes(i) && selectedWideners.length >= 2);
+      });
+    }
+
+    // ==================== SECTION 6: INTERACTIVE SCORING ====================
+    function initSection6() {
+      const sliders = document.querySelectorAll('.slider');
+      const compareBtn = document.getElementById('compareButton');
+
+      sliders.forEach(slider => {
+        slider.addEventListener('input', (e) => {
+          const dimension = e.target.dataset.dimension;
+          const value = parseFloat(e.target.value);
+          userScores[dimension] = value;
+          e.target.nextElementSibling.textContent = value.toFixed(1);
+        });
+      });
+
+      compareBtn.addEventListener('click', showAIComparison);
+    }
+
+    function showAIComparison() {
+      const comparison = document.getElementById('aiComparison');
+      comparison.classList.add('visible');
+
+      setTimeout(() => {
+        const bars = document.querySelectorAll('.ai-score-fill');
+        bars.forEach((bar, i) => {
+          const widths = [70, 80, 60, 90];
+          bar.style.width = widths[i] + '%';
+        });
+      }, 100);
+    }
+
+    // ==================== SECTION 7: DASHBOARD ====================
+    function initSection7() {
+      const toggle = document.getElementById('anonToggle');
+      toggle.addEventListener('click', toggleAnonymization);
+      renderCandidates();
+    }
+
+    function toggleAnonymization() {
+      anonymized = !anonymized;
+      const checkbox = document.getElementById('anonCheckbox');
+      const text = document.getElementById('anonText');
+
+      checkbox.classList.toggle('checked');
+      text.textContent = anonymized ? 'Anonymized' : 'Reveal Names';
+      renderCandidates();
+    }
+
+    function renderCandidates() {
+      const container = document.getElementById('candidatesContainer');
+      container.innerHTML = candidates
+        .map(c => renderCandidateCard(c))
+        .join('');
+
+      document.querySelectorAll('.candidate-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('.candidate-card')) {
+            const id = card.dataset.candidateId;
+            expandCandidate(id);
+          }
+        });
+      });
+    }
+
+    function renderCandidateCard(c) {
+      const displayName = anonymized ? c.anon : c.name;
+      const freshnessClass = c.freshness === 'active' ? 'freshness-active' : 'freshness-recent';
+      const freshnessLabel = c.freshness === 'active' ? 'Active' : 'Recent';
+
+      return `
+        <div class="candidate-card" data-candidate-id="${c.id}">
+          <span class="expand-hint">→</span>
+          <div class="candidate-name">${displayName}</div>
+          <div class="candidate-overall">
+            <span class="overall-label">Overall</span>
+            <span class="overall-score">${c.overall}</span>
+          </div>
+          <div class="candidate-wideners">Wideners chosen:</div>
+          <div class="widener-tags">
+            ${c.wideners.map(w => `<span class="widener-tag">${w}</span>`).join('')}
+          </div>
+          <div class="proof-stack">
+            ${c.proofs} proof${c.proofs > 1 ? 's' : ''} completed | Latest: ${c.latest} | Freshness: <span class="${freshnessClass}" style="display: inline-block;"></span>${freshnessLabel}
+          </div>
+          <div class="quick-scores">
+            <div class="quick-score">
+              <span class="quick-score-label">Quality</span>
+              <span class="quick-score-value">${c.scores.quality}</span>
+            </div>
+            <div class="quick-score">
+              <span class="quick-score-label">Solving</span>
+              <span class="quick-score-value">${c.scores.solving}</span>
+            </div>
+            <div class="quick-score">
+              <span class="quick-score-label">Testing</span>
+              <span class="quick-score-value">${c.scores.testing}</span>
+            </div>
+            <div class="quick-score">
+              <span class="quick-score-label">Ownership</span>
+              <span class="quick-score-value">${c.scores.ownership}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function expandCandidate(id) {
+      const candidate = candidates.find(c => c.id === id);
+      if (!candidate) return;
+
+      candidateExpanded = id;
+      const displayName = anonymized ? candidate.anon : candidate.name;
+
+      const expanded = document.getElementById('candidateExpanded');
+      const content = document.getElementById('expandedContent');
+
+      content.innerHTML = `
+        <div class="expanded-header">
+          <div class="expanded-name">${displayName}</div>
+          <div class="expanded-overall">Overall: ${candidate.overall}/5</div>
+        </div>
+
+        <div class="fitfolio-tabs">
+          <button class="fitfolio-tab active" onclick="switchTab(event, 'hiring-manager')">Hiring Manager</button>
+          <button class="fitfolio-tab" onclick="switchTab(event, 'ats-export')">ATS Export</button>
+          <button class="fitfolio-tab" onclick="switchTab(event, 'portfolio')">Portfolio Page</button>
+        </div>
+
+        <div id="hiring-manager" class="tab-content visible">
+          <div class="score-breakdown">
+            <div class="breakdown-item">
+              <div class="breakdown-label">Code Quality</div>
+              <div class="breakdown-bar">
+                <div class="breakdown-fill" style="width: ${candidate.scores.quality * 20}%;"></div>
+              </div>
+              <div class="breakdown-value">${candidate.scores.quality}/5</div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-label">Problem Solving</div>
+              <div class="breakdown-bar">
+                <div class="breakdown-fill" style="width: ${candidate.scores.solving * 20}%;"></div>
+              </div>
+              <div class="breakdown-value">${candidate.scores.solving}/5</div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-label">Testing</div>
+              <div class="breakdown-bar">
+                <div class="breakdown-fill" style="width: ${candidate.scores.testing * 20}%;"></div>
+              </div>
+              <div class="breakdown-value">${candidate.scores.testing}/5</div>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-label">Ownership</div>
+              <div class="breakdown-bar">
+                <div class="breakdown-fill" style="width: ${candidate.scores.ownership * 20}%;"></div>
+              </div>
+              <div class="breakdown-value">${candidate.scores.ownership}/5</div>
+            </div>
+          </div>
+          <div class="curator-note">
+            <strong>Curator note:</strong> Demonstrates consistent technical execution with strong ownership signals.
+          </div>
+        </div>
+
+        <div id="ats-export" class="tab-content">
+          <p style="margin-bottom: 16px; color: #8899a6; font-size: 13px;">Structured data for ATS integration:</p>
+          <div class="ats-export-code">{
+  "candidate": "${candidate.name}",
+  "role": "Senior Engineer",
+  "scores": {
+    "quality": ${candidate.scores.quality},
+    "problem_solving": ${candidate.scores.solving},
+    "testing": ${candidate.scores.testing},
+    "ownership": ${candidate.scores.ownership}
+  },
+  "verification_status": "verified",
+  "proof_date": "2025-02-13",
+  "wideners": ${JSON.stringify(candidate.wideners)}
+}</div>
+          <div class="ats-export-note">Machine-readable, drops into any ATS via API</div>
+        </div>
+
+        <div id="portfolio" class="tab-content">
+          <div class="portfolio-details">
+            <div class="portfolio-item">
+              <div class="portfolio-item-title">Public Profile</div>
+              <div class="portfolio-item-desc">Candidate-controlled public profile. Shareable link, PDF export available.</div>
+            </div>
+            <div class="portfolio-item">
+              <div class="portfolio-item-title">Privacy Controls</div>
+              <div class="portfolio-item-desc">Redaction controls, anonymization toggles, and selective sharing.</div>
+            </div>
+            <div class="portfolio-item">
+              <div class="portfolio-item-title">No Lock-In</div>
+              <div class="portfolio-item-desc">Export proof, scores, and evidence. Own your data completely.</div>
+            </div>
+            <div class="portfolio-item">
+              <div class="portfolio-item-title">Shareable</div>
+              <div class="portfolio-item-desc">Direct link to public FitFolio, embedded evidence, third-party verification.</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      expanded.classList.add('visible');
+    }
+
+    function switchTab(e, tabId) {
+      e.preventDefault();
+
+      document.querySelectorAll('.fitfolio-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('visible'));
+
+      e.target.classList.add('active');
+      document.getElementById(tabId).classList.add('visible');
+    }
+
+    // ==================== INITIALIZATION ====================
+    function init() {
+      initSection5();
+      initSection6();
+      initSection7();
+
+      document.getElementById('expandedClose').addEventListener('click', () => {
+        document.getElementById('candidateExpanded').classList.remove('visible');
+      });
+
+      navigateToSection(0);
+      updateSpeakerNotes();
+
+      setInterval(updateTimer, 1000);
+
+      window.toggleWidener = toggleWidener;
+      window.switchTab = switchTab;
+      window.toggleProspectMode = toggleProspectMode;
+      window.navigateToSection = navigateToSection;
+      window.startSimulation = startSimulation;
+      window.toggleSimulation = toggleSimulation;
+      window.resetSimulation = resetSimulation;
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
