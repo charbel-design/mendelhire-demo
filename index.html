@@ -881,18 +881,29 @@
 
     /* ===== SCORE RADIAL ===== */
     .score-radial {
-      width: 60px;
-      height: 60px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      background: conic-gradient(var(--accent) var(--score-percentage, 0%), rgba(255,255,255,0.1) 0%);
+      background: conic-gradient(var(--accent) 0%, var(--accent) var(--score-percentage, 0%), rgba(255,255,255,0.08) var(--score-percentage, 0%), rgba(255,255,255,0.08) 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
-      color: var(--accent);
-      border: 2px solid var(--border-subtle);
+      color: var(--text-primary);
+      position: relative;
       transition: all 0.25s ease;
+    }
+    .score-radial::before {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      border-radius: 50%;
+      background: var(--bg-primary, #0a1628);
+    }
+    .score-radial span {
+      position: relative;
+      z-index: 1;
     }
 
     /* ===== CODE EDITOR ===== */
@@ -920,6 +931,13 @@
       font-weight: 600;
       color: var(--text-secondary);
     }
+    .code-editor-body .kw { color: #c792ea; }
+    .code-editor-body .tp { color: #ffcb8b; }
+    .code-editor-body .fn { color: #82aaff; }
+    .code-editor-body .pr { color: #89ddff; }
+    .code-editor-body .st { color: #c3e88d; }
+    .code-editor-body .nm { color: #f78c6c; }
+    .code-editor-body .cm { color: #546e7a; font-style: italic; }
 
     /* ===== PIPELINE VISUALIZATION ===== */
     .pipeline-container {
@@ -1378,17 +1396,12 @@
               <div class="code-editor-title">src/components/ProductCard.tsx</div>
               <span style="font-size: 11px; color: var(--text-muted);">Latest commit</span>
             </div>
-            <div style="font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.5; color: #89ddff;">
-              <div><span style="color: #c792ea;">export</span> <span style="color: #c792ea;">interface</span> <span style="color: #ffcb8b;">Product</span> {</div>
-              <div style="margin-left: 16px;"><span style="color: #89ddff;">id</span>: <span style="color: #c792ea;">string</span>;</div>
-              <div style="margin-left: 16px;"><span style="color: #89ddff;">name</span>: <span style="color: #c792ea;">string</span>;</div>
-              <div style="margin-left: 16px;"><span style="color: #89ddff;">price</span>: <span style="color: #c792ea;">number</span>;</div>
-              <div>}</div>
-              <div>&nbsp;</div>
-              <div><span style="color: #c792ea;">export</span> <span style="color: #c792ea;">const</span> <span style="color: #dfd9a8;">ProductCard</span>: <span style="color: #ffcb8b;">FC</span>&lt;<span style="color: #ffcb8b;">Product</span>&gt; = ({</div>
-              <div style="margin-left: 16px;"><span style="color: #89ddff;">id</span>, <span style="color: #89ddff;">name</span>, <span style="color: #89ddff;">price</span></div>
-              <div>}) =&gt; (</div>
-              <div style="margin-left: 16px;">&lt;<span style="color: #c792ea;">div</span> <span style="color: #89ddff;">className</span>=<span style="color: #c3e88d;">"card"</span>&gt;</div>
+            <div class="code-editor-body" style="font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.8; color: #89ddff; transition: opacity 0.3s ease;">
+              <span class="kw">export</span> <span class="kw">interface</span> <span class="tp">Product</span> {<br>
+              &nbsp;&nbsp;<span class="pr">id</span>: <span class="kw">string</span>;<br>
+              &nbsp;&nbsp;<span class="pr">name</span>: <span class="kw">string</span>;<br>
+              &nbsp;&nbsp;<span class="pr">price</span>: <span class="kw">number</span>;<br>
+              }
             </div>
           </div>
         </div>
@@ -1460,7 +1473,7 @@
                 <td>MH-2841</td>
                 <td>Frontend React</td>
                 <td><span class="status-badge ready">FitFolio Ready</span></td>
-                <td><div class="score-radial" style="--score-percentage: 84%;">4.2</div></td>
+                <td><div class="score-radial" style="--score-percentage: 84%;"><span>4.2</span></div></td>
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2841')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
@@ -1470,7 +1483,7 @@
                 <td>MH-2842</td>
                 <td>Frontend React</td>
                 <td><span class="status-badge scored">Scored</span></td>
-                <td><div class="score-radial" style="--score-percentage: 76%;">3.8</div></td>
+                <td><div class="score-radial" style="--score-percentage: 76%;"><span>3.8</span></div></td>
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2842')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
@@ -1490,7 +1503,7 @@
                 <td>MH-2844</td>
                 <td>Data Python/SQL</td>
                 <td><span class="status-badge ready">FitFolio Ready</span></td>
-                <td><div class="score-radial" style="--score-percentage: 90%;">4.5</div></td>
+                <td><div class="score-radial" style="--score-percentage: 90%;"><span>4.5</span></div></td>
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2844')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
@@ -1510,7 +1523,7 @@
                 <td>MH-2846</td>
                 <td>Data Python/SQL</td>
                 <td><span class="status-badge scored">Scored</span></td>
-                <td><div class="score-radial" style="--score-percentage: 70%;">3.5</div></td>
+                <td><div class="score-radial" style="--score-percentage: 70%;"><span>3.5</span></div></td>
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2846')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
@@ -1526,11 +1539,11 @@
               </tr>
               <tr data-status="FitFolio Ready" data-challenge="Data Python/SQL" data-score="4.0">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2848"><strong>Elena Volkova</strong></td>
+                <td id="name-MH-2848"><div class="avatar-badge"><div class="avatar-circle">EV</div><strong>Elena Volkova</strong></div></td>
                 <td>MH-2848</td>
                 <td>Data Python/SQL</td>
-                <td><span class="badge badge-success">FitFolio Ready</span></td>
-                <td><strong style="color: #5CD6C8;">4.0</strong></td>
+                <td><span class="status-badge ready">FitFolio Ready</span></td>
+                <td><div class="score-radial" style="--score-percentage: 80%;"><span>4.0</span></div></td>
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2848')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
@@ -2236,6 +2249,33 @@
     // LIVE SESSION SIMULATION
     let simRunning = false;
     let simTimer = null;
+    let lastCodePhase = -1;
+
+    const codePhases = [
+      { file: 'src/components/ProductCard.tsx', code: '<span class="kw">export</span> <span class="kw">interface</span> <span class="tp">Product</span> {\n  <span class="pr">id</span>: <span class="kw">string</span>;\n  <span class="pr">name</span>: <span class="kw">string</span>;\n  <span class="pr">price</span>: <span class="kw">number</span>;\n}' },
+      { file: 'src/components/ProductCard.tsx', code: '<span class="kw">import</span> { <span class="tp">FC</span> } <span class="kw">from</span> <span class="st">\'react\'</span>;\n<span class="kw">import</span> { <span class="fn">formatCurrency</span> } <span class="kw">from</span> <span class="st">\'../utils\'</span>;\n\n<span class="kw">export const</span> <span class="fn">ProductCard</span>: <span class="tp">FC</span>&lt;<span class="tp">Product</span>&gt; = ({\n  id, name, price\n}) =&gt; (\n  &lt;<span class="kw">div</span> <span class="pr">className</span>=<span class="st">"card"</span>&gt;\n    &lt;<span class="kw">h3</span>&gt;{name}&lt;/<span class="kw">h3</span>&gt;\n    &lt;<span class="kw">p</span>&gt;{formatCurrency(price)}&lt;/<span class="kw">p</span>&gt;\n  &lt;/<span class="kw">div</span>&gt;\n);' },
+      { file: 'src/hooks/useProducts.ts', code: '<span class="kw">import</span> { <span class="fn">useState</span>, <span class="fn">useEffect</span> } <span class="kw">from</span> <span class="st">\'react\'</span>;\n<span class="kw">import</span> { <span class="tp">Product</span> } <span class="kw">from</span> <span class="st">\'../types\'</span>;\n\n<span class="kw">export function</span> <span class="fn">useProducts</span>() {\n  <span class="kw">const</span> [products, setProducts] = <span class="fn">useState</span>&lt;<span class="tp">Product</span>[]&gt;([]);\n  <span class="kw">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="kw">true</span>);\n\n  <span class="fn">useEffect</span>(() =&gt; {\n    <span class="fn">fetchProducts</span>().then(setProducts);\n  }, []);\n\n  <span class="kw">return</span> { products, loading };\n}' },
+      { file: 'src/components/ProductGrid.tsx', code: '<span class="cm">// PIVOT: Refactor to support filtering</span>\n<span class="kw">import</span> { <span class="fn">useProducts</span> } <span class="kw">from</span> <span class="st">\'../hooks\'</span>;\n<span class="kw">import</span> { <span class="fn">ProductCard</span> } <span class="kw">from</span> <span class="st">\'./ProductCard\'</span>;\n\n<span class="kw">export const</span> <span class="fn">ProductGrid</span>: <span class="tp">FC</span>&lt;{\n  <span class="pr">filter</span>?: <span class="kw">string</span>;\n  <span class="pr">sortBy</span>?: <span class="st">\'price\'</span> | <span class="st">\'name\'</span>;\n}&gt; = ({ filter, sortBy }) =&gt; {\n  <span class="kw">const</span> { products } = <span class="fn">useProducts</span>();\n  <span class="kw">const</span> filtered = products\n    .<span class="fn">filter</span>(p =&gt; !filter || p.name.<span class="fn">includes</span>(filter))\n    .<span class="fn">sort</span>((a,b) =&gt; sortBy === <span class="st">\'price\'</span> ? a.price - b.price : 0);\n\n  <span class="kw">return</span> &lt;<span class="kw">div</span> <span class="pr">className</span>=<span class="st">"grid"</span>&gt;\n    {filtered.<span class="fn">map</span>(p =&gt; &lt;<span class="fn">ProductCard</span> <span class="pr">key</span>={p.id} {...p} /&gt;)}\n  &lt;/<span class="kw">div</span>&gt;;\n};' },
+      { file: 'src/__tests__/ProductCard.test.tsx', code: '<span class="kw">import</span> { <span class="fn">render</span>, <span class="fn">screen</span> } <span class="kw">from</span> <span class="st">\'@testing-library/react\'</span>;\n<span class="kw">import</span> { <span class="fn">ProductCard</span> } <span class="kw">from</span> <span class="st">\'../components/ProductCard\'</span>;\n\n<span class="fn">describe</span>(<span class="st">\'ProductCard\'</span>, () =&gt; {\n  <span class="fn">it</span>(<span class="st">\'renders product name and price\'</span>, () =&gt; {\n    <span class="fn">render</span>(&lt;<span class="fn">ProductCard</span>\n      <span class="pr">id</span>=<span class="st">"1"</span> <span class="pr">name</span>=<span class="st">"Widget"</span> <span class="pr">price</span>={<span class="nm">29.99</span>}\n    /&gt;);\n    <span class="fn">expect</span>(<span class="fn">screen</span>.<span class="fn">getByText</span>(<span class="st">\'Widget\'</span>)).<span class="fn">toBeInTheDocument</span>();\n    <span class="fn">expect</span>(<span class="fn">screen</span>.<span class="fn">getByText</span>(<span class="st">\'$29.99\'</span>)).<span class="fn">toBeInTheDocument</span>();\n  });\n});' },
+      { file: 'src/components/ProductGrid.tsx', code: '<span class="cm">// Final: added pagination + error handling</span>\n<span class="kw">export const</span> <span class="fn">ProductGrid</span>: <span class="tp">FC</span>&lt;<span class="tp">GridProps</span>&gt; = ({\n  filter, sortBy, <span class="pr">pageSize</span> = <span class="nm">12</span>\n}) =&gt; {\n  <span class="kw">const</span> { products, loading, error } = <span class="fn">useProducts</span>();\n  <span class="kw">const</span> [page, setPage] = <span class="fn">useState</span>(<span class="nm">0</span>);\n\n  <span class="kw">if</span> (error) <span class="kw">return</span> &lt;<span class="fn">ErrorBanner</span> <span class="pr">msg</span>={error} /&gt;;\n  <span class="kw">if</span> (loading) <span class="kw">return</span> &lt;<span class="fn">Skeleton</span> <span class="pr">rows</span>={<span class="nm">3</span>} /&gt;;\n\n  <span class="kw">const</span> sorted = <span class="fn">applySort</span>(products, sortBy);\n  <span class="kw">const</span> paged = sorted.<span class="fn">slice</span>(page * pageSize, (page+<span class="nm">1</span>) * pageSize);\n\n  <span class="kw">return</span> &lt;&gt;\n    &lt;<span class="kw">div</span> <span class="pr">className</span>=<span class="st">"grid"</span>&gt;\n      {paged.<span class="fn">map</span>(p =&gt; &lt;<span class="fn">ProductCard</span> <span class="pr">key</span>={p.id} {...p}/&gt;)}\n    &lt;/<span class="kw">div</span>&gt;\n    &lt;<span class="fn">Pagination</span> <span class="pr">total</span>={sorted.length} <span class="pr">page</span>={page} <span class="pr">onChange</span>={setPage}/&gt;\n  &lt;/&gt;;\n};' }
+    ];
+
+    function updateCodeEditor(phaseIndex) {
+      if (phaseIndex === lastCodePhase || phaseIndex >= codePhases.length) return;
+      lastCodePhase = phaseIndex;
+      const phase = codePhases[phaseIndex];
+      const editor = document.querySelector('.code-editor');
+      if (!editor) return;
+      const header = editor.querySelector('.code-editor-header');
+      const titleEl = header.querySelector('.code-editor-title');
+      titleEl.textContent = phase.file;
+      const codeBody = editor.querySelector('.code-editor-body');
+      if (codeBody) {
+        codeBody.innerHTML = phase.code.replace(/\n/g, '<br>');
+        codeBody.style.opacity = '0';
+        setTimeout(() => { codeBody.style.opacity = '1'; }, 50);
+      }
+    }
 
     function updateLiveSession() {
       if (!simRunning) return;
@@ -2260,6 +2300,10 @@
         phaseEl.textContent = proofTime >= (pivotTime * 60) ? 'Post-Pivot' : 'Pre-Pivot';
         phaseEl.style.color = proofTime >= (pivotTime * 60) ? '#E5B84C' : '#5CD6C8';
       }
+
+      // Update code editor based on progress
+      const codePhaseIndex = Math.min(Math.floor(pct / (100 / codePhases.length)), codePhases.length - 1);
+      updateCodeEditor(codePhaseIndex);
 
       if (proofTime < totalSeconds) {
         simTimer = setTimeout(updateLiveSession, 100);
@@ -2288,6 +2332,8 @@
       simRunning = false;
       clearTimeout(simTimer);
       proofTime = 0;
+      lastCodePhase = -1;
+      updateCodeEditor(0);
       document.getElementById('elapsedTime').textContent = '0:00';
       document.getElementById('commitCount').textContent = '0';
       document.getElementById('linesAdded').textContent = '0';
