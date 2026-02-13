@@ -12,13 +12,16 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    html {
       width: 100%;
       height: 100%;
       overflow: hidden;
     }
 
     body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background-color: #0a1628;
       color: #f0f4f8;
@@ -31,33 +34,25 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      position: relative;
     }
 
     .sections-container {
       flex: 1;
-      position: relative;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
     }
 
     .section {
-      position: absolute;
+      scroll-snap-align: start;
+      min-height: 100%;
       width: 100%;
-      height: 100%;
-      display: none;
+      display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      overflow-y: auto;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.35s ease-out, transform 0.35s ease-out;
       padding: 60px 80px;
-    }
-
-    .section.active {
-      display: flex;
-      opacity: 1;
-      transform: translateY(0);
     }
 
     /* Animated background for title section */
@@ -2605,7 +2600,7 @@
     <div class="sections-container">
 
       <!-- SECTION 1: TITLE -->
-      <section id="section-1" class="section active">
+      <section id="section-1" class="section">
         <div class="animated-bg">
           <svg viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice">
             <defs>
@@ -3443,20 +3438,26 @@
         document.getElementById('btn-start').textContent = 'Start';
       }
 
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById(`section-${sectionIndex + 1}`).classList.add('active');
-
-      document.querySelectorAll('.nav-dot').forEach((dot, i) => {
-        dot.classList.toggle('active', i === sectionIndex);
-      });
+      // Scroll to the section (works with scroll-snap)
+      const target = document.getElementById('section-' + (sectionIndex + 1));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
 
       currentSection = sectionIndex;
+      updateNavDots();
       updateSpeakerNotes();
       updateNavArrows();
 
       if (!timerStarted) {
         timerStarted = true;
       }
+    }
+
+    function updateNavDots() {
+      document.querySelectorAll('.nav-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSection);
+      });
     }
 
     function prevSection() {
@@ -4049,12 +4050,38 @@
         });
       }
 
-      navigateToSection(0);
+      // IntersectionObserver to track which section is visible during scroll
+      const container = document.querySelector('.sections-container');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+            const id = entry.target.id;
+            const index = parseInt(id.replace('section-', '')) - 1;
+            if (index >= 0 && index < totalSections && index !== currentSection) {
+              currentSection = index;
+              updateNavDots();
+              updateSpeakerNotes();
+              updateNavArrows();
+              if (!timerStarted) timerStarted = true;
+            }
+          }
+        });
+      }, {
+        root: container,
+        threshold: 0.5
+      });
+
+      document.querySelectorAll('.section').forEach(section => {
+        observer.observe(section);
+      });
+
+      // Set initial state
+      currentSection = 0;
+      updateNavDots();
       updateSpeakerNotes();
+      updateNavArrows();
 
       setInterval(updateTimer, 1000);
-
-      updateNavArrows();
     }
 
     document.addEventListener('DOMContentLoaded', init);
