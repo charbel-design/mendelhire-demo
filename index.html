@@ -1245,6 +1245,10 @@
                 <div class="pivot-label">Pivot Point</div>
                 <div style="font-size: 14px; color: #f0f4f8;">60 minutes - Add keyboard navigation and ARIA labels</div>
               </div>
+              <button class="btn-primary" style="width: 100%; margin-top: 16px;" onclick="launchLiveSession({title:'Frontend React', type:'Frontend', stack:['React','TypeScript','Testing'], duration:120, stipend:100, desc:'Start with a product list (name, price, category). Add client-side search and category filter. At minute 60, add keyboard navigation and ARIA labels for all controls.', pivot:'Add keyboard navigation and ARIA labels'})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                Run Challenge
+              </button>
             </div>
             <div class="challenge-card">
               <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
@@ -1291,6 +1295,10 @@
                 <div class="pivot-label">Pivot Point</div>
                 <div style="font-size: 14px; color: #f0f4f8;">60 minutes - Redefine cohorts by first paid event instead of first seen</div>
               </div>
+              <button class="btn-primary" style="width: 100%; margin-top: 16px;" onclick="launchLiveSession({title:'Data Python/SQL', type:'Data', stack:['Python','SQL','PostgreSQL'], duration:120, stipend:100, desc:'Analyze a CSV of user events. Produce a monthly cohort retention chart and five bullet insights. At the pivot: redefine cohorts by first paid event instead of first seen.', pivot:'Redefine cohorts by first paid event'})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                Run Challenge
+              </button>
             </div>
           </div>
         </div>
@@ -1298,10 +1306,10 @@
         <!-- LIVE SESSION PAGE -->
         <div id="live-session" class="page">
           <div class="candidate-header">
-            <div class="candidate-avatar">JL</div>
+            <div class="candidate-avatar" id="lsCandidateAvatar">JL</div>
             <div style="flex: 1;">
-              <div style="font-size: 16px; font-weight: 700; color: #f0f4f8; margin-bottom: 4px;">Jordan Lee</div>
-              <div style="font-size: 13px; color: #94a3b8;">Frontend React • Challenge in progress</div>
+              <div style="font-size: 16px; font-weight: 700; color: #f0f4f8; margin-bottom: 4px;" id="lsCandidateName">Jordan Lee</div>
+              <div style="font-size: 13px; color: #94a3b8;" id="lsChallengeInfo">Frontend React • Challenge in progress</div>
             </div>
             <div style="text-align: right;">
               <div class="badge badge-warning">In Progress</div>
@@ -1420,7 +1428,7 @@
 
           <div class="code-editor">
             <div class="code-editor-header">
-              <div class="code-editor-title">src/components/ProductCard.tsx</div>
+              <div class="code-editor-title" id="lsCodeTitle">src/components/ProductCard.tsx</div>
               <span style="font-size: 11px; color: var(--text-muted);">Latest commit</span>
             </div>
             <div class="code-editor-body" style="font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.8; color: #89ddff; transition: opacity 0.3s ease;">
@@ -2373,6 +2381,42 @@
       document.getElementById('createChallengeModal').classList.remove('active');
     }
 
+    // ===== ROLE-SPECIFIC CODE PHASES FOR LIVE SESSION =====
+    const roleCodePhases = {
+      'Frontend': [
+        { file: 'src/components/ProductCard.tsx', code: '<span class="kw">export</span> <span class="kw">interface</span> <span class="tp">Product</span> {\n  <span class="pr">id</span>: <span class="kw">string</span>;\n  <span class="pr">name</span>: <span class="kw">string</span>;\n  <span class="pr">price</span>: <span class="kw">number</span>;\n}' },
+        { file: 'src/components/ProductCard.tsx', code: '<span class="kw">import</span> { <span class="tp">FC</span> } <span class="kw">from</span> <span class="st">\'react\'</span>;\n\n<span class="kw">export const</span> <span class="fn">ProductCard</span>: <span class="tp">FC</span>&lt;<span class="tp">Product</span>&gt; = ({\n  id, name, price\n}) =&gt; (\n  &lt;<span class="kw">div</span> <span class="pr">className</span>=<span class="st">"card"</span>&gt;\n    &lt;<span class="kw">h3</span>&gt;{name}&lt;/<span class="kw">h3</span>&gt;\n    &lt;<span class="kw">p</span>&gt;{formatCurrency(price)}&lt;/<span class="kw">p</span>&gt;\n  &lt;/<span class="kw">div</span>&gt;\n);' },
+        { file: 'src/hooks/useProducts.ts', code: '<span class="kw">import</span> { <span class="fn">useState</span>, <span class="fn">useEffect</span> } <span class="kw">from</span> <span class="st">\'react\'</span>;\n\n<span class="kw">export function</span> <span class="fn">useProducts</span>() {\n  <span class="kw">const</span> [products, setProducts] = <span class="fn">useState</span>([]);\n  <span class="kw">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="kw">true</span>);\n\n  <span class="fn">useEffect</span>(() =&gt; {\n    <span class="fn">fetchProducts</span>().then(setProducts);\n  }, []);\n  <span class="kw">return</span> { products, loading };\n}' },
+        { file: 'src/components/ProductGrid.tsx', code: '<span class="cm">// PIVOT: Adding filter + sort</span>\n<span class="kw">export const</span> <span class="fn">ProductGrid</span>: <span class="tp">FC</span>&lt;{\n  <span class="pr">filter</span>?: <span class="kw">string</span>;\n}&gt; = ({ filter }) =&gt; {\n  <span class="kw">const</span> { products } = <span class="fn">useProducts</span>();\n  <span class="kw">const</span> filtered = products\n    .<span class="fn">filter</span>(p =&gt; !filter || p.name.<span class="fn">includes</span>(filter));\n  <span class="kw">return</span> &lt;<span class="kw">div</span>&gt;{filtered.<span class="fn">map</span>(p =&gt; &lt;<span class="fn">ProductCard</span> {...p}/&gt;)}&lt;/<span class="kw">div</span>&gt;;\n};' },
+        { file: 'src/__tests__/ProductCard.test.tsx', code: '<span class="kw">import</span> { <span class="fn">render</span>, <span class="fn">screen</span> } <span class="kw">from</span> <span class="st">\'@testing-library/react\'</span>;\n\n<span class="fn">describe</span>(<span class="st">\'ProductCard\'</span>, () =&gt; {\n  <span class="fn">it</span>(<span class="st">\'renders name and price\'</span>, () =&gt; {\n    <span class="fn">render</span>(&lt;<span class="fn">ProductCard</span> <span class="pr">id</span>=<span class="st">"1"</span> <span class="pr">name</span>=<span class="st">"Widget"</span> <span class="pr">price</span>={29.99}/&gt;);\n    <span class="fn">expect</span>(<span class="fn">screen</span>.<span class="fn">getByText</span>(<span class="st">\'Widget\'</span>)).<span class="fn">toBeInTheDocument</span>();\n  });\n});' },
+        { file: 'src/components/ProductGrid.tsx', code: '<span class="cm">// Final: pagination + error handling</span>\n<span class="kw">export const</span> <span class="fn">ProductGrid</span> = ({ filter, pageSize = 12 }) =&gt; {\n  <span class="kw">const</span> { products, error } = <span class="fn">useProducts</span>();\n  <span class="kw">const</span> [page, setPage] = <span class="fn">useState</span>(0);\n  <span class="kw">if</span> (error) <span class="kw">return</span> &lt;<span class="fn">ErrorBanner</span>/&gt;;\n  <span class="kw">const</span> paged = products.<span class="fn">slice</span>(page*pageSize, (page+1)*pageSize);\n  <span class="kw">return</span> &lt;&gt;{paged.<span class="fn">map</span>(p=&gt;&lt;<span class="fn">ProductCard</span> {...p}/&gt;)}&lt;/&gt;;\n};' }
+      ],
+      'Backend': [
+        { file: 'src/server.ts', code: '<span class="kw">import</span> <span class="fn">express</span> <span class="kw">from</span> <span class="st">\'express\'</span>;\n<span class="kw">import</span> { <span class="fn">router</span> } <span class="kw">from</span> <span class="st">\'./routes\'</span>;\n\n<span class="kw">const</span> app = <span class="fn">express</span>();\napp.<span class="fn">use</span>(<span class="fn">express</span>.<span class="fn">json</span>());\napp.<span class="fn">use</span>(<span class="st">\'/api\'</span>, router);' },
+        { file: 'src/routes/booking.ts', code: '<span class="kw">import</span> { <span class="tp">Router</span> } <span class="kw">from</span> <span class="st">\'express\'</span>;\n<span class="kw">import</span> { <span class="fn">BookingService</span> } <span class="kw">from</span> <span class="st">\'../services\'</span>;\n\n<span class="kw">export const</span> router = <span class="fn">Router</span>();\n\nrouter.<span class="fn">post</span>(<span class="st">\'/bookings\'</span>, <span class="kw">async</span> (req, res) =&gt; {\n  <span class="kw">const</span> booking = <span class="kw">await</span> BookingService.<span class="fn">create</span>(req.body);\n  res.<span class="fn">status</span>(201).<span class="fn">json</span>(booking);\n});' },
+        { file: 'src/services/booking.ts', code: '<span class="kw">import</span> { <span class="fn">db</span> } <span class="kw">from</span> <span class="st">\'../db\'</span>;\n\n<span class="kw">export class</span> <span class="tp">BookingService</span> {\n  <span class="kw">static async</span> <span class="fn">create</span>(data) {\n    <span class="kw">const</span> conflict = <span class="kw">await</span> <span class="kw">this</span>.<span class="fn">checkConflict</span>(data);\n    <span class="kw">if</span> (conflict) <span class="kw">throw</span> <span class="kw">new</span> <span class="fn">ConflictError</span>();\n    <span class="kw">return</span> db.<span class="fn">insert</span>(<span class="st">\'bookings\'</span>, data);\n  }\n\n  <span class="kw">static async</span> <span class="fn">checkConflict</span>({ start, end, room }) {\n    <span class="kw">return</span> db.<span class="fn">query</span>(<span class="st">`SELECT 1 FROM bookings\n      WHERE room = $1 AND tsrange(start,end) && tsrange($2,$3)`</span>,\n      [room, start, end]);\n  }\n}' },
+        { file: 'src/middleware/rateLimit.ts', code: '<span class="cm">// PIVOT: Adding webhook + retry</span>\n<span class="kw">import</span> <span class="fn">Redis</span> <span class="kw">from</span> <span class="st">\'ioredis\'</span>;\n\n<span class="kw">export const</span> <span class="fn">rateLimiter</span> = (limit, window) =&gt; {\n  <span class="kw">const</span> redis = <span class="kw">new</span> <span class="fn">Redis</span>();\n  <span class="kw">return async</span> (req, res, next) =&gt; {\n    <span class="kw">const</span> key = <span class="st">`rl:${req.ip}`</span>;\n    <span class="kw">const</span> count = <span class="kw">await</span> redis.<span class="fn">incr</span>(key);\n    <span class="kw">if</span> (count === 1) <span class="kw">await</span> redis.<span class="fn">expire</span>(key, window);\n    <span class="kw">if</span> (count > limit) <span class="kw">return</span> res.<span class="fn">status</span>(429).<span class="fn">json</span>({error:<span class="st">\'Rate limited\'</span>});\n    <span class="fn">next</span>();\n  };\n};' },
+        { file: 'src/__tests__/booking.test.ts', code: '<span class="kw">import</span> <span class="fn">supertest</span> <span class="kw">from</span> <span class="st">\'supertest\'</span>;\n<span class="kw">import</span> { app } <span class="kw">from</span> <span class="st">\'../server\'</span>;\n\n<span class="fn">describe</span>(<span class="st">\'POST /api/bookings\'</span>, () =&gt; {\n  <span class="fn">it</span>(<span class="st">\'creates a booking\'</span>, <span class="kw">async</span> () =&gt; {\n    <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">supertest</span>(app)\n      .<span class="fn">post</span>(<span class="st">\'/api/bookings\'</span>)\n      .<span class="fn">send</span>({ room: <span class="st">\'A1\'</span>, start: <span class="st">\'10:00\'</span>, end: <span class="st">\'11:00\'</span> });\n    <span class="fn">expect</span>(res.status).<span class="fn">toBe</span>(201);\n  });\n\n  <span class="fn">it</span>(<span class="st">\'rejects conflicting booking\'</span>, <span class="kw">async</span> () =&gt; {\n    <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">supertest</span>(app)\n      .<span class="fn">post</span>(<span class="st">\'/api/bookings\'</span>)\n      .<span class="fn">send</span>({ room: <span class="st">\'A1\'</span>, start: <span class="st">\'10:30\'</span>, end: <span class="st">\'11:30\'</span> });\n    <span class="fn">expect</span>(res.status).<span class="fn">toBe</span>(409);\n  });\n});' },
+        { file: 'src/webhooks/notify.ts', code: '<span class="cm">// Final: webhook dispatch + retry queue</span>\n<span class="kw">export class</span> <span class="tp">WebhookDispatcher</span> {\n  <span class="kw">async</span> <span class="fn">send</span>(url, payload, retries = 3) {\n    <span class="kw">for</span> (<span class="kw">let</span> i = 0; i &lt; retries; i++) {\n      <span class="kw">try</span> {\n        <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(url, {\n          method: <span class="st">\'POST\'</span>,\n          body: JSON.<span class="fn">stringify</span>(payload)\n        });\n        <span class="kw">if</span> (res.ok) <span class="kw">return</span>;\n      } <span class="kw">catch</span> (e) {\n        <span class="kw">await</span> <span class="fn">delay</span>(1000 * (i+1));\n      }\n    }\n    <span class="kw">await</span> <span class="kw">this</span>.<span class="fn">deadLetterQueue</span>(payload);\n  }\n}' }
+      ],
+      'Data': [
+        { file: 'pipeline/extract.py', code: '<span class="kw">import</span> pandas <span class="kw">as</span> pd\n\n<span class="kw">def</span> <span class="fn">extract_events</span>(path: <span class="tp">str</span>) -&gt; pd.DataFrame:\n    df = pd.<span class="fn">read_csv</span>(path)\n    df[<span class="st">\'timestamp\'</span>] = pd.<span class="fn">to_datetime</span>(df[<span class="st">\'timestamp\'</span>])\n    <span class="kw">return</span> df.<span class="fn">dropna</span>(subset=[<span class="st">\'user_id\'</span>])' },
+        { file: 'pipeline/transform.py', code: '<span class="kw">import</span> pandas <span class="kw">as</span> pd\n\n<span class="kw">def</span> <span class="fn">build_cohorts</span>(df: pd.DataFrame) -&gt; pd.DataFrame:\n    df[<span class="st">\'cohort\'</span>] = df.<span class="fn">groupby</span>(<span class="st">\'user_id\'</span>)[<span class="st">\'timestamp\'</span>]\\\n        .<span class="fn">transform</span>(<span class="st">\'min\'</span>).dt.<span class="fn">to_period</span>(<span class="st">\'M\'</span>)\n    df[<span class="st">\'period\'</span>] = df[<span class="st">\'timestamp\'</span>].dt.<span class="fn">to_period</span>(<span class="st">\'M\'</span>)\n    <span class="kw">return</span> df' },
+        { file: 'pipeline/retention.py', code: '<span class="kw">def</span> <span class="fn">calc_retention</span>(df):\n    cohort_size = df.<span class="fn">groupby</span>(<span class="st">\'cohort\'</span>)[<span class="st">\'user_id\'</span>].<span class="fn">nunique</span>()\n    retention = df.<span class="fn">groupby</span>([<span class="st">\'cohort\'</span>, <span class="st">\'period\'</span>])\\\n        [<span class="st">\'user_id\'</span>].<span class="fn">nunique</span>().<span class="fn">unstack</span>()\n    <span class="kw">return</span> retention.<span class="fn">divide</span>(cohort_size, axis=0)' },
+        { file: 'pipeline/retention.py', code: '<span class="cm"># PIVOT: redefine by first paid event</span>\n<span class="kw">def</span> <span class="fn">calc_retention_v2</span>(df):\n    paid = df[df[<span class="st">\'event_type\'</span>] == <span class="st">\'purchase\'</span>]\n    first_paid = paid.<span class="fn">groupby</span>(<span class="st">\'user_id\'</span>)[<span class="st">\'timestamp\'</span>].<span class="fn">min</span>()\n    df[<span class="st">\'cohort_v2\'</span>] = df[<span class="st">\'user_id\'</span>].<span class="fn">map</span>(\n        first_paid.dt.<span class="fn">to_period</span>(<span class="st">\'M\'</span>))\n    <span class="kw">return</span> df.<span class="fn">dropna</span>(subset=[<span class="st">\'cohort_v2\'</span>])' },
+        { file: 'pipeline/visualize.py', code: '<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt\n<span class="kw">import</span> seaborn <span class="kw">as</span> sns\n\n<span class="kw">def</span> <span class="fn">plot_retention</span>(retention_df, title=<span class="st">\'Cohort Retention\'</span>):\n    fig, ax = plt.<span class="fn">subplots</span>(figsize=(12, 6))\n    sns.<span class="fn">heatmap</span>(retention_df,\n        annot=<span class="kw">True</span>, fmt=<span class="st">\'.0%\'</span>,\n        cmap=<span class="st">\'Blues\'</span>, ax=ax)\n    ax.<span class="fn">set_title</span>(title)\n    <span class="kw">return</span> fig' },
+        { file: 'insights.md', code: '<span class="cm"># Key Insights</span>\n\n<span class="pr">1.</span> Month-1 retention averages <span class="nm">42%</span> across cohorts\n<span class="pr">2.</span> Q4 cohorts show <span class="nm">15%</span> higher retention\n<span class="pr">3.</span> Paid-cohort retention is <span class="nm">2.3x</span> higher\n<span class="pr">4.</span> Drop-off steepest in months 2-3\n<span class="pr">5.</span> Redefining by paid event shifts\n   all cohort boundaries later by ~<span class="nm">18</span> days' }
+      ],
+      'Full Stack': [
+        { file: 'app/page.tsx', code: '<span class="kw">import</span> { <span class="fn">TaskList</span> } <span class="kw">from</span> <span class="st">\'./components\'</span>;\n<span class="kw">import</span> { <span class="fn">AuthProvider</span> } <span class="kw">from</span> <span class="st">\'./auth\'</span>;\n\n<span class="kw">export default function</span> <span class="fn">Home</span>() {\n  <span class="kw">return</span> (\n    &lt;<span class="fn">AuthProvider</span>&gt;\n      &lt;<span class="fn">TaskList</span> /&gt;\n    &lt;/<span class="fn">AuthProvider</span>&gt;\n  );\n}' },
+        { file: 'app/api/tasks/route.ts', code: '<span class="kw">import</span> { <span class="fn">db</span> } <span class="kw">from</span> <span class="st">\'@/lib/db\'</span>;\n<span class="kw">import</span> { <span class="fn">auth</span> } <span class="kw">from</span> <span class="st">\'@/lib/auth\'</span>;\n\n<span class="kw">export async function</span> <span class="fn">GET</span>() {\n  <span class="kw">const</span> user = <span class="kw">await</span> <span class="fn">auth</span>();\n  <span class="kw">const</span> tasks = <span class="kw">await</span> db.<span class="fn">query</span>(\n    <span class="st">`SELECT * FROM tasks WHERE user_id = $1\n     ORDER BY created_at DESC`</span>,\n    [user.id]\n  );\n  <span class="kw">return</span> Response.<span class="fn">json</span>(tasks);\n}' },
+        { file: 'app/components/TaskItem.tsx', code: '<span class="st">\'use client\'</span>;\n<span class="kw">import</span> { <span class="fn">useState</span> } <span class="kw">from</span> <span class="st">\'react\'</span>;\n\n<span class="kw">export function</span> <span class="fn">TaskItem</span>({ task, onUpdate }) {\n  <span class="kw">const</span> [editing, setEditing] = <span class="fn">useState</span>(<span class="kw">false</span>);\n\n  <span class="kw">const</span> <span class="fn">toggle</span> = <span class="kw">async</span> () =&gt; {\n    <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">`/api/tasks/${task.id}`</span>, {\n      method: <span class="st">\'PATCH\'</span>,\n      body: JSON.<span class="fn">stringify</span>({ done: !task.done })\n    });\n    <span class="fn">onUpdate</span>();\n  };\n\n  <span class="kw">return</span> &lt;<span class="kw">div</span>&gt;{task.title}&lt;/<span class="kw">div</span>&gt;;\n}' },
+        { file: 'app/lib/realtime.ts', code: '<span class="cm">// PIVOT: real-time collab</span>\n<span class="kw">import</span> { <span class="fn">Server</span> } <span class="kw">from</span> <span class="st">\'socket.io\'</span>;\n\n<span class="kw">export function</span> <span class="fn">initRealtime</span>(httpServer) {\n  <span class="kw">const</span> io = <span class="kw">new</span> <span class="fn">Server</span>(httpServer);\n\n  io.<span class="fn">on</span>(<span class="st">\'connection\'</span>, (socket) =&gt; {\n    socket.<span class="fn">on</span>(<span class="st">\'task:update\'</span>, (data) =&gt; {\n      socket.broadcast.<span class="fn">emit</span>(\n        <span class="st">\'task:changed\'</span>, data);\n    });\n  });\n}' },
+        { file: 'app/__tests__/tasks.test.ts', code: '<span class="kw">import</span> { <span class="fn">render</span>, <span class="fn">screen</span>, <span class="fn">fireEvent</span> } <span class="kw">from</span> <span class="st">\'@testing-library/react\'</span>;\n\n<span class="fn">describe</span>(<span class="st">\'TaskItem\'</span>, () =&gt; {\n  <span class="fn">it</span>(<span class="st">\'toggles task completion\'</span>, <span class="kw">async</span> () =&gt; {\n    <span class="fn">render</span>(&lt;<span class="fn">TaskItem</span> task={{id:1, title:<span class="st">\'Test\'</span>, done:<span class="kw">false</span>}}/&gt;);\n    <span class="fn">fireEvent</span>.<span class="fn">click</span>(<span class="fn">screen</span>.<span class="fn">getByRole</span>(<span class="st">\'checkbox\'</span>));\n    <span class="fn">expect</span>(<span class="fn">screen</span>.<span class="fn">getByRole</span>(<span class="st">\'checkbox\'</span>)).<span class="fn">toBeChecked</span>();\n  });\n\n  <span class="fn">it</span>(<span class="st">\'supports inline editing\'</span>, () =&gt; {\n    <span class="fn">render</span>(&lt;<span class="fn">TaskItem</span> task={{id:1, title:<span class="st">\'Test\'</span>}}/&gt;);\n    <span class="fn">fireEvent</span>.<span class="fn">dblClick</span>(<span class="fn">screen</span>.<span class="fn">getByText</span>(<span class="st">\'Test\'</span>));\n    <span class="fn">expect</span>(<span class="fn">screen</span>.<span class="fn">getByRole</span>(<span class="st">\'textbox\'</span>)).toHaveFocus();\n  });\n});' },
+        { file: 'app/lib/conflict.ts', code: '<span class="cm">// Final: conflict resolution</span>\n<span class="kw">export function</span> <span class="fn">resolveConflict</span>(local, remote) {\n  <span class="kw">if</span> (local.version &gt; remote.version)\n    <span class="kw">return</span> local;\n  <span class="kw">if</span> (remote.version &gt; local.version)\n    <span class="kw">return</span> remote;\n  <span class="cm">// Same version — merge fields</span>\n  <span class="kw">return</span> {\n    ...remote,\n    ...local,\n    version: local.version + 1,\n    merged: <span class="kw">true</span>\n  };\n}' }
+      ]
+    };
+
     // ===== CHALLENGE TEMPLATES (role-specific content) =====
     const challengeTemplates = {
       'Frontend Engineer': {
@@ -2426,6 +2470,66 @@
     };
 
     let challengeCounter = 0;
+
+    // Random candidate name generator for live sessions
+    const candidateFirstNames = ['Alex', 'Jordan', 'Taylor', 'Morgan', 'Casey', 'Riley', 'Quinn', 'Avery', 'Reese', 'Dakota', 'Skyler', 'Jamie', 'Drew', 'Sage', 'Rowan'];
+    const candidateLastNames = ['Kim', 'Patel', 'Santos', 'Nakamura', 'Okafor', 'Lindström', 'Dubois', 'Reeves', 'Tanaka', 'Moreau', 'Gupta', 'Voss', 'Zheng', 'Alvarez', 'Bianchi'];
+
+    function launchLiveSession(challengeData) {
+      // Reset any running simulation
+      resetSimulation();
+
+      // Pick a random candidate
+      const firstName = candidateFirstNames[Math.floor(Math.random() * candidateFirstNames.length)];
+      const lastName = candidateLastNames[Math.floor(Math.random() * candidateLastNames.length)];
+      const fullName = firstName + ' ' + lastName;
+      const initials = firstName[0] + lastName[0];
+
+      // Update Live Session header
+      const avatar = document.getElementById('lsCandidateAvatar');
+      const namEl = document.getElementById('lsCandidateName');
+      const infoEl = document.getElementById('lsChallengeInfo');
+      if (avatar) avatar.textContent = initials;
+      if (namEl) namEl.textContent = fullName;
+      if (infoEl) infoEl.textContent = challengeData.title + ' • Challenge in progress';
+
+      // Update session duration
+      sessionDuration = parseInt(challengeData.duration) || 120;
+
+      // Update commit feed with challenge-specific initial commits
+      const feed = document.getElementById('commitFeed');
+      if (feed) {
+        const commitMessages = {
+          'Frontend': ['Initial project setup', 'Add component structure and types'],
+          'Backend': ['Project scaffolding with Express', 'Add route definitions and middleware'],
+          'Data': ['Setup pipeline directory structure', 'Add data extraction module'],
+          'Full Stack': ['Initialize Next.js project', 'Add auth provider and DB connection']
+        };
+        const msgs = commitMessages[challengeData.type] || commitMessages['Frontend'];
+        feed.innerHTML = msgs.map((msg, i) => `
+          <div class="commit-item">
+            <div class="commit-icon">${i + 1}</div>
+            <div class="commit-content">
+              <div class="commit-message">${msg}</div>
+              <div class="commit-meta">By ${fullName} at ${i === 0 ? '0:05' : '15:23'}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Swap code phases to match the challenge type
+      const newPhases = roleCodePhases[challengeData.type] || roleCodePhases['Frontend'];
+      // Replace the global codePhases array contents
+      codePhases.length = 0;
+      newPhases.forEach(p => codePhases.push(p));
+      lastCodePhase = -1;
+      updateCodeEditor(0);
+
+      // Navigate to Live Session page
+      window.location.hash = 'live-session';
+
+      showToast('Live session started for ' + challengeData.title);
+    }
 
     function getNewChallengeFormValues() {
       return {
@@ -2518,6 +2622,10 @@
           <div class="pivot-label">Pivot Point</div>
           <div style="font-size: 14px; color: #f0f4f8;">60 minutes - ${pivot}</div>
         </div>
+        <button class="btn-primary" style="width: 100%; margin-top: 16px;" onclick="launchLiveSession({title:'${title.replace(/'/g, "\\'")}', type:'${tmpl.type}', stack:${JSON.stringify(stack)}, duration:${vals.duration}, stipend:${vals.stipend}, desc:'${desc.replace(/'/g, "\\'")}', pivot:'${pivot.replace(/'/g, "\\'")}'})">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          Run Challenge
+        </button>
       `;
 
       const grid = document.querySelector('.challenge-grid');
