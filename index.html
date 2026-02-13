@@ -1,2836 +1,1293 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MendelHire — Proof-First Hiring</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a1628;
-            color: #f0f4f8;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-        }
-
-        .slide-container {
-            position: relative;
-            width: 100%;
-            height: calc(100vh - 56px);
-        }
-
-        .slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 56px;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            transform: translateY(20px);
-            overflow-y: auto;
-            padding: 60px 80px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .slide.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        /* Navigation Bar */
-        .nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 56px;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(8px);
-            border-top: 1px solid rgba(59, 130, 246, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 40px;
-            z-index: 1000;
-        }
-
-        .nav-arrow {
-            background: none;
-            border: none;
-            color: #8899a6;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 8px 12px;
-            transition: color 0.2s;
-        }
-
-        .nav-arrow:hover {
-            color: #3b82f6;
-        }
-
-        .nav-dots {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .nav-dot {
-            background: none;
-            border: none;
-            color: #8899a6;
-            font-size: 12px;
-            cursor: pointer;
-            padding: 8px 6px;
-            transition: all 0.2s;
-        }
-
-        .nav-dot.active {
-            background-color: #3b82f6;
-            color: white;
-            border-radius: 3px;
-        }
-
-        .nav-dot:hover {
-            color: #3b82f6;
-        }
-
-        /* Speaker Notes */
-        .speaker-notes {
-            position: fixed;
-            bottom: 70px;
-            left: 20px;
-            background: rgba(20, 30, 48, 0.9);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            padding: 12px 16px;
-            max-width: 300px;
-            font-size: 12px;
-            color: #8899a6;
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s, visibility 0.2s;
-        }
-
-        .speaker-notes.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Timer */
-        .timer {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(20, 30, 48, 0.9);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 12px;
-            color: #8899a6;
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s, visibility 0.2s;
-        }
-
-        .timer.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Gradient Text */
-        .gradient-text {
-            background: linear-gradient(135deg, #3b82f6 0%, #d4a843 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Buttons */
-        button {
-            font-family: 'Inter', sans-serif;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background-color: #3b82f6;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #2563eb;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            color: #3b82f6;
-            border: 2px solid #3b82f6;
-        }
-
-        .btn-secondary:hover {
-            background-color: #3b82f6;
-            color: white;
-        }
-
-        .btn-gold {
-            background-color: #d4a843;
-            color: #0a1628;
-        }
-
-        .btn-gold:hover {
-            background-color: #c99a3d;
-            transform: translateY(-2px);
-        }
-
-        /* ===== SLIDE 1: TITLE ===== */
-        .slide-title {
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            gap: 30px;
-        }
-
-        .title-main {
-            font-size: 72px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .title-subtitle {
-            font-size: 32px;
-            color: #3b82f6;
-            margin-bottom: 20px;
-        }
-
-        .title-description {
-            font-size: 18px;
-            color: #8899a6;
-            max-width: 700px;
-            margin-bottom: 40px;
-        }
-
-        /* ===== SLIDE 2: PROBLEM ===== */
-        .code-comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .code-block {
-            border: 2px solid;
-            border-radius: 8px;
-            padding: 20px;
-            background-color: #111d2e;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            line-height: 1.6;
-            overflow-x: auto;
-        }
-
-        .code-block.ai-generated {
-            border-color: #ef4444;
-        }
-
-        .code-block.verified {
-            border-color: #4ecdc4;
-        }
-
-        .code-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 10px;
-        }
-
-        .code-badge.suspicious {
-            background-color: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-        }
-
-        .code-badge.verified {
-            background-color: rgba(78, 205, 196, 0.2);
-            color: #4ecdc4;
-        }
-
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-bottom: 40px;
-            padding: 30px;
-            background-color: #111d2e;
-            border-radius: 8px;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 32px;
-            font-weight: 700;
-            color: #d4a843;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: #8899a6;
-        }
-
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-
-        .comparison-table th {
-            background-color: #152238;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-            color: #f0f4f8;
-        }
-
-        .comparison-table td {
-            padding: 12px;
-            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
-        }
-
-        .comparison-table tr:hover {
-            background-color: rgba(59, 130, 246, 0.05);
-        }
-
-        .check {
-            color: #4ecdc4;
-        }
-
-        .cross {
-            color: #ef4444;
-        }
-
-        /* ===== SLIDE 3: LIVE PROOF SIMULATION ===== */
-        .proof-preflight {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: start;
-        }
-
-        .brief-card {
-            background-color: #111d2e;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            padding: 30px;
-        }
-
-        .brief-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #f0f4f8;
-            margin-bottom: 20px;
-        }
-
-        .criteria-list {
-            list-style: none;
-            margin-bottom: 20px;
-        }
-
-        .criteria-list li {
-            padding: 8px 0;
-            font-size: 14px;
-            color: #8899a6;
-        }
-
-        .criteria-list li:before {
-            content: "✓ ";
-            color: #4ecdc4;
-            font-weight: 600;
-            margin-right: 8px;
-        }
-
-        .brief-meta {
-            padding-top: 20px;
-            border-top: 1px solid rgba(59, 130, 246, 0.1);
-            font-size: 12px;
-            color: #8899a6;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-        }
-
-        .brief-meta div {
-            text-align: center;
-        }
-
-        .brief-meta strong {
-            display: block;
-            color: #f0f4f8;
-            font-weight: 600;
-        }
-
-        .proof-active {
-            display: none;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .proof-active.visible {
-            display: flex;
-        }
-
-        .timeline-container {
-            background-color: #111d2e;
-            border-radius: 8px;
-            padding: 30px;
-            position: relative;
-        }
-
-        .timeline-track {
-            position: relative;
-            height: 6px;
-            background-color: #152238;
-            border-radius: 3px;
-            margin-bottom: 40px;
-            overflow: visible;
-        }
-
-        .timeline-fill {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            background: linear-gradient(90deg, #3b82f6 0%, #d4a843 100%);
-            border-radius: 3px;
-            width: 0%;
-            transition: width 0.1s linear;
-        }
-
-        .timeline-pivot {
-            position: absolute;
-            top: -15px;
-            width: 3px;
-            height: 36px;
-            background-color: #d4a843;
-        }
-
-        .timeline-pivot-label {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 11px;
-            font-weight: 600;
-            color: #d4a843;
-            white-space: nowrap;
-        }
-
-        .timeline-commit-dot {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background-color: #3b82f6;
-            border-radius: 50%;
-            top: 0;
-            transform: translateX(-50%) translateY(-50%);
-        }
-
-        .timeline-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: #8899a6;
-            margin-top: 10px;
-        }
-
-        .proof-grid {
-            display: grid;
-            grid-template-columns: 1fr 250px;
-            gap: 20px;
-        }
-
-        .commit-feed {
-            background-color: #0a1628;
-            border: 1px solid rgba(59, 130, 246, 0.1);
-            border-radius: 8px;
-            padding: 20px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            line-height: 1.6;
-            height: 300px;
-            overflow-y: auto;
-            color: #4ecdc4;
-        }
-
-        .commit-line {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
-            animation: slideInLeft 0.3s ease-out;
-        }
-
-        .commit-line.pivot {
-            color: #d4a843;
-            font-weight: 600;
-        }
-
-        .commit-time {
-            color: #8899a6;
-            margin-right: 12px;
-        }
-
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .stats-panel {
-            background-color: #0a1628;
-            border: 1px solid rgba(59, 130, 246, 0.1);
-            border-radius: 8px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .stat-block {
-            text-align: center;
-        }
-
-        .stat-block-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #3b82f6;
-        }
-
-        .stat-block-label {
-            font-size: 11px;
-            color: #8899a6;
-            margin-top: 4px;
-        }
-
-        .progress-bar {
-            background-color: #152238;
-            height: 6px;
-            border-radius: 3px;
-            overflow: hidden;
-            margin-top: 6px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background-color: #4ecdc4;
-            width: 0%;
-            transition: width 0.1s linear;
-        }
-
-        .proof-controls {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
-
-        .proof-complete {
-            text-align: center;
-            padding: 40px;
-            background: linear-gradient(135deg, rgba(212, 168, 67, 0.1) 0%, rgba(78, 205, 196, 0.1) 100%);
-            border-radius: 8px;
-            border: 1px solid rgba(212, 168, 67, 0.2);
-            display: none;
-        }
-
-        .proof-complete.visible {
-            display: block;
-        }
-
-        .verified-badge {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #d4a843;
-            color: #0a1628;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 16px;
-            margin-top: 20px;
-        }
-
-        .checklist {
-            text-align: left;
-            max-width: 400px;
-            margin: 20px auto;
-        }
-
-        .checklist-item {
-            padding: 8px 0;
-            font-size: 14px;
-            color: #8899a6;
-        }
-
-        .checklist-item:before {
-            content: "✓ ";
-            color: #4ecdc4;
-            font-weight: 600;
-            margin-right: 8px;
-        }
-
-        /* ===== SLIDE 4: SOLUTION ===== */
-        .feature-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        .feature-card {
-            background-color: #111d2e;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            padding: 30px;
-            border-top: 3px solid;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.1);
-        }
-
-        .feature-card.blue {
-            border-top-color: #3b82f6;
-        }
-
-        .feature-card.gold {
-            border-top-color: #d4a843;
-        }
-
-        .feature-card.teal {
-            border-top-color: #4ecdc4;
-        }
-
-        .feature-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #f0f4f8;
-        }
-
-        .feature-description {
-            font-size: 14px;
-            color: #8899a6;
-            line-height: 1.6;
-        }
-
-        .candidate-value {
-            background-color: #152238;
-            border-radius: 8px;
-            padding: 30px;
-            margin-bottom: 40px;
-        }
-
-        .candidate-value-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #f0f4f8;
-            margin-bottom: 20px;
-        }
-
-        .value-columns {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            text-align: center;
-        }
-
-        .value-item {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .value-number {
-            font-size: 24px;
-            font-weight: 700;
-            color: #d4a843;
-        }
-
-        .value-text {
-            font-size: 13px;
-            color: #8899a6;
-        }
-
-        .journey {
-            background-color: #111d2e;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            padding: 30px;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .journey-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #f0f4f8;
-            margin-bottom: 20px;
-        }
-
-        .journey-steps {
-            font-size: 14px;
-            color: #8899a6;
-            line-height: 1.8;
-        }
-
-        .fairness-box {
-            background: linear-gradient(135deg, rgba(78, 205, 196, 0.1) 0%, rgba(212, 168, 67, 0.1) 100%);
-            border: 1px solid rgba(78, 205, 196, 0.2);
-            border-radius: 8px;
-            padding: 30px;
-        }
-
-        .fairness-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #f0f4f8;
-            margin-bottom: 20px;
-        }
-
-        .fairness-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .fairness-item {
-            font-size: 14px;
-            color: #8899a6;
-        }
-
-        .fairness-item:before {
-            content: "✓ ";
-            color: #4ecdc4;
-            font-weight: 600;
-            margin-right: 8px;
-        }
-
-        .fairness-statement {
-            font-size: 14px;
-            color: #8899a6;
-            font-style: italic;
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid rgba(78, 205, 196, 0.2);
-        }
-
-        /* ===== SLIDE 5: ROLE BUILDER ===== */
-        .role-input-section {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .role-subtitle {
-            font-size: 14px;
-            color: #8899a6;
-        }
-
-        .role-input {
-            padding: 12px 16px;
-            background-color: #111d2e;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 6px;
-            color: #f0f4f8;
-            font-size: 14px;
-            width: 100%;
-            max-width: 500px;
-            transition: border-color 0.2s;
-        }
-
-        .role-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .challenge-card {
-            background-color: #111d2e;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            padding: 30px;
-            margin-bottom: 30px;
-            max-width: 600px;
-        }
-
-        .challenge-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #f0f4f8;
-            margin-bottom: 20px;
-        }
-
-        .challenge-criteria {
-            list-style: none;
-            margin-bottom: 20px;
-        }
-
-        .challenge-criteria li {
-            padding: 8px 0;
-            font-size: 14px;
-            color: #8899a6;
-        }
-
-        .challenge-criteria li:before {
-            content: "• ";
-            color: #3b82f6;
-            margin-right: 8px;
-        }
-
-        .challenge-meta {
-            padding-top: 20px;
-            border-top: 1px solid rgba(59, 130, 246, 0.1);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            font-size: 13px;
-            color: #8899a6;
-        }
-
-        .challenge-meta strong {
-            display: block;
-            color: #f0f4f8;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .wideners-section {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(59, 130, 246, 0.1);
-        }
-
-        .wideners-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #f0f4f8;
-            margin-bottom: 15px;
-        }
-
-        .widener-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .chip {
-            padding: 8px 16px;
-            background-color: transparent;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 20px;
-            font-size: 13px;
-            color: #8899a6;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .chip:hover {
-            border-color: #3b82f6;
-            color: #3b82f6;
-        }
-
-        .chip.selected {
-            background-color: #4ecdc4;
-            border-color: #4ecdc4;
-            color: #0a1628;
-        }
-
-        .widener-description {
-            font-size: 13px;
-            color: #8899a6;
-            font-style: italic;
-        }
-
-        /* ===== SLIDE 6: SCORING ===== */
-        .scoring-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 30px;
-        }
-
-        .code-preview {
-            background-color: #111d2e;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            padding: 20px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            line-height: 1.6;
-            color: #4ecdc4;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .scoring-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .slider-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .slider-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #f0f4f8;
-        }
-
-        .slider-sublabel {
-            font-size: 12px;
-            color: #8899a6;
-        }
-
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        input[type="range"] {
-            flex: 1;
-            height: 6px;
-            background: #152238;
-            border-radius: 3px;
-            outline: none;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            background: #3b82f6;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        input[type="range"]::-webkit-slider-thumb:hover {
-            background: #2563eb;
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
-            background: #3b82f6;
-            border-radius: 50%;
-            cursor: pointer;
-            border: none;
-            transition: background 0.2s;
-        }
-
-        input[type="range"]::-moz-range-thumb:hover {
-            background: #2563eb;
-        }
-
-        .slider-value {
-            width: 40px;
-            text-align: right;
-            font-weight: 600;
-            color: #3b82f6;
-        }
-
-        .comparison-button {
-            align-self: flex-start;
-            margin-top: 10px;
-        }
-
-        .comparison-panel {
-            background-color: #111d2e;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            padding: 30px;
-            margin-top: 30px;
-            display: none;
-        }
-
-        .comparison-panel.visible {
-            display: block;
-        }
-
-        .comparison-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #f0f4f8;
-            margin-bottom: 20px;
-        }
-
-        .comparison-row {
-            display: grid;
-            grid-template-columns: 150px 1fr 1fr 1fr;
-            gap: 20px;
-            align-items: center;
-            padding: 16px;
-            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
-        }
-
-        .comparison-row:last-child {
-            border-bottom: none;
-        }
-
-        .comparison-label {
-            font-size: 13px;
-            color: #8899a6;
-        }
-
-        .comparison-bar-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .comparison-bar {
-            width: 100%;
-            height: 6px;
-            background-color: #152238;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .comparison-bar-fill {
-            height: 100%;
-            background-color: #3b82f6;
-            width: 0%;
-        }
-
-        .comparison-values {
-            text-align: right;
-            font-size: 13px;
-            color: #8899a6;
-            min-width: 60px;
-        }
-
-        .divergence-note {
-            background-color: rgba(212, 168, 67, 0.1);
-            border-left: 3px solid #d4a843;
-            padding: 16px;
-            margin-top: 20px;
-            font-size: 13px;
-            color: #8899a6;
-            border-radius: 4px;
-        }
-
-        .curator-note {
-            background-color: rgba(78, 205, 196, 0.1);
-            border-left: 3px solid #4ecdc4;
-            padding: 16px;
-            margin-top: 12px;
-            font-size: 13px;
-            color: #8899a6;
-            border-radius: 4px;
-        }
-
-        /* ===== SLIDE 7: DASHBOARD ===== */
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .anonymize-toggle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: #8899a6;
-        }
-
-        .toggle-checkbox {
-            width: 40px;
-            height: 24px;
-            background-color: #152238;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 12px;
-            cursor: pointer;
-            position: relative;
-            transition: background-color 0.2s;
-        }
-
-        .toggle-checkbox.checked {
-            background-color: #4ecdc4;
-        }
-
-        .toggle-checkbox-inner {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: left 0.2s;
-        }
-
-        .toggle-checkbox.checked .toggle-checkbox-inner {
-            left: 18px;
-        }
-
-        .candidate-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .candidate-card {
-            background-color: #111d2e;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .candidate-card:hover {
-            border-color: #3b82f6;
-            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.1);
-            transform: translateY(-4px);
-        }
-
-        .candidate-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 16px;
-        }
-
-        .candidate-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #f0f4f8;
-        }
-
-        .candidate-score {
-            font-size: 18px;
-            font-weight: 700;
-            color: #3b82f6;
-        }
-
-        .candidate-wideners {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 12px;
-        }
-
-        .widener-tag {
-            display: inline-block;
-            padding: 4px 8px;
-            background-color: rgba(78, 205, 196, 0.1);
-            border: 1px solid rgba(78, 205, 196, 0.2);
-            border-radius: 3px;
-            font-size: 11px;
-            color: #4ecdc4;
-        }
-
-        .candidate-meta {
-            font-size: 12px;
-            color: #8899a6;
-            margin-bottom: 12px;
-        }
-
-        .candidate-freshness {
-            display: inline-block;
-            padding: 2px 6px;
-            background-color: rgba(78, 205, 196, 0.2);
-            border-radius: 3px;
-            font-size: 11px;
-            color: #4ecdc4;
-            margin-left: 8px;
-        }
-
-        .candidate-scores {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(59, 130, 246, 0.1);
-        }
-
-        .score-item {
-            font-size: 12px;
-            color: #8899a6;
-        }
-
-        .score-item strong {
-            display: block;
-            color: #f0f4f8;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(10, 22, 40, 0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-
-        .overlay.visible {
-            display: flex;
-        }
-
-        .fitfolio-modal {
-            background-color: #111d2e;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            width: 90%;
-            max-width: 700px;
-            max-height: 80vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .fitfolio-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
-        }
-
-        .fitfolio-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #f0f4f8;
-        }
-
-        .fitfolio-close {
-            background: none;
-            border: none;
-            color: #8899a6;
-            font-size: 24px;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .fitfolio-close:hover {
-            color: #f0f4f8;
-        }
-
-        .fitfolio-tabs {
-            display: flex;
-            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
-            padding: 0 20px;
-        }
-
-        .fitfolio-tab {
-            background: none;
-            border: none;
-            color: #8899a6;
-            padding: 12px 16px;
-            font-size: 14px;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .fitfolio-tab.active {
-            color: #3b82f6;
-            border-bottom-color: #3b82f6;
-        }
-
-        .fitfolio-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .fitfolio-tab-content {
-            display: none;
-        }
-
-        .fitfolio-tab-content.active {
-            display: block;
-        }
-
-        .score-bars {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .score-bar-row {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .score-bar-label {
-            width: 150px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #f0f4f8;
-        }
-
-        .score-bar {
-            flex: 1;
-            height: 8px;
-            background-color: #152238;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .score-bar-fill {
-            height: 100%;
-            background-color: #3b82f6;
-            width: 0%;
-        }
-
-        .score-bar-value {
-            width: 40px;
-            text-align: right;
-            font-size: 13px;
-            color: #3b82f6;
-            font-weight: 600;
-        }
-
-        .json-export {
-            background-color: #0a1628;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 6px;
-            padding: 16px;
-            font-family: 'Courier New', monospace;
-            font-size: 11px;
-            color: #4ecdc4;
-            line-height: 1.4;
-            overflow-x: auto;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .portfolio-info {
-            font-size: 14px;
-            color: #8899a6;
-            line-height: 1.8;
-        }
-
-        .fairness-banner {
-            background: linear-gradient(90deg, rgba(78, 205, 196, 0.1) 0%, rgba(212, 168, 67, 0.1) 100%);
-            border: 1px solid rgba(78, 205, 196, 0.2);
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            font-size: 13px;
-            color: #8899a6;
-        }
-
-        .fairness-banner strong {
-            color: #4ecdc4;
-        }
-
-        /* ===== SLIDE 8: BRIDGE ===== */
-        .bridge-recap {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 40px;
-            padding: 20px;
-            background-color: #111d2e;
-            border-radius: 8px;
-            border-left: 3px solid #3b82f6;
-        }
-
-        .recap-line {
-            font-size: 16px;
-            color: #f0f4f8;
-        }
-
-        .bridge-grid {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-
-        .bridge-grid th {
-            background-color: #152238;
-            padding: 16px;
-            text-align: left;
-            font-weight: 600;
-            color: #f0f4f8;
-        }
-
-        .bridge-grid td {
-            padding: 16px;
-            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
-        }
-
-        .bridge-grid tr:nth-child(even) td {
-            background-color: rgba(59, 130, 246, 0.03);
-        }
-
-        .bridge-col-traditional {
-            color: #ef4444;
-        }
-
-        .bridge-col-mendel {
-            color: #4ecdc4;
-        }
-
-        .bridge-cta {
-            text-align: center;
-            font-size: 18px;
-            color: #d4a843;
-            font-weight: 600;
-            margin-top: 40px;
-        }
-
-        /* ===== SLIDE 9: CLOSE ===== */
-        .pricing-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .pricing-card {
-            background-color: #111d2e;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            padding: 30px;
-        }
-
-        .pricing-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #f0f4f8;
-            margin-bottom: 8px;
-        }
-
-        .pricing-price {
-            font-size: 32px;
-            font-weight: 700;
-            color: #3b82f6;
-            margin-bottom: 12px;
-        }
-
-        .pricing-description {
-            font-size: 13px;
-            color: #8899a6;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .pricing-features {
-            list-style: none;
-            font-size: 13px;
-            color: #8899a6;
-            margin-bottom: 20px;
-        }
-
-        .pricing-features li {
-            padding: 6px 0;
-        }
-
-        .pricing-features li:before {
-            content: "✓ ";
-            color: #4ecdc4;
-            font-weight: 600;
-            margin-right: 8px;
-        }
-
-        .pricing-note {
-            font-size: 12px;
-            color: #d4a843;
-            font-weight: 600;
-        }
-
-        .roi-box {
-            background: linear-gradient(135deg, rgba(212, 168, 67, 0.1) 0%, rgba(78, 205, 196, 0.1) 100%);
-            border: 1px solid rgba(212, 168, 67, 0.2);
-            border-radius: 8px;
-            padding: 30px;
-            margin-bottom: 40px;
-            font-size: 14px;
-            color: #8899a6;
-            line-height: 1.8;
-        }
-
-        .trust-badges {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .trust-badge {
-            background-color: #111d2e;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 8px;
-            padding: 16px;
-            text-align: center;
-            font-size: 12px;
-            color: #8899a6;
-        }
-
-        .trust-badge:before {
-            content: "✓ ";
-            color: #4ecdc4;
-            font-weight: 600;
-        }
-
-        .testimonial {
-            background-color: #111d2e;
-            border-left: 3px solid #d4a843;
-            border-radius: 8px;
-            padding: 30px;
-            margin-bottom: 30px;
-            font-size: 16px;
-            font-style: italic;
-            color: #f0f4f8;
-            line-height: 1.8;
-        }
-
-        .testimonial-attribution {
-            text-align: right;
-            margin-top: 12px;
-            font-size: 13px;
-            color: #8899a6;
-            font-style: normal;
-        }
-
-        .final-note {
-            text-align: center;
-            padding: 20px;
-            background-color: #152238;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #8899a6;
-            line-height: 1.6;
-        }
-
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(59, 130, 246, 0.3);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(59, 130, 246, 0.5);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MendelHire - Proof-First Hiring Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; font-family: 'Inter', sans-serif; background: #0a1628; color: #f0f4f8; }
+    #app { display: flex; height: 100vh; overflow: hidden; }
+    .sidebar { width: 240px; background: #0d1117; border-right: 1px solid #1e2d3d; display: flex; flex-direction: column; transition: width 0.3s ease; z-index: 100; }
+    .sidebar.collapsed { width: 64px; }
+    .sidebar-top { padding: 20px; border-bottom: 1px solid #1e2d3d; }
+    .sidebar.collapsed .sidebar-top { padding: 16px; display: flex; align-items: center; justify-content: center; }
+    .logo { font-size: 18px; font-weight: 700; color: #3b82f6; letter-spacing: -0.5px; }
+    .sidebar.collapsed .logo { font-size: 24px; }
+    .nav { flex: 1; padding: 20px 0; display: flex; flex-direction: column; gap: 4px; }
+    .sidebar.collapsed .nav { padding: 16px 0; align-items: center; }
+    .nav-item { padding: 12px 16px; color: #8899a6; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 12px; border-left: 3px solid transparent; font-size: 14px; font-weight: 500; }
+    .sidebar.collapsed .nav-item { padding: 12px; justify-content: center; gap: 0; border-left: none; }
+    .nav-item:hover { color: #f0f4f8; background: rgba(59, 130, 246, 0.1); }
+    .nav-item.active { color: #3b82f6; border-left-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+    .sidebar.collapsed .nav-item.active { border-left: none; background: rgba(59, 130, 246, 0.15); }
+    .nav-icon { width: 20px; text-align: center; flex-shrink: 0; }
+    .sidebar.collapsed .nav-text { display: none; }
+    .sidebar-bottom { padding: 16px; border-top: 1px solid #1e2d3d; display: flex; align-items: center; gap: 12px; }
+    .sidebar.collapsed .sidebar-bottom { flex-direction: column; gap: 8px; }
+    .user-avatar { width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; flex-shrink: 0; }
+    .user-info { flex: 1; }
+    .sidebar.collapsed .user-info { display: none; }
+    .user-name { font-size: 13px; font-weight: 600; color: #f0f4f8; }
+    .user-org { font-size: 12px; color: #8899a6; }
+    .collapse-toggle { padding: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid #1e2d3d; border-radius: 6px; color: #3b82f6; cursor: pointer; transition: all 0.2s ease; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+    .collapse-toggle:hover { background: rgba(59, 130, 246, 0.2); }
+    .topbar { height: 64px; background: #111d2e; border-bottom: 1px solid #1e2d3d; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .topbar-left { display: flex; align-items: center; gap: 32px; flex: 1; }
+    .page-title { font-size: 24px; font-weight: 700; color: #f0f4f8; }
+    .search-box { background: #0a1628; border: 1px solid #1e2d3d; border-radius: 8px; padding: 8px 12px; width: 280px; color: #f0f4f8; font-size: 14px; transition: all 0.2s ease; }
+    .search-box:focus { outline: none; border-color: #3b82f6; background: #0d1520; }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .icon-btn { width: 40px; height: 40px; border: 1px solid #1e2d3d; background: rgba(59, 130, 246, 0.1); border-radius: 6px; color: #3b82f6; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: all 0.2s ease; }
+    .icon-btn:hover { background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; }
+    .icon-btn.notification { position: relative; }
+    .notification-dot { position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background: #ff6b6b; border-radius: 50%; }
+    .btn-primary { background: #3b82f6; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+    .btn-primary:hover { background: #2563eb; }
+    .main-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .content { flex: 1; overflow-y: auto; padding: 32px; background: linear-gradient(135deg, #0a1628 0%, #0d1520 100%); }
+    .content::-webkit-scrollbar { width: 8px; }
+    .content::-webkit-scrollbar-track { background: transparent; }
+    .content::-webkit-scrollbar-thumb { background: #1e2d3d; border-radius: 4px; }
+    .content::-webkit-scrollbar-thumb:hover { background: #2a3a4d; }
+    .page { display: none; }
+    .page.active { display: block; }
+    .card { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 24px; transition: all 0.2s ease; }
+    .card:hover { border-color: #2a3a4d; transform: translateY(-2px); }
+    .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+    .metric-card { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 20px; text-align: center; }
+    .metric-value { font-size: 32px; font-weight: 700; color: #3b82f6; margin: 8px 0; }
+    .metric-label { font-size: 13px; color: #8899a6; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+    .section { margin-bottom: 32px; }
+    .section-title { font-size: 18px; font-weight: 600; color: #f0f4f8; margin-bottom: 16px; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+    .badge-success { background: rgba(78, 205, 196, 0.2); color: #4ecdc4; }
+    .badge-primary { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+    .badge-warning { background: rgba(212, 168, 67, 0.2); color: #d4a843; }
+    .activity-item { padding: 16px; border-bottom: 1px solid #1e2d3d; display: flex; gap: 12px; align-items: flex-start; }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+    .activity-dot.completed { background: #4ecdc4; }
+    .activity-dot.generated { background: #3b82f6; }
+    .activity-dot.new { background: #d4a843; }
+    .activity-content { flex: 1; min-width: 0; }
+    .activity-text { font-size: 14px; color: #f0f4f8; margin-bottom: 2px; }
+    .activity-time { font-size: 12px; color: #8899a6; }
+    .challenge-card { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 24px; margin-bottom: 24px; }
+    .challenge-title { font-size: 18px; font-weight: 600; color: #f0f4f8; margin-bottom: 8px; }
+    .challenge-meta { display: flex; gap: 16px; font-size: 13px; color: #8899a6; margin-bottom: 16px; }
+    .challenge-section { margin-bottom: 20px; }
+    .challenge-section-title { font-size: 13px; font-weight: 600; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px; }
+    .challenge-brief { font-size: 14px; color: #f0f4f8; line-height: 1.6; }
+    .criteria-list { font-size: 14px; color: #f0f4f8; line-height: 1.7; list-style: disc; margin-left: 20px; }
+    .stack-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .stack-tag { background: rgba(59, 130, 246, 0.15); color: #3b82f6; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+    .challenge-stats { display: flex; gap: 32px; padding-top: 16px; border-top: 1px solid #1e2d3d; }
+    .stat { display: flex; gap: 8px; }
+    .stat-label { color: #8899a6; font-size: 12px; font-weight: 500; }
+    .stat-value { color: #f0f4f8; font-weight: 600; font-size: 14px; }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 12px; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; padding: 32px; }
+    .modal-header { font-size: 20px; font-weight: 700; color: #f0f4f8; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
+    .modal-close { background: none; border: none; color: #8899a6; font-size: 24px; cursor: pointer; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+    .modal-close:hover { color: #f0f4f8; }
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-size: 13px; font-weight: 600; color: #f0f4f8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.3px; }
+    .form-input, .form-textarea, .form-select { width: 100%; background: #0a1628; border: 1px solid #1e2d3d; border-radius: 6px; padding: 10px 12px; color: #f0f4f8; font-size: 14px; font-family: 'Inter', sans-serif; transition: all 0.2s ease; }
+    .form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: #3b82f6; background: #0d1520; }
+    .form-textarea { resize: vertical; min-height: 80px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .checkbox-group { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+    .checkbox-item { display: flex; align-items: center; gap: 8px; }
+    .checkbox-item input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: #3b82f6; }
+    .checkbox-item label { cursor: pointer; font-size: 14px; color: #f0f4f8; }
+    .form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 32px; padding-top: 24px; border-top: 1px solid #1e2d3d; }
+    .btn-secondary { background: transparent; border: 1px solid #1e2d3d; color: #f0f4f8; padding: 10px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+    .btn-secondary:hover { background: rgba(59, 130, 246, 0.1); border-color: #3b82f6; }
+    .btn-gold { background: #d4a843; color: #0a1628; padding: 10px 20px; border-radius: 6px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+    .btn-gold:hover { background: #e4b853; }
+    .candidate-header { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 16px 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; }
+    .candidate-info { display: flex; align-items: center; gap: 16px; }
+    .candidate-avatar { width: 48px; height: 48px; border-radius: 8px; background: linear-gradient(135deg, #4ecdc4, #3b82f6); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 16px; }
+    .candidate-details h3 { font-size: 15px; font-weight: 600; color: #f0f4f8; margin-bottom: 4px; }
+    .candidate-details p { font-size: 13px; color: #8899a6; }
+    .candidate-status { display: flex; align-items: center; gap: 12px; }
+    .status-indicator { display: flex; align-items: center; gap: 4px; font-size: 13px; color: #8899a6; }
+    .status-indicator.verified { color: #4ecdc4; }
+    .status-indicator.live { color: #ff6b6b; }
+    .live-dot { width: 6px; height: 6px; background: #ff6b6b; border-radius: 50%; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .timeline-container { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 16px; margin-bottom: 24px; }
+    .timeline-bar { display: flex; align-items: center; height: 8px; background: #0a1628; border-radius: 4px; overflow: hidden; position: relative; margin-bottom: 12px; }
+    .timeline-progress { height: 100%; background: linear-gradient(90deg, #d4a843, #f4b860); border-radius: 4px; transition: width 0.1s linear; position: relative; }
+    .timeline-progress::after { content: ''; position: absolute; top: -4px; right: -4px; width: 16px; height: 16px; background: #d4a843; border-radius: 50%; box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.2); }
+    .timeline-pivot { position: absolute; height: 16px; width: 2px; background: #ff6b6b; top: -4px; box-shadow: 0 0 8px rgba(255, 107, 107, 0.6); z-index: 10; }
+    .timeline-labels { display: flex; justify-content: space-between; font-size: 12px; color: #8899a6; }
+    .session-container { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; margin-bottom: 24px; }
+    .commit-feed { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; overflow: hidden; }
+    .commit-item { padding: 16px; border-bottom: 1px solid #1e2d3d; display: flex; gap: 12px; }
+    .commit-item:last-child { border-bottom: none; }
+    .commit-marker { width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; margin-top: 5px; flex-shrink: 0; }
+    .commit-content { flex: 1; min-width: 0; }
+    .commit-time { font-size: 12px; color: #8899a6; margin-bottom: 4px; }
+    .commit-msg { font-size: 14px; color: #f0f4f8; font-weight: 500; margin-bottom: 6px; word-break: break-word; }
+    .commit-stats { font-size: 12px; color: #8899a6; }
+    .commit-item.pivot-marker .commit-marker { background: #ff6b6b; width: 12px; height: 12px; margin-left: -2px; margin-top: 2px; }
+    .pivot-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; color: #ff6b6b; font-weight: 700; margin-bottom: 4px; }
+    .stats-panel { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 24px; }
+    .stats-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid #1e2d3d; }
+    .stats-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .stats-label { font-size: 13px; color: #8899a6; font-weight: 500; text-transform: uppercase; letter-spacing: 0.3px; }
+    .stats-value { font-size: 18px; font-weight: 700; color: #3b82f6; }
+    .progress-bar { width: 100%; height: 6px; background: #0a1628; border-radius: 3px; overflow: hidden; margin-top: 6px; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #4ecdc4); border-radius: 3px; transition: width 0.2s ease; }
+    .table-container { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { border-bottom: 1px solid #1e2d3d; background: #0d1520; }
+    th { padding: 16px; text-align: left; font-size: 12px; font-weight: 600; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; }
+    tbody tr { border-bottom: 1px solid #1e2d3d; transition: background 0.2s ease; cursor: pointer; }
+    tbody tr:hover { background: rgba(59, 130, 246, 0.1); }
+    td { padding: 16px; font-size: 14px; color: #f0f4f8; }
+    .text-muted { color: #8899a6; font-size: 13px; }
+    .fitfolio-container { max-width: 1200px; margin: 0 auto; }
+    .fitfolio-header { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 32px; margin-bottom: 24px; text-align: center; }
+    .verified-badge { display: inline-block; background: rgba(212, 168, 67, 0.15); border: 2px solid #d4a843; color: #d4a843; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 16px; }
+    .fitfolio-headline { font-size: 22px; font-weight: 700; color: #f0f4f8; line-height: 1.4; }
+    .tabs { background: #111d2e; border: 1px solid #1e2d3d; border-bottom: none; border-radius: 8px 8px 0 0; display: flex; gap: 0; }
+    .tab { padding: 16px 24px; border-bottom: 2px solid transparent; cursor: pointer; font-size: 14px; font-weight: 600; color: #8899a6; transition: all 0.2s ease; flex: 0 0 auto; }
+    .tab:hover { color: #f0f4f8; }
+    .tab.active { color: #3b82f6; border-bottom-color: #3b82f6; }
+    .tab-content { background: #111d2e; border: 1px solid #1e2d3d; border-top: none; border-radius: 0 0 8px 8px; padding: 32px; display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .skill-radar { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 24px 0; }
+    .radar-section { text-align: center; }
+    .radar-title { font-size: 13px; font-weight: 600; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 16px; }
+    .skill-bars { display: flex; flex-direction: column; gap: 16px; }
+    .skill-row { display: flex; gap: 12px; align-items: center; }
+    .skill-name { font-size: 13px; color: #8899a6; width: 120px; text-align: right; }
+    .skill-bar { height: 6px; background: #0a1628; border-radius: 3px; flex: 1; overflow: hidden; }
+    .skill-bar-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #4ecdc4); border-radius: 3px; }
+    .skill-score { font-size: 13px; color: #3b82f6; font-weight: 600; width: 40px; }
+    .proof-snapshot { background: #0a1628; border: 1px solid #1e2d3d; border-radius: 6px; padding: 16px; margin: 24px 0; }
+    .snapshot-stat { font-size: 13px; color: #8899a6; margin-bottom: 8px; }
+    .snapshot-link { color: #3b82f6; text-decoration: none; font-weight: 600; }
+    .snapshot-link:hover { text-decoration: underline; }
+    .widener-results { margin: 24px 0; }
+    .widener-item { background: #0a1628; border-left: 3px solid #3b82f6; padding: 16px; margin-bottom: 12px; border-radius: 4px; }
+    .widener-title { font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 8px; }
+    .widener-score { display: inline-block; background: rgba(59, 130, 246, 0.2); color: #3b82f6; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: 700; margin-left: 8px; }
+    .widener-desc { font-size: 13px; color: #8899a6; line-height: 1.6; }
+    .curator-note { background: rgba(212, 168, 67, 0.1); border-left: 3px solid #d4a843; padding: 16px; border-radius: 4px; margin: 24px 0; }
+    .curator-label { font-size: 12px; font-weight: 600; color: #d4a843; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px; }
+    .curator-text { font-size: 14px; color: #f0f4f8; line-height: 1.6; }
+    .scoring-container { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 1400px; margin: 0 auto; }
+    .scoring-column { display: flex; flex-direction: column; gap: 16px; }
+    .scoring-section { background: #111d2e; border: 1px solid #1e2d3d; border-radius: 8px; padding: 24px; }
+    .scoring-title { font-size: 16px; font-weight: 600; color: #f0f4f8; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #1e2d3d; }
+    .dimension { margin-bottom: 24px; }
+    .dimension:last-child { margin-bottom: 0; }
+    .dimension-label { font-size: 13px; font-weight: 600; color: #f0f4f8; margin-bottom: 8px; }
+    .dimension-desc { font-size: 12px; color: #8899a6; margin-bottom: 12px; line-height: 1.5; }
+    .slider-container { display: flex; align-items: center; gap: 12px; }
+    .slider { flex: 1; height: 6px; -webkit-appearance: none; appearance: none; background: #0a1628; border-radius: 3px; outline: none; cursor: pointer; }
+    .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; cursor: pointer; transition: background 0.2s ease; }
+    .slider::-webkit-slider-thumb:hover { background: #2563eb; }
+    .slider::-moz-range-thumb { width: 16px; height: 16px; background: #3b82f6; border-radius: 50%; cursor: pointer; border: none; transition: background 0.2s ease; }
+    .slider::-moz-range-thumb:hover { background: #2563eb; }
+    .slider-value { font-size: 16px; font-weight: 700; color: #3b82f6; width: 30px; text-align: right; }
+    .comparison-row { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
+    .comparison-label { font-size: 12px; color: #8899a6; width: 100px; }
+    .comparison-bars { flex: 1; display: flex; gap: 8px; height: 24px; }
+    .bar-your { background: #3b82f6; border-radius: 3px; transition: width 0.3s ease; min-width: 24px; display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 600; }
+    .bar-ai { background: #4ecdc4; border-radius: 3px; transition: width 0.3s ease; min-width: 24px; display: flex; align-items: center; justify-content: center; color: #0a1628; font-size: 11px; font-weight: 600; }
+    .ai-note { background: rgba(78, 205, 196, 0.1); border-left: 3px solid #4ecdc4; padding: 12px; border-radius: 4px; font-size: 12px; color: #8899a6; line-height: 1.5; margin-top: 16px; }
+    .filter-bar { display: flex; gap: 16px; margin-bottom: 24px; align-items: center; flex-wrap: wrap; }
+    .filter-group { display: flex; gap: 8px; align-items: center; }
+    .filter-label { font-size: 13px; font-weight: 600; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; }
+    .form-select { background: #111d2e; border: 1px solid #1e2d3d; color: #f0f4f8; }
+    .toggle-switch { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+    .toggle-box { width: 40px; height: 24px; background: #0a1628; border: 1px solid #1e2d3d; border-radius: 12px; padding: 2px; transition: all 0.2s ease; display: flex; align-items: center; }
+    .toggle-box.active { background: #3b82f6; border-color: #3b82f6; }
+    .toggle-dot { width: 18px; height: 18px; background: white; border-radius: 50%; transition: transform 0.2s ease; }
+    .toggle-box.active .toggle-dot { transform: translateX(16px); }
+    .success-modal { text-align: center; }
+    .success-icon { font-size: 48px; margin-bottom: 16px; }
+    .success-modal h2 { font-size: 20px; font-weight: 700; color: #f0f4f8; margin-bottom: 12px; }
+    .success-modal p { font-size: 14px; color: #8899a6; margin-bottom: 24px; }
+    @media (max-width: 1200px) { .metrics-grid { grid-template-columns: repeat(2, 1fr); } .session-container { grid-template-columns: 1fr; } .scoring-container { grid-template-columns: 1fr; } .skill-radar { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) { .sidebar { width: 64px; } .topbar { padding: 0 16px; } .content { padding: 16px; } .metrics-grid { grid-template-columns: 1fr 1fr; gap: 12px; } .metric-card { padding: 16px; } .metric-value { font-size: 24px; } .search-box { width: 200px; } }
+  </style>
 </head>
 <body>
-    <div class="slide-container">
-        <!-- SLIDE 1: TITLE -->
-        <section class="slide slide-title active">
-            <div class="title-main gradient-text">MendelHire</div>
-            <div class="title-subtitle">Proof-first hiring for engineering teams</div>
-            <div class="title-description">Replace resume screening with verified craft. Know the work is real.</div>
-            <button class="btn btn-primary" data-next-slide>Begin Demo →</button>
-        </section>
-
-        <!-- SLIDE 2: PROBLEM -->
-        <section class="slide">
-            <h2 style="font-size: 32px; margin-bottom: 30px; color: #f0f4f8;">The AI Authenticity Crisis</h2>
-
-            <div class="code-comparison">
-                <div>
-                    <div class="code-block ai-generated">function filterList(arr, term) {
-  return arr.filter(item =>
-    item.toLowerCase().includes(term)
-  );
-}</div>
-                    <span class="code-badge suspicious">Suspiciously perfect</span>
-                </div>
-                <div>
-                    <div class="code-block verified">const debounce = (fn, ms) => {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn(...args), ms);
-  };
-};
-
-const fuzzyMatch = (str, pattern) => {
-  return levenshteinDistance(str, pattern) < 2;
-};</div>
-                    <span class="code-badge verified">Real commit history + Loom verify</span>
-                </div>
+  <div id="app">
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <div class="logo">MH</div>
+      </div>
+      <nav class="nav" id="nav">
+        <div class="nav-item active" data-page="dashboard">
+          <div class="nav-icon">📊</div>
+          <div class="nav-text">Dashboard</div>
+        </div>
+        <div class="nav-item" data-page="challenges">
+          <div class="nav-icon">🎯</div>
+          <div class="nav-text">Challenges</div>
+        </div>
+        <div class="nav-item" data-page="candidates">
+          <div class="nav-icon">👥</div>
+          <div class="nav-text">Candidates</div>
+        </div>
+        <div class="nav-item" data-page="scoring">
+          <div class="nav-icon">⭐</div>
+          <div class="nav-text">Scoring</div>
+        </div>
+        <div class="nav-item" data-page="settings">
+          <div class="nav-icon">⚙️</div>
+          <div class="nav-text">Settings</div>
+        </div>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="user-avatar">CA</div>
+        <div class="user-info">
+          <div class="user-name">Charbel A.</div>
+          <div class="user-org">Talent Gurus</div>
+        </div>
+        <button class="collapse-toggle" id="collapseToggle">←</button>
+      </div>
+    </div>
+    <div class="main-container">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="page-title" id="pageTitle">Dashboard</div>
+          <input type="text" class="search-box" placeholder="Search candidates, challenges...">
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn notification">
+            🔔
+            <div class="notification-dot"></div>
+          </button>
+          <button class="btn-primary" id="createChallengeBtn">+ Create Challenge</button>
+        </div>
+      </div>
+      <div class="content" id="content">
+        <!-- DASHBOARD PAGE -->
+        <div class="page active" id="page-dashboard">
+          <div class="section">
+            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">Good morning, Charbel</h2>
+            <p style="color: #8899a6; font-size: 14px; margin-bottom: 24px;" id="currentDate"></p>
+          </div>
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-label">Active Challenges</div>
+              <div class="metric-value">2</div>
             </div>
-
-            <div class="stats-row">
-                <div class="stat-item">
-                    <div class="stat-number">50–300%</div>
-                    <div class="stat-label">AI submissions increase</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">72%</div>
-                    <div class="stat-label">HMs distrust take-homes</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">4.2</div>
-                    <div class="stat-label">Interview rounds</div>
-                </div>
+            <div class="metric-card">
+              <div class="metric-label">Candidates in Pipeline</div>
+              <div class="metric-value">12</div>
             </div>
+            <div class="metric-card">
+              <div class="metric-label">Proofs Completed</div>
+              <div class="metric-value">8</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Avg Score</div>
+              <div class="metric-value" style="color: #4ecdc4;">3.9<span style="font-size: 18px;color: #8899a6;">/5</span></div>
+            </div>
+          </div>
+          <div class="section">
+            <h3 class="section-title">Active Challenges</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+              <div class="card">
+                <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 8px; color: #f0f4f8;">Frontend React — Search + Accessibility Pivot</h4>
+                <p style="color: #8899a6; font-size: 13px; margin-bottom: 16px;">Build product list with client-side search, category filter, and keyboard navigation.</p>
+                <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                  <div class="stack-tag">React</div>
+                  <div class="stack-tag">TypeScript</div>
+                </div>
+                <div style="display: flex; gap: 24px; font-size: 13px; color: #8899a6; padding-top: 16px; border-top: 1px solid #1e2d3d;">
+                  <span>⏱️ 120 min</span>
+                  <span>💰 $100</span>
+                  <span>👥 3 in progress</span>
+                  <span>✓ 2 scored</span>
+                </div>
+              </div>
+              <div class="card">
+                <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 8px; color: #f0f4f8;">Data Python/SQL — Retention Cohorts</h4>
+                <p style="color: #8899a6; font-size: 13px; margin-bottom: 16px;">Analyze CSV, build monthly cohort retention chart + insights. Pivot: redefine cohorts.</p>
+                <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                  <div class="stack-tag">Python</div>
+                  <div class="stack-tag">SQL</div>
+                </div>
+                <div style="display: flex; gap: 24px; font-size: 13px; color: #8899a6; padding-top: 16px; border-top: 1px solid #1e2d3d;">
+                  <span>⏱️ 120 min</span>
+                  <span>💰 $100</span>
+                  <span>👥 1 in progress</span>
+                  <span>✓ 1 scored</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="section">
+            <h3 class="section-title">Recent Activity</h3>
+            <div class="card">
+              <div class="activity-item">
+                <div class="activity-dot completed"></div>
+                <div class="activity-content">
+                  <div class="activity-text">Sarah Chen completed proof — <strong>Frontend React</strong></div>
+                  <div class="activity-time">2 hours ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot generated"></div>
+                <div class="activity-content">
+                  <div class="activity-text">FitFolio generated for <strong>Marcus Johnson</strong></div>
+                  <div class="activity-time">5 hours ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot new"></div>
+                <div class="activity-content">
+                  <div class="activity-text">New application: <strong>Priya Patel</strong> — Frontend React</div>
+                  <div class="activity-time">1 day ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot completed"></div>
+                <div class="activity-content">
+                  <div class="activity-text">Alex Rivera scored 4.2/5 — <strong>Data Python/SQL</strong></div>
+                  <div class="activity-time">2 days ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot generated"></div>
+                <div class="activity-content">
+                  <div class="activity-text">Proof session started: <strong>Jordan Lee</strong> — Frontend React</div>
+                  <div class="activity-time">Just now</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            <h3 style="font-size: 18px; margin-bottom: 20px; color: #f0f4f8;">How we're different</h3>
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>Feature</th>
-                        <th>Traditional</th>
-                        <th>MendelHire</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Identity verification</td>
-                        <td><span class="cross">✗</span> No verification</td>
-                        <td><span class="check">✓</span> Loom identity-verified</td>
-                    </tr>
-                    <tr>
-                        <td>Time constraints</td>
-                        <td><span class="cross">✗</span> Unpaid, no limit</td>
-                        <td><span class="check">✓</span> 120 min / $100–$150</td>
-                    </tr>
-                    <tr>
-                        <td>Pivot testing</td>
-                        <td><span class="cross">✗</span> Static challenge</td>
-                        <td><span class="check">✓</span> Mid-task pivot @ 60 min</td>
-                    </tr>
-                    <tr>
-                        <td>Scoring</td>
-                        <td><span class="cross">✗</span> Subjective gut feel</td>
-                        <td><span class="check">✓</span> Published rubric, dual-scored</td>
-                    </tr>
-                    <tr>
-                        <td>Candidate value</td>
-                        <td><span class="cross">✗</span> Zero if not hired</td>
-                        <td><span class="check">✓</span> Paid + feedback + FitFolio</td>
-                    </tr>
-                </tbody>
+        <!-- CHALLENGES PAGE -->
+        <div class="page" id="page-challenges">
+          <div class="section">
+            <h3 class="section-title">Active Challenges</h3>
+            <div class="challenge-card">
+              <div class="challenge-header">
+                <h4 class="challenge-title">Frontend React — Search + Accessibility Pivot</h4>
+                <div class="challenge-meta">
+                  <span>⏱️ 120 minutes</span>
+                  <span>💰 $100 stipend</span>
+                  <span>React / TypeScript</span>
+                </div>
+              </div>
+              <div class="challenge-section">
+                <div class="challenge-section-title">Brief</div>
+                <p class="challenge-brief">Build a product list component with client-side search and category filter. At minute 60, the pivot is triggered: add keyboard navigation and ARIA labels for all controls.</p>
+              </div>
+              <div class="challenge-section">
+                <div class="challenge-section-title">Acceptance Criteria</div>
+                <ul class="criteria-list">
+                  <li>Real-time search filters products by name/description</li>
+                  <li>Category filter composes cleanly with search filter</li>
+                  <li>Keyboard navigation: Tab, Shift+Tab, Enter keys work</li>
+                  <li>ARIA labels on search input and category dropdown</li>
+                  <li>Basic unit tests for filter and search logic</li>
+                </ul>
+              </div>
+              <div class="challenge-section">
+                <div class="challenge-section-title">Pivot Specification</div>
+                <p class="challenge-brief" style="background: rgba(255, 107, 107, 0.1); padding: 12px; border-radius: 4px; border-left: 3px solid #ff6b6b;">At 60 minutes: "Add keyboard navigation and ARIA labels for all controls. Focus on accessibility best practices. Justify your implementation choices in the README."</p>
+              </div>
+              <div class="challenge-stats">
+                <div class="stat"><div class="stat-label">In Progress</div><div class="stat-value">3</div></div>
+                <div class="stat"><div class="stat-label">Scored</div><div class="stat-value">2</div></div>
+                <div class="stat"><div class="stat-label">FitFolio Ready</div><div class="stat-value">1</div></div>
+              </div>
+            </div>
+            <div class="challenge-card">
+              <div class="challenge-header">
+                <h4 class="challenge-title">Data Python/SQL — Retention Cohorts</h4>
+                <div class="challenge-meta">
+                  <span>⏱️ 120 minutes</span>
+                  <span>💰 $100 stipend</span>
+                  <span>Python / SQL</span>
+                </div>
+              </div>
+              <div class="challenge-section">
+                <div class="challenge-section-title">Brief</div>
+                <p class="challenge-brief">Analyze a CSV of user events. Create a monthly cohort retention chart (Month 0, 1, 2...) and provide 5 key insights. At minute 60, pivot: redefine cohorts by first paid event instead of signup date.</p>
+              </div>
+              <div class="challenge-section">
+                <div class="challenge-section-title">Acceptance Criteria</div>
+                <ul class="criteria-list">
+                  <li>Cohort retention analysis by month</li>
+                  <li>Clear visualization (table or chart format)</li>
+                  <li>5 bullet-point insights from the data</li>
+                  <li>Code is readable and documented</li>
+                  <li>Pivot response shows flexibility and SQL skill</li>
+                </ul>
+              </div>
+              <div class="challenge-stats">
+                <div class="stat"><div class="stat-label">In Progress</div><div class="stat-value">1</div></div>
+                <div class="stat"><div class="stat-label">Scored</div><div class="stat-value">1</div></div>
+                <div class="stat"><div class="stat-label">FitFolio Ready</div><div class="stat-value">0</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LIVE SESSION PAGE -->
+        <div class="page" id="page-live-session">
+          <div class="candidate-header">
+            <div class="candidate-info">
+              <div class="candidate-avatar">JL</div>
+              <div class="candidate-details">
+                <h3>Candidate #MH-2845</h3>
+                <p>Frontend React — Search + Accessibility Pivot</p>
+              </div>
+            </div>
+            <div class="candidate-status">
+              <span class="badge badge-success">IN PROGRESS</span>
+              <span class="status-indicator verified">✓ Identity</span>
+              <span class="status-indicator live">
+                <div class="live-dot"></div>
+                Loom Recording
+              </span>
+            </div>
+          </div>
+          <div class="timeline-container">
+            <div class="timeline-bar">
+              <div class="timeline-progress" id="timelineProgress" style="width: 0%;"></div>
+              <div class="timeline-pivot" id="timelinePivot" style="left: 50%;"></div>
+            </div>
+            <div class="timeline-labels">
+              <span>0 min</span>
+              <span id="timelineTime">0 min</span>
+              <span>120 min</span>
+            </div>
+          </div>
+          <div class="session-container">
+            <div class="commit-feed" id="commitFeed">
+              <div style="padding: 16px; text-align: center; color: #8899a6;">
+                Click "Start Session" below to begin streaming commits...
+              </div>
+            </div>
+            <div class="stats-panel">
+              <div class="stats-row">
+                <span class="stats-label">Commits</span>
+                <span class="stats-value" id="commitCount">0</span>
+              </div>
+              <div class="stats-row">
+                <span class="stats-label">Lines Changed</span>
+                <span class="stats-value" id="linesChanged">0</span>
+              </div>
+              <div class="stats-row">
+                <span class="stats-label">Test Coverage</span>
+                <div style="flex: 1;">
+                  <div class="progress-bar">
+                    <div class="progress-fill" id="testCoverage" style="width: 0%;"></div>
+                  </div>
+                  <span class="stats-value" style="display: inline-block; margin-top: 8px;" id="testCoveragePercent">0%</span>
+                </div>
+              </div>
+              <div class="stats-row">
+                <span class="stats-label">Time Remaining</span>
+                <span class="stats-value" id="timeRemaining">120m</span>
+              </div>
+              <div class="stats-row">
+                <span class="stats-label">Phase</span>
+                <span class="stats-value" id="phase" style="color: #4ecdc4; font-size: 14px;">Pre-Pivot</span>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+            <button class="btn-primary" id="startSessionBtn">Start Session</button>
+            <button class="btn-secondary" id="pauseSessionBtn" style="display: none;">Pause</button>
+            <button class="btn-secondary" id="resetSessionBtn">Reset</button>
+          </div>
+        </div>
+
+        <!-- CANDIDATES PAGE -->
+        <div class="page" id="page-candidates">
+          <div class="filter-bar">
+            <div class="filter-group">
+              <input type="text" class="form-input" style="width: 200px;" placeholder="Search candidates...">
+            </div>
+            <div class="filter-group">
+              <span class="filter-label">Status</span>
+              <select class="form-select" style="width: 150px;">
+                <option>All</option>
+                <option>In Progress</option>
+                <option>Scored</option>
+                <option>FitFolio Ready</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <span class="filter-label">Challenge</span>
+              <select class="form-select" style="width: 180px;">
+                <option>All</option>
+                <option>Frontend React</option>
+                <option>Data Python/SQL</option>
+              </select>
+            </div>
+            <div style="margin-left: auto;">
+              <label class="toggle-switch">
+                <span style="font-size: 13px; font-weight: 600; color: #8899a6;">Anonymized Mode</span>
+                <div class="toggle-box active" id="anonToggle">
+                  <div class="toggle-dot"></div>
+                </div>
+              </label>
+            </div>
+          </div>
+          <div class="table-container">
+            <table id="candidateTable">
+              <thead>
+                <tr>
+                  <th>Candidate</th>
+                  <th>Challenge</th>
+                  <th>Status</th>
+                  <th>Score</th>
+                  <th>Wideners</th>
+                  <th>Stack</th>
+                  <th>Verified</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="candidateBody">
+              </tbody>
             </table>
-        </section>
+          </div>
+        </div>
 
-        <!-- SLIDE 3: LIVE PROOF SIMULATION -->
-        <section class="slide">
-            <h2 style="font-size: 32px; margin-bottom: 30px; color: #f0f4f8;">Proof in Action</h2>
-
-            <div class="proof-preflight" id="proofPreflight">
-                <div class="brief-card">
-                    <div class="brief-title">Frontend Challenge</div>
-                    <div style="font-size: 14px; color: #8899a6; margin-bottom: 20px;">Build a SearchFilter Component</div>
-                    <ul class="criteria-list">
-                        <li>Handles debounce (300ms)</li>
-                        <li>Filters in real-time</li>
-                        <li>Accessible keyboard nav</li>
-                    </ul>
-                    <div class="brief-meta">
-                        <div><strong>120 MINUTES</strong></div>
-                        <div><strong>$100 STIPEND</strong></div>
-                        <div><strong>60 min PIVOT</strong></div>
-                    </div>
-                </div>
-                <div style="display: flex; align-items: center; justify-content: center;">
-                    <button class="btn btn-primary" id="startSimulation">Start Simulation →</button>
-                </div>
+        <!-- FITFOLIO PAGE -->
+        <div class="page" id="page-fitfolio">
+          <div class="fitfolio-container">
+            <div class="fitfolio-header">
+              <div class="verified-badge">✓ VERIFIED CRAFT</div>
+              <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 8px;">Sarah Chen</h2>
+              <p class="fitfolio-headline">Strong React developer with exceptional accessibility awareness and clear communication style</p>
             </div>
-
-            <div class="proof-active" id="proofActive">
-                <div class="timeline-container">
-                    <div class="timeline-track" id="timelineTrack">
-                        <div class="timeline-fill" id="timelineFill"></div>
-                        <div class="timeline-pivot" id="timelinePivot" style="left: 50%;"></div>
-                        <div class="timeline-pivot-label">PIVOT</div>
-                    </div>
-                    <div class="timeline-labels">
-                        <span>0 min</span>
-                        <span>Pivot (60 min)</span>
-                        <span>120 min</span>
-                    </div>
-                </div>
-
-                <div class="proof-grid">
-                    <div class="commit-feed" id="commitFeed"></div>
-                    <div class="stats-panel">
-                        <div class="stat-block">
-                            <div class="stat-block-value" id="commitCount">0</div>
-                            <div class="stat-block-label">Commits</div>
-                        </div>
-                        <div class="stat-block">
-                            <div class="stat-block-value" id="linesChanged">0</div>
-                            <div class="stat-block-label">Lines Changed</div>
-                        </div>
-                        <div class="stat-block">
-                            <div class="stat-block-label">Test Coverage</div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="testCoverage"></div>
-                            </div>
-                            <div style="font-size: 11px; color: #8899a6; margin-top: 4px;" id="testPercent">0%</div>
-                        </div>
-                        <div class="stat-block">
-                            <div class="stat-block-value" id="timeRemaining">120</div>
-                            <div class="stat-block-label">Minutes Remaining</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="proof-controls">
-                    <button class="btn btn-secondary" id="pauseButton">Pause</button>
-                    <button class="btn btn-secondary" id="resetButton">Reset</button>
-                </div>
+            <div class="tabs" id="fitfolioTabs">
+              <div class="tab active" data-tab="hiring-card">Hiring Manager Card</div>
+              <div class="tab" data-tab="factsheet">ATS & LLM Factsheet</div>
+              <div class="tab" data-tab="portfolio">Portfolio Page</div>
             </div>
-
-            <div class="proof-complete" id="proofComplete">
-                <div style="font-size: 18px; color: #f0f4f8; font-weight: 600;">Proof Submitted Successfully</div>
-                <div class="checklist">
-                    <div class="checklist-item">All acceptance criteria met</div>
-                    <div class="checklist-item">Code quality verified</div>
-                    <div class="checklist-item">Identity confirmed via Loom</div>
-                </div>
-                <div class="verified-badge">VERIFIED CRAFT</div>
-            </div>
-        </section>
-
-        <!-- SLIDE 4: SOLUTION -->
-        <section class="slide">
-            <h2 style="font-size: 32px; margin-bottom: 40px; color: #f0f4f8;">How MendelHire Works</h2>
-
-            <div class="feature-cards">
-                <div class="feature-card blue">
-                    <div class="feature-title">Verified Proof</div>
-                    <div class="feature-description">Identity-confirmed, time-capped, Loom-recorded challenges. The work is real.</div>
-                </div>
-                <div class="feature-card gold">
-                    <div class="feature-title">Adaptive Signal</div>
-                    <div class="feature-description">Mid-task pivot at minute 60 separates genuine skill from prepared answers.</div>
-                </div>
-                <div class="feature-card teal">
-                    <div class="feature-title">Rubric-Scored</div>
-                    <div class="feature-description">Published rubrics, calibrated reviewers, AI + human dual-scoring.</div>
-                </div>
-            </div>
-
-            <div class="candidate-value">
-                <div class="candidate-value-title">Why Candidates Show Up</div>
-                <div class="value-columns">
-                    <div class="value-item">
-                        <div class="value-number">$100–$150</div>
-                        <div class="value-text">Paid per completed proof</div>
-                    </div>
-                    <div class="value-item">
-                        <div class="value-number">72h</div>
-                        <div class="value-text">Scored feedback delivered</div>
-                    </div>
-                    <div class="value-item">
-                        <div class="value-number">Portable</div>
-                        <div class="value-text">Own your FitFolio forever</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="journey">
-                <div class="journey-title">Candidate Journey</div>
-                <div class="journey-steps">See brief & rubric → Complete 120-min proof → Get paid → Receive feedback → Own FitFolio</div>
-            </div>
-
-            <div class="fairness-box">
-                <div class="fairness-title">Fairness by Design</div>
-                <div class="fairness-grid">
-                    <div class="fairness-item">Published rubrics</div>
-                    <div class="fairness-item">Anonymized-by-default</div>
-                    <div class="fairness-item">Accommodations available</div>
-                    <div class="fairness-item">Adverse impact monitoring</div>
-                </div>
-                <div class="fairness-statement">Every proof evaluated on the same criteria, under the same conditions.</div>
-            </div>
-        </section>
-
-        <!-- SLIDE 5: ROLE BUILDER -->
-        <section class="slide">
-            <h2 style="font-size: 32px; margin-bottom: 20px; color: #f0f4f8;">Generate a Proof for Any Role</h2>
-            <div class="role-subtitle">Powered by your role</div>
-
-            <div class="role-input-section">
-                <input type="text" class="role-input" id="roleInput" placeholder="Type a role, e.g. Senior React Engineer...">
-            </div>
-
-            <div id="challengeOutput"></div>
-
-            <div class="wideners-section" id="widenersSection" style="display: none;">
-                <div class="wideners-title">Optional: Add Wideners (up to 2)</div>
-                <div class="widener-chips">
-                    <button class="chip" data-widener="Technical Writing">Technical Writing</button>
-                    <button class="chip" data-widener="Product Sense">Product Sense</button>
-                    <button class="chip" data-widener="Code Review">Code Review</button>
-                    <button class="chip" data-widener="Diagnostics">Diagnostics</button>
-                    <button class="chip" data-widener="Customer Empathy">Customer Empathy</button>
-                </div>
-                <div class="widener-description">Wideners reveal how engineers think — judgment signals code alone can't show.</div>
-            </div>
-        </section>
-
-        <!-- SLIDE 6: SCORING -->
-        <section class="slide">
-            <h2 style="font-size: 32px; margin-bottom: 30px; color: #f0f4f8;">Score Like a Hiring Manager</h2>
-
-            <div class="scoring-grid">
-                <div class="code-preview">// SearchFilter component
-const SearchFilter = ({ items }) => {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState(items);
-
-  const debouncedSearch = useCallback(
-    debounce((term) => {
-      setResults(items.filter(item =>
-        fuzzyMatch(item.name, term)
-      ));
-    }, 300),
-    [items]
-  );
-
-  const handleChange = (e) => {
-    setQuery(e.target.value);
-    debouncedSearch(e.target.value);
-  };
-
-  return (
-    &lt;div role="search"&gt;
-      &lt;input
-        onChange={handleChange}
-        value={query}
-        placeholder="Search..."
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            debouncedSearch.flush();
-          }
-        }}
-      /&gt;
-      &lt;ul&gt;
-        {results.map(r => (
-          &lt;li key={r.id}&gt;{r.name}&lt;/li&gt;
-        ))}
-      &lt;/ul&gt;
-    &lt;/div&gt;
-  );
-};
-                </div>
-
-                <div class="scoring-panel">
-                    <div class="slider-group">
-                        <div class="slider-label">Code Quality</div>
-                        <div class="slider-sublabel">Structure, naming, patterns</div>
-                        <div class="slider-container">
-                            <input type="range" min="1" max="5" step="0.5" value="3.5" class="scoring-slider" data-metric="quality">
-                            <div class="slider-value" data-display="quality">3.5</div>
+            <!-- TAB 1: HIRING MANAGER CARD -->
+            <div class="tab-content active" id="tab-hiring-card">
+              <div style="max-width: 900px;">
+                <div class="skill-radar">
+                  <div class="radar-section">
+                    <div class="radar-title">Stack Dimensions</div>
+                    <div class="skill-bars">
+                      <div class="skill-row">
+                        <div class="skill-name">Correctness</div>
+                        <div class="skill-bar">
+                          <div class="skill-bar-fill" style="width: 80%;"></div>
                         </div>
-                    </div>
-
-                    <div class="slider-group">
-                        <div class="slider-label">Problem Solving</div>
-                        <div class="slider-sublabel">Approach, algorithm, edge cases</div>
-                        <div class="slider-container">
-                            <input type="range" min="1" max="5" step="0.5" value="3.5" class="scoring-slider" data-metric="solving">
-                            <div class="slider-value" data-display="solving">3.5</div>
+                        <div class="skill-score">4/5</div>
+                      </div>
+                      <div class="skill-row">
+                        <div class="skill-name">Accessibility</div>
+                        <div class="skill-bar">
+                          <div class="skill-bar-fill" style="width: 100%;"></div>
                         </div>
-                    </div>
-
-                    <div class="slider-group">
-                        <div class="slider-label">Testing</div>
-                        <div class="slider-sublabel">Coverage, test design, assertions</div>
-                        <div class="slider-container">
-                            <input type="range" min="1" max="5" step="0.5" value="3.5" class="scoring-slider" data-metric="testing">
-                            <div class="slider-value" data-display="testing">3.5</div>
+                        <div class="skill-score">5/5</div>
+                      </div>
+                      <div class="skill-row">
+                        <div class="skill-name">Code Clarity</div>
+                        <div class="skill-bar">
+                          <div class="skill-bar-fill" style="width: 80%;"></div>
                         </div>
+                        <div class="skill-score">4/5</div>
+                      </div>
                     </div>
-
-                    <div class="slider-group">
-                        <div class="slider-label">Ownership</div>
-                        <div class="slider-sublabel">Commit messages, docs, polish</div>
-                        <div class="slider-container">
-                            <input type="range" min="1" max="5" step="0.5" value="3.5" class="scoring-slider" data-metric="ownership">
-                            <div class="slider-value" data-display="ownership">3.5</div>
+                  </div>
+                  <div class="radar-section">
+                    <div class="radar-title">Trait Dimensions</div>
+                    <div class="skill-bars">
+                      <div class="skill-row">
+                        <div class="skill-name">Ownership</div>
+                        <div class="skill-bar">
+                          <div class="skill-bar-fill" style="width: 80%;"></div>
                         </div>
+                        <div class="skill-score">4/5</div>
+                      </div>
+                      <div class="skill-row">
+                        <div class="skill-name">Problem-Solving</div>
+                        <div class="skill-bar">
+                          <div class="skill-bar-fill" style="width: 80%;"></div>
+                        </div>
+                        <div class="skill-score">4/5</div>
+                      </div>
+                      <div class="skill-row">
+                        <div class="skill-name">Communication</div>
+                        <div class="skill-bar">
+                          <div class="skill-bar-fill" style="width: 100%;"></div>
+                        </div>
+                        <div class="skill-score">5/5</div>
+                      </div>
                     </div>
-
-                    <button class="btn btn-secondary comparison-button" id="compareButton">Compare with AI Assessment →</button>
+                  </div>
                 </div>
-            </div>
-
-            <div class="comparison-panel" id="comparisonPanel">
-                <div class="comparison-title">AI vs. Your Assessment</div>
-
-                <div class="comparison-row">
-                    <div class="comparison-label">Code Quality</div>
-                    <div class="comparison-bar-container">
-                        <div class="comparison-bar">
-                            <div class="comparison-bar-fill" id="aiQualityBar"></div>
-                        </div>
-                    </div>
-                    <div class="comparison-bar-container">
-                        <div class="comparison-bar">
-                            <div class="comparison-bar-fill" id="userQualityBar"></div>
-                        </div>
-                    </div>
-                    <div class="comparison-values">
-                        <span id="aiQualityVal">3.5</span> / <span id="userQualityVal">3.5</span>
-                    </div>
+                <div class="proof-snapshot">
+                  <div class="snapshot-stat"><strong>Repository:</strong> <a href="#" class="snapshot-link">github.com/sarahchen/mendelhire-proof-001</a></div>
+                  <div class="snapshot-stat"><strong>Loom Walkthrough:</strong> <a href="#" class="snapshot-link">loom.com/share/proof-2847-sarah</a></div>
+                  <div class="snapshot-stat"><strong>Session:</strong> 18 commits, 342 lines changed, 78% test coverage in 118 minutes</div>
                 </div>
-
-                <div class="comparison-row">
-                    <div class="comparison-label">Problem Solving</div>
-                    <div class="comparison-bar-container">
-                        <div class="comparison-bar">
-                            <div class="comparison-bar-fill" id="aiSolvingBar"></div>
-                        </div>
-                    </div>
-                    <div class="comparison-bar-container">
-                        <div class="comparison-bar">
-                            <div class="comparison-bar-fill" id="userSolvingBar"></div>
-                        </div>
-                    </div>
-                    <div class="comparison-values">
-                        <span id="aiSolvingVal">4.0</span> / <span id="userSolvingVal">3.5</span>
-                    </div>
+                <div class="widener-results">
+                  <div class="widener-item">
+                    <div class="widener-title">Product Sense <span class="widener-score">4/5</span></div>
+                    <div class="widener-desc">Defined success metrics before writing code. Identified three user scenarios that guided search UX decisions.</div>
+                  </div>
+                  <div class="widener-item">
+                    <div class="widener-title">Communication & Documentation <span class="widener-score">5/5</span></div>
+                    <div class="widener-desc">README is exemplary. Loom walkthrough clearly explains the accessibility pivot rationale and tradeoffs.</div>
+                  </div>
                 </div>
-
-                <div class="comparison-row">
-                    <div class="comparison-label">Testing</div>
-                    <div class="comparison-bar-container">
-                        <div class="comparison-bar">
-                            <div class="comparison-bar-fill" id="aiTestingBar"></div>
-                        </div>
-                    </div>
-                    <div class="comparison-bar-container">
-                        <div class="comparison-bar">
-                            <div class="comparison-bar-fill" id="userTestingBar"></div>
-                        </div>
-                    </div>
-                    <div class="comparison-values">
-                        <span id="aiTestingVal">3.0</span> / <span id="userTestingVal">3.5</span>
-                    </div>
-                </div>
-
-                <div class="comparison-row">
-                    <div class="comparison-label">Ownership</div>
-                    <div class="comparison-bar-container">
-                        <div class="comparison-bar">
-                            <div class="comparison-bar-fill" id="aiOwnershipBar"></div>
-                        </div>
-                    </div>
-                    <div class="comparison-bar-container">
-                        <div class="comparison-bar">
-                            <div class="comparison-bar-fill" id="userOwnershipBar"></div>
-                        </div>
-                    </div>
-                    <div class="comparison-values">
-                        <span id="aiOwnershipVal">4.5</span> / <span id="userOwnershipVal">3.5</span>
-                    </div>
-                </div>
-
-                <div class="divergence-note">
-                    <strong>Divergence Pattern:</strong> Human reviewers tend to weight problem-solving approach over raw test coverage. AI weights ownership signals more heavily — commit quality and documentation are strong craft signals.
-                </div>
-
                 <div class="curator-note">
-                    <strong>Curator's Note:</strong> This divergence pattern is common. MendelHire uses both signals to create a more complete picture.
+                  <div class="curator-label">Curator Note</div>
+                  <div class="curator-text">Exceptionally clean pivot response. Accessibility implementation goes well beyond requirements. This is a strong hire.</div>
                 </div>
+              </div>
             </div>
-        </section>
-
-        <!-- SLIDE 7: DASHBOARD -->
-        <section class="slide">
-            <h2 style="font-size: 32px; margin-bottom: 20px; color: #f0f4f8;">Your Shortlist — Evidence, Not Résumés</h2>
-
-            <div class="dashboard-header">
-                <div></div>
-                <div class="anonymize-toggle">
-                    <span>Anonymized Mode</span>
-                    <div class="toggle-checkbox checked" id="anonToggle">
-                        <div class="toggle-checkbox-inner"></div>
-                    </div>
+            <!-- TAB 2: ATS & LLM FACTSHEET -->
+            <div class="tab-content" id="tab-factsheet">
+              <div style="max-width: 900px;">
+                <div class="section">
+                  <h3 class="section-title">Structured Data (JSON-LD)</h3>
+                  <div class="proof-snapshot">
+                    <pre style="font-size: 12px; line-height: 1.6; color: #8899a6; overflow-x: auto;"><code>{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "Frontend React — Search + Accessibility Proof",
+  "author": { "@type": "Person", "name": "Sarah Chen", "identifier": "MH-2841" },
+  "dateCreated": "2026-02-10",
+  "duration": "PT118M",
+  "skills": ["React", "TypeScript", "Accessibility", "ARIA", "Jest"],
+  "verifiedBy": "MendelHire Verified Craft Badge"
+}</code></pre>
+                  </div>
                 </div>
+                <div class="section">
+                  <h3 class="section-title">5 Verifiable Facts</h3>
+                  <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div class="widener-item">
+                      <div class="widener-title">Completed 120-min timed challenge with mid-task pivot</div>
+                      <div class="widener-desc">Session ID MH-2847-FE-001. Identity verified via government ID scan.</div>
+                    </div>
+                    <div class="widener-item">
+                      <div class="widener-title">18 commits with consistent timing pattern</div>
+                      <div class="widener-desc">GitHub repo shows commits every 6-7 min, suggesting real development.</div>
+                    </div>
+                    <div class="widener-item">
+                      <div class="widener-title">Accessibility audit passes jest-axe</div>
+                      <div class="widener-desc">Test output: 0 violations. ARIA implementation validated.</div>
+                    </div>
+                    <div class="widener-item">
+                      <div class="widener-title">Loom walkthrough: 4:32 explaining decisions</div>
+                      <div class="widener-desc">Shows candidate explaining design choices and tradeoffs clearly.</div>
+                    </div>
+                    <div class="widener-item">
+                      <div class="widener-title">Identity verified via MendelHire identity check</div>
+                      <div class="widener-desc">No identity fraud risk detected.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-
-            <div class="candidate-cards">
-                <div class="candidate-card" data-candidate-id="1">
-                    <div class="candidate-header">
-                        <div class="candidate-name" id="candidateName1">Sarah Chen</div>
-                        <div class="candidate-score">4.2</div>
-                    </div>
-                    <div class="candidate-wideners">
-                        <span class="widener-tag">Technical Writing</span>
-                        <span class="widener-tag">Product Sense</span>
-                    </div>
-                    <div class="candidate-meta">3 proofs<span class="candidate-freshness">Active</span></div>
-                    <div class="candidate-scores">
-                        <div class="score-item"><strong>Quality</strong> 4.0</div>
-                        <div class="score-item"><strong>Solving</strong> 4.5</div>
-                        <div class="score-item"><strong>Testing</strong> 4.0</div>
-                        <div class="score-item"><strong>Ownership</strong> 4.5</div>
-                    </div>
+            <!-- TAB 3: PORTFOLIO PAGE -->
+            <div class="tab-content" id="tab-portfolio">
+              <div style="max-width: 900px;">
+                <div style="text-align: center; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid #1e2d3d;">
+                  <div class="verified-badge">✓ VERIFIED CRAFT</div>
+                  <h2 style="font-size: 24px; font-weight: 700; margin-top: 16px; margin-bottom: 8px;">Sarah Chen</h2>
+                  <p style="color: #8899a6; font-size: 14px;">React & Accessibility Specialist</p>
                 </div>
-
-                <div class="candidate-card" data-candidate-id="2">
-                    <div class="candidate-header">
-                        <div class="candidate-name" id="candidateName2">Marcus Johnson</div>
-                        <div class="candidate-score">3.8</div>
-                    </div>
-                    <div class="candidate-wideners">
-                        <span class="widener-tag">Diagnostics</span>
-                        <span class="widener-tag">Code Review</span>
-                    </div>
-                    <div class="candidate-meta">1 proof<span class="candidate-freshness" style="background-color: rgba(136, 153, 166, 0.1); color: #8899a6;">Recent</span></div>
-                    <div class="candidate-scores">
-                        <div class="score-item"><strong>Quality</strong> 4.0</div>
-                        <div class="score-item"><strong>Solving</strong> 3.5</div>
-                        <div class="score-item"><strong>Testing</strong> 3.5</div>
-                        <div class="score-item"><strong>Ownership</strong> 4.0</div>
-                    </div>
-                </div>
-
-                <div class="candidate-card" data-candidate-id="3">
-                    <div class="candidate-header">
-                        <div class="candidate-name" id="candidateName3">Priya Patel</div>
-                        <div class="candidate-score">4.5</div>
-                    </div>
-                    <div class="candidate-wideners">
-                        <span class="widener-tag">Customer Empathy</span>
-                        <span class="widener-tag">Technical Writing</span>
-                    </div>
-                    <div class="candidate-meta">5 proofs<span class="candidate-freshness">Active</span></div>
-                    <div class="candidate-scores">
-                        <div class="score-item"><strong>Quality</strong> 4.5</div>
-                        <div class="score-item"><strong>Solving</strong> 4.5</div>
-                        <div class="score-item"><strong>Testing</strong> 4.5</div>
-                        <div class="score-item"><strong>Ownership</strong> 4.5</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="overlay" id="overlay">
-                <div class="fitfolio-modal">
-                    <div class="fitfolio-header">
-                        <div class="fitfolio-title">FitFolio — <span id="fitfolioName"></span></div>
-                        <button class="fitfolio-close" id="closeModal">&times;</button>
-                    </div>
-
-                    <div class="fitfolio-tabs">
-                        <button class="fitfolio-tab active" data-tab="hiring-manager">Hiring Manager</button>
-                        <button class="fitfolio-tab" data-tab="ats-export">ATS Export</button>
-                        <button class="fitfolio-tab" data-tab="portfolio">Portfolio Page</button>
-                    </div>
-
-                    <div class="fitfolio-content">
-                        <div class="fitfolio-tab-content active" id="tab-hiring-manager">
-                            <div class="score-bars">
-                                <div class="score-bar-row">
-                                    <div class="score-bar-label">Code Quality</div>
-                                    <div class="score-bar">
-                                        <div class="score-bar-fill" id="hm-quality" style="width: 80%;"></div>
-                                    </div>
-                                    <div class="score-bar-value" id="hm-quality-val">4.0</div>
-                                </div>
-                                <div class="score-bar-row">
-                                    <div class="score-bar-label">Problem Solving</div>
-                                    <div class="score-bar">
-                                        <div class="score-bar-fill" id="hm-solving" style="width: 90%;"></div>
-                                    </div>
-                                    <div class="score-bar-value" id="hm-solving-val">4.5</div>
-                                </div>
-                                <div class="score-bar-row">
-                                    <div class="score-bar-label">Testing</div>
-                                    <div class="score-bar">
-                                        <div class="score-bar-fill" id="hm-testing" style="width: 80%;"></div>
-                                    </div>
-                                    <div class="score-bar-value" id="hm-testing-val">4.0</div>
-                                </div>
-                                <div class="score-bar-row">
-                                    <div class="score-bar-label">Ownership</div>
-                                    <div class="score-bar">
-                                        <div class="score-bar-fill" id="hm-ownership" style="width: 90%;"></div>
-                                    </div>
-                                    <div class="score-bar-value" id="hm-ownership-val">4.5</div>
-                                </div>
-                            </div>
-
-                            <div class="curator-note" style="margin-top: 30px;">
-                                <strong>Curator's Assessment:</strong> Strong technical foundation with excellent problem-solving skills. The work shows deep understanding of component patterns and testing practices. Ownership signals (commit messages, documentation) are exemplary.
-                            </div>
+                <div class="section">
+                  <h3 class="section-title">Proof Timeline</h3>
+                  <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div class="card" style="padding: 16px;">
+                      <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                          <div style="font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 4px;">Frontend React — Search + Accessibility Pivot</div>
+                          <div style="font-size: 12px; color: #8899a6;">118 minutes • 18 commits • 342 LOC</div>
                         </div>
-
-                        <div class="fitfolio-tab-content" id="tab-ats-export">
-                            <div class="json-export">{
-  "candidate": "Sarah Chen",
-  "overall_score": 4.2,
-  "dimensions": {
-    "code_quality": 4.0,
-    "problem_solving": 4.5,
-    "testing": 4.0,
-    "ownership": 4.5
-  },
-  "wideners": [
-    "Technical Writing",
-    "Product Sense"
-  ],
-  "proofs_completed": 3,
-  "last_updated": "2024-01-15T14:32:00Z",
-  "rubric_id": "frontend-react-v2",
-  "verified": true,
-  "identity_method": "Loom"
-}</div>
+                        <div style="text-align: right;">
+                          <div style="font-size: 16px; font-weight: 700; color: #3b82f6;">4.2/5</div>
+                          <div style="font-size: 12px; color: #8899a6;">Feb 2026</div>
                         </div>
-
-                        <div class="fitfolio-tab-content" id="tab-portfolio">
-                            <div class="portfolio-info">
-                                <p><strong>FitFolio</strong> is your portable proof of craft. It includes:</p>
-                                <ul style="margin-left: 20px; margin-top: 12px;">
-                                    <li>Your verified scores across all dimensions</li>
-                                    <li>Video recording of your problem-solving process</li>
-                                    <li>Your final submission code and tests</li>
-                                    <li>Detailed feedback from our curators</li>
-                                </ul>
-                                <p style="margin-top: 16px;">You own this forever. Share it with other companies, link to it from your portfolio, or keep it private — you decide.</p>
-                            </div>
-                        </div>
+                      </div>
                     </div>
+                    <div class="card" style="padding: 16px;">
+                      <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                          <div style="font-size: 14px; font-weight: 600; color: #f0f4f8; margin-bottom: 4px;">API Design — REST + GraphQL</div>
+                          <div style="font-size: 12px; color: #8899a6;">90 minutes • 14 commits • 280 LOC</div>
+                        </div>
+                        <div style="text-align: right;">
+                          <div style="font-size: 16px; font-weight: 700; color: #3b82f6;">4.0/5</div>
+                          <div style="font-size: 12px; color: #8899a6;">Jan 2026</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <div class="fairness-banner">
-                <strong>✓ Fairness Audited</strong> — Rubrics published, anonymized-by-default, adverse impact monitored (80% rule)
+        <!-- SCORING PAGE -->
+        <div class="page" id="page-scoring">
+          <div class="candidate-header">
+            <div class="candidate-info">
+              <div class="candidate-avatar">SC</div>
+              <div class="candidate-details">
+                <h3>Candidate #MH-2841</h3>
+                <p>Frontend React — Search + Accessibility Pivot</p>
+              </div>
             </div>
-        </section>
-
-        <!-- SLIDE 8: BRIDGE -->
-        <section class="slide">
-            <h2 style="font-size: 32px; margin-bottom: 30px; color: #f0f4f8;">What You Just Saw</h2>
-
-            <div class="bridge-recap">
-                <div class="recap-line">Three candidates, scored on the same rubric, under the same conditions.</div>
-                <div class="recap-line">Verified proof of craft — not résumé claims, not AI-generated code.</div>
-                <div class="recap-line">That replaces your first two interview rounds.</div>
-            </div>
-
-            <table class="bridge-grid">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Traditional Screening</th>
-                        <th>MendelHire</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Resume Screening</strong></td>
-                        <td class="bridge-col-traditional">30 seconds × 200 candidates = 100 hours + high false-positive rate</td>
-                        <td class="bridge-col-mendel">Pre-screened FitFolio shortlist with verified craft signals</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Take-Home Test</strong></td>
-                        <td class="bridge-col-traditional">Unpaid, 3-5 day turnaround, 40% completion rate, bias toward unemployed</td>
-                        <td class="bridge-col-mendel">Paid 120-min proof, 80%+ completion rate, identity-verified</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Interview Rounds</strong></td>
-                        <td class="bridge-col-traditional">1 hour × 3 interviewers per candidate = 12 person-hours per hire</td>
-                        <td class="bridge-col-mendel">1-2 rounds after FitFolio review, with proven signals</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="bridge-cta">Ready to see what this means for your team?</div>
-        </section>
-
-        <!-- SLIDE 9: CLOSE -->
-        <section class="slide">
-            <h2 style="font-size: 32px; margin-bottom: 30px; color: #f0f4f8;">Start Your Pilot</h2>
-
-            <div class="pricing-cards">
-                <div class="pricing-card">
-                    <div class="pricing-title">Shortlist Plan</div>
-                    <div class="pricing-price">$2,000/mo</div>
-                    <div class="pricing-description">Best for focused hiring</div>
-                    <ul class="pricing-features">
-                        <li>Up to 5 proof cycles</li>
-                        <li>Dashboard access</li>
-                        <li>Dedicated curator</li>
-                    </ul>
-                    <div class="pricing-note">Founding employer rates — limited availability</div>
+            <span class="badge badge-primary">READY FOR REVIEW</span>
+          </div>
+          <div class="scoring-container">
+            <div class="scoring-column">
+              <div class="scoring-section">
+                <h3 class="scoring-title">Stack Dimensions</h3>
+                <div class="dimension">
+                  <div class="dimension-label">Correctness & Edge Cases</div>
+                  <div class="dimension-desc">Does the code handle expected and edge-case inputs correctly?</div>
+                  <div class="slider-container">
+                    <input type="range" min="1" max="5" value="4" class="slider score-slider">
+                    <span class="slider-value">4</span>
+                  </div>
                 </div>
-
-                <div class="pricing-card">
-                    <div class="pricing-title">Per-Proof</div>
-                    <div class="pricing-price">$500</div>
-                    <div class="pricing-description">Best for testing the model</div>
-                    <ul class="pricing-features">
-                        <li>Single proof cycle</li>
-                        <li>Full FitFolio delivery</li>
-                        <li>ATS integration</li>
-                    </ul>
-                    <div class="pricing-note">Founding employer rates — limited availability</div>
+                <div class="dimension">
+                  <div class="dimension-label">Accessibility Quality</div>
+                  <div class="dimension-desc">Are ARIA labels meaningful? Does keyboard nav work?</div>
+                  <div class="slider-container">
+                    <input type="range" min="1" max="5" value="5" class="slider score-slider">
+                    <span class="slider-value">5</span>
+                  </div>
                 </div>
+                <div class="dimension">
+                  <div class="dimension-label">Code/Analysis Clarity</div>
+                  <div class="dimension-desc">Is the code readable, well-structured, documented?</div>
+                  <div class="slider-container">
+                    <input type="range" min="1" max="5" value="4" class="slider score-slider">
+                    <span class="slider-value">4</span>
+                  </div>
+                </div>
+              </div>
+              <div class="scoring-section">
+                <h3 class="scoring-title">Trait Dimensions</h3>
+                <div class="dimension">
+                  <div class="dimension-label">Ownership</div>
+                  <div class="dimension-desc">Did the candidate follow instructions and handle the pivot?</div>
+                  <div class="slider-container">
+                    <input type="range" min="1" max="5" value="4" class="slider score-slider">
+                    <span class="slider-value">4</span>
+                  </div>
+                </div>
+                <div class="dimension">
+                  <div class="dimension-label">Problem-Solving</div>
+                  <div class="dimension-desc">Were tradeoffs surfaced and decisions explained?</div>
+                  <div class="slider-container">
+                    <input type="range" min="1" max="5" value="4" class="slider score-slider">
+                    <span class="slider-value">4</span>
+                  </div>
+                </div>
+                <div class="dimension">
+                  <div class="dimension-label">Communication</div>
+                  <div class="dimension-desc">Is the README clear? Is the Loom walkthrough coherent?</div>
+                  <div class="slider-container">
+                    <input type="range" min="1" max="5" value="5" class="slider score-slider">
+                    <span class="slider-value">5</span>
+                  </div>
+                </div>
+              </div>
+              <div class="scoring-section">
+                <h3 class="scoring-title">Widener Scores</h3>
+                <div class="dimension">
+                  <div class="dimension-label">Product Sense</div>
+                  <div class="dimension-desc">Did they define success metrics and consider user scenarios?</div>
+                  <div class="slider-container">
+                    <input type="range" min="1" max="5" value="4" class="slider score-slider">
+                    <span class="slider-value">4</span>
+                  </div>
+                </div>
+                <div class="dimension">
+                  <div class="dimension-label">Communication & Documentation</div>
+                  <div class="dimension-desc">Is the README written for a new teammate?</div>
+                  <div class="slider-container">
+                    <input type="range" min="1" max="5" value="5" class="slider score-slider">
+                    <span class="slider-value">5</span>
+                  </div>
+                </div>
+              </div>
             </div>
+            <div class="scoring-column">
+              <div class="scoring-section">
+                <h3 class="scoring-title">AI Pre-Score Comparison</h3>
+                <p style="font-size: 13px; color: #8899a6; margin-bottom: 20px;">Compare your scores vs. AI's initial assessment.</p>
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                  <div class="comparison-row">
+                    <div class="comparison-label">Correctness</div>
+                    <div class="comparison-bars">
+                      <div class="bar-your" style="width: 80%;">4</div>
+                      <div class="bar-ai" style="width: 60%;">3</div>
+                    </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">Accessibility</div>
+                    <div class="comparison-bars">
+                      <div class="bar-your" style="width: 100%;">5</div>
+                      <div class="bar-ai" style="width: 80%;">4</div>
+                    </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">Code Clarity</div>
+                    <div class="comparison-bars">
+                      <div class="bar-your" style="width: 80%;">4</div>
+                      <div class="bar-ai" style="width: 80%;">4</div>
+                    </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">Ownership</div>
+                    <div class="comparison-bars">
+                      <div class="bar-your" style="width: 80%;">4</div>
+                      <div class="bar-ai" style="width: 80%;">4</div>
+                    </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">Problem-Solving</div>
+                    <div class="comparison-bars">
+                      <div class="bar-your" style="width: 80%;">4</div>
+                      <div class="bar-ai" style="width: 60%;">3</div>
+                    </div>
+                  </div>
+                  <div class="comparison-row">
+                    <div class="comparison-label">Communication</div>
+                    <div class="comparison-bars">
+                      <div class="bar-your" style="width: 100%;">5</div>
+                      <div class="bar-ai" style="width: 80%;">4</div>
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #1e2d3d;">
+                  <div style="font-size: 13px; font-weight: 600; color: #8899a6; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 12px;">Overall Score</div>
+                  <div style="display: flex; align-items: baseline; gap: 16px;">
+                    <div style="font-size: 28px; font-weight: 700; color: #3b82f6;">4.2<span style="font-size: 18px; color: #8899a6;">/5</span></div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-gold" id="generateFitfolioBtn" style="width: 100%; padding: 16px; font-size: 15px;">Generate FitFolio →</button>
+            </div>
+          </div>
+        </div>
 
-            <div class="roi-box">
-                <strong>The Math:</strong> If one FitFolio shortlist saves you two interview rounds across three candidates, that's ~36 hours of engineering time back. At a $150/hr blended rate, that's $5,400 in value — from a single proof cycle.
+        <!-- SETTINGS PAGE -->
+        <div class="page" id="page-settings">
+          <div class="section" style="max-width: 800px;">
+            <h3 class="section-title">Team Members</h3>
+            <div class="card">
+              <div style="display: flex; align-items: center; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid #1e2d3d;">
+                <div style="width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">CA</div>
+                <div>
+                  <div style="font-size: 14px; font-weight: 600; color: #f0f4f8;">Charbel Atala</div>
+                  <div style="font-size: 12px; color: #8899a6;">Admin • Talent Gurus</div>
+                </div>
+                <div style="margin-left: auto; font-size: 12px; color: #8899a6;">you@example.com</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid #1e2d3d;">
+                <div style="width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, #4ecdc4, #3b82f6); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px;">MJ</div>
+                <div>
+                  <div style="font-size: 14px; font-weight: 600; color: #f0f4f8;">Maya Johnson</div>
+                  <div style="font-size: 12px; color: #8899a6;">Reviewer • Talent Gurus</div>
+                </div>
+                <div style="margin-left: auto; font-size: 12px; color: #8899a6;">maya@example.com</div>
+              </div>
             </div>
-
-            <div class="trust-badges">
-                <div class="trust-badge">Rubric-published</div>
-                <div class="trust-badge">Fairness audited</div>
-                <div class="trust-badge">SOC 2 in progress</div>
-                <div class="trust-badge">Candidate-first design</div>
+          </div>
+          <div class="section" style="max-width: 800px;">
+            <h3 class="section-title">Integrations</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+              <div class="card">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                  <span style="font-size: 24px;">🐙</span>
+                  <div style="flex: 1;">
+                    <div style="font-size: 14px; font-weight: 600; color: #f0f4f8;">GitHub OAuth</div>
+                    <div style="font-size: 12px; color: #8899a6;">Connect repos</div>
+                  </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #4ecdc4; font-weight: 600;">
+                  ✓ Connected
+                </div>
+              </div>
+              <div class="card">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                  <span style="font-size: 24px;">💳</span>
+                  <div style="flex: 1;">
+                    <div style="font-size: 14px; font-weight: 600; color: #f0f4f8;">Stripe Payouts</div>
+                    <div style="font-size: 12px; color: #8899a6;">Send stipends</div>
+                  </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #4ecdc4; font-weight: 600;">
+                  ✓ Connected
+                </div>
+              </div>
             </div>
-
-            <div class="testimonial">
-                "This is what I've been looking for — proof that the work is real, not just another score."
-                <div class="testimonial-attribution">— Engineering Leader, Series B Startup</div>
-            </div>
-
-            <div class="final-note">
-                What you're seeing is a live interactive demo, not slides. We build products, not decks.
-            </div>
-        </section>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Navigation Bar -->
-    <div class="nav-bar">
-        <button class="nav-arrow" id="prevBtn">◀</button>
-        <div class="nav-dots" id="navDots"></div>
-        <button class="nav-arrow" id="nextBtn">▶</button>
+  <!-- MODALS -->
+  <div class="modal-overlay" id="createChallengeModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span>Create New Challenge</span>
+        <button class="modal-close" id="closeModalBtn">✕</button>
+      </div>
+      <form id="challengeForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Challenge Title</label>
+            <input type="text" class="form-input" placeholder="e.g., Frontend React — Search Component">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stack Tags</label>
+            <input type="text" class="form-input" placeholder="e.g., React, TypeScript">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Time Cap</label>
+            <select class="form-select">
+              <option>90 minutes</option>
+              <option selected>120 minutes</option>
+              <option>150 minutes</option>
+              <option>180 minutes</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stipend</label>
+            <select class="form-select">
+              <option selected>$100</option>
+              <option>$150</option>
+              <option>$200</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Brief</label>
+          <textarea class="form-textarea" placeholder="Describe the challenge briefly..."></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+          <button type="button" class="btn-primary">Save Challenge</button>
+        </div>
+      </form>
     </div>
-
-    <!-- Speaker Notes -->
-    <div class="speaker-notes" id="speakerNotes"></div>
-
-    <!-- Timer -->
-    <div class="timer" id="timer"></div>
-
-    <script>
-        // ============ STATE ============
-        let currentSlide = 0;
-        const slides = [
-            'Title',
-            'Problem',
-            'Proof',
-            'Solution',
-            'Roles',
-            'Scoring',
-            'Dashboard',
-            'Bridge',
-            'Close'
-        ];
-
-        let speakerNotesVisible = false;
-        let timerVisible = false;
-        let elapsedSeconds = 0;
-        let timerInterval = null;
-        let proofSimulationActive = false;
-        let proofSimulationPaused = false;
-        let proofTime = 0;
-        let selectedWideners = [];
-
-        const speakerNotesMap = {
-            0: "Open strong. This is the proof-first moment. Click 'Begin Demo' to move forward.",
-            1: "Problem narrative: AI is flooding the market. Our solution is verification + constraints + pivot testing. Ask if they've seen this in their pipeline.",
-            2: "Live proof. Commit timeline shows real work over 120 minutes. Pivot at 60 min separates skill from memorization. Watch the timeline.",
-            3: "MendelHire's three pillars: verified proof, adaptive signal, rubric-scored. Fairness is built in — no post-hoc fixes.",
-            4: "Role builder is powered. Different roles, different challenges, but same rubric structure. Wideners add depth.",
-            5: "Scoring demo. User controls quality/solving/testing/ownership. When they click Compare, show the AI divergence — humans weight approach, AI weights ownership.",
-            6: "FitFolio is the portfolio. Candidates own this forever. Anonymized toggle respects privacy. Three tabs: hiring manager summary, ATS export, portfolio info.",
-            7: "Bridge: connects what they saw (FitFolio shortlist) to what they do (interviews). One shortlist replaces hours of screening.",
-            8: "Close with ROI and social proof. Founding rates. Contact is outside this demo — that's a CRM moment."
-        };
-
-        // ============ INITIALIZATION ============
-        function init() {
-            createNavDots();
-            attachEventListeners();
-            updateSlide();
-            initProofSimulation();
-            initScoringSliders();
-            initRoleBuilder();
-            initDashboard();
-        }
-
-        function createNavDots() {
-            const navDotsContainer = document.getElementById('navDots');
-            slides.forEach((label, index) => {
-                const dot = document.createElement('button');
-                dot.className = 'nav-dot';
-                if (index === 0) dot.classList.add('active');
-                dot.textContent = label;
-                dot.addEventListener('click', () => goToSlide(index));
-                navDotsContainer.appendChild(dot);
-            });
-        }
-
-        function attachEventListeners() {
-            // Navigation
-            document.getElementById('prevBtn').addEventListener('click', prevSlide);
-            document.getElementById('nextBtn').addEventListener('click', nextSlide);
-
-            // Keyboard
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowLeft') prevSlide();
-                if (e.key === 'ArrowRight') nextSlide();
-                if (e.key === 'n' || e.key === 'N') toggleSpeakerNotes();
-                if (e.key === 'p' || e.key === 'P') toggleProspectMode();
-                if (e.key === 'Escape') closeModal();
-            });
-
-            // Buttons
-            document.querySelectorAll('[data-next-slide]').forEach(btn => {
-                btn.addEventListener('click', nextSlide);
-            });
-        }
-
-        function updateSlide() {
-            const allSlides = document.querySelectorAll('.slide');
-            allSlides.forEach((slide, index) => {
-                slide.classList.toggle('active', index === currentSlide);
-            });
-
-            const dots = document.querySelectorAll('.nav-dot');
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSlide);
-            });
-
-            updateSpeakerNotes();
-        }
-
-        function goToSlide(index) {
-            currentSlide = Math.max(0, Math.min(index, slides.length - 1));
-            updateSlide();
-        }
-
-        function nextSlide() {
-            goToSlide(currentSlide + 1);
-        }
-
-        function prevSlide() {
-            goToSlide(currentSlide - 1);
-        }
-
-        function updateSpeakerNotes() {
-            const notes = document.getElementById('speakerNotes');
-            notes.textContent = speakerNotesMap[currentSlide] || '';
-        }
-
-        function toggleSpeakerNotes() {
-            speakerNotesVisible = !speakerNotesVisible;
-            const notes = document.getElementById('speakerNotes');
-            notes.classList.toggle('visible', speakerNotesVisible);
-        }
-
-        function toggleProspectMode() {
-            timerVisible = !timerVisible;
-            const timer = document.getElementById('timer');
-            timer.classList.toggle('visible', timerVisible);
-        }
-
-        // ============ PROOF SIMULATION ============
-        const commits = [
-            { time: 3, message: 'Initial setup: React + TypeScript scaffold' },
-            { time: 12, message: 'feat: basic input with onChange handler' },
-            { time: 24, message: 'feat: implement debounce utility (300ms)' },
-            { time: 31, message: 'feat: connect filter to list rendering' },
-            { time: 42, message: 'test: unit tests for debounce behavior' },
-            { time: 51, message: 'feat: keyboard nav (arrow keys + Enter)' },
-            { time: 58, message: 'refactor: extract FilterContext' },
-            { time: 60, message: '⚡ PIVOT — add fuzzy matching with typo tolerance', isPivot: true },
-            { time: 62, message: 'feat: research fuzzy matching approaches' },
-            { time: 68, message: 'feat: implement Levenshtein distance' },
-            { time: 75, message: 'feat: integrate fuzzy into filter pipeline' },
-            { time: 82, message: 'fix: empty input returns full list' },
-            { time: 90, message: 'test: fuzzy matching test suite' },
-            { time: 98, message: 'docs: README with architecture decisions' },
-            { time: 108, message: 'refactor: optimize for large lists' },
-            { time: 115, message: 'feat: loading state + error boundary' },
-            { time: 119, message: 'final: cleanup, lint, submission ready' }
-        ];
-
-        let displayedCommits = [];
-
-        function initProofSimulation() {
-            document.getElementById('startSimulation').addEventListener('click', startSimulation);
-            document.getElementById('pauseButton').addEventListener('click', togglePause);
-            document.getElementById('resetButton').addEventListener('click', resetSimulation);
-        }
-
-        function startSimulation() {
-            const preflight = document.getElementById('proofPreflight');
-            const active = document.getElementById('proofActive');
-            const complete = document.getElementById('proofComplete');
-
-            preflight.style.display = 'none';
-            active.classList.add('visible');
-            complete.classList.remove('visible');
-
-            proofSimulationActive = true;
-            proofSimulationPaused = false;
-            proofTime = 0;
-            displayedCommits = [];
-            document.getElementById('commitFeed').innerHTML = '';
-
-            runSimulation();
-        }
-
-        function runSimulation() {
-            const interval = setInterval(() => {
-                if (proofSimulationPaused) return;
-
-                proofTime += 0.4; // 120 min in ~30 seconds for demo pacing
-
-                if (proofTime >= 120) {
-                    proofTime = 120;
-                    clearInterval(interval);
-                    completeSimulation();
-                    return;
-                }
-
-                updateProofUI();
-                addCommitsForTime();
-            }, 100);
-        }
-
-        function updateProofUI() {
-            const progress = (proofTime / 120) * 100;
-            document.getElementById('timelineFill').style.width = progress + '%';
-            document.getElementById('timeRemaining').textContent = Math.max(0, Math.ceil(120 - proofTime));
-
-            const commitCount = commits.filter(c => c.time <= proofTime).length;
-            document.getElementById('commitCount').textContent = commitCount;
-
-            const linesPerCommit = 20 + Math.random() * 30;
-            const linesChanged = Math.ceil(commitCount * linesPerCommit);
-            document.getElementById('linesChanged').textContent = linesChanged;
-
-            const coverage = (commitCount / commits.length) * 100;
-            document.getElementById('testCoverage').style.width = coverage + '%';
-            document.getElementById('testPercent').textContent = Math.round(coverage) + '%';
-
-            // Add commit dots
-            commits.forEach(commit => {
-                if (commit.time <= proofTime) {
-                    const existing = document.querySelector(`[data-commit-time="${commit.time}"]`);
-                    if (!existing) {
-                        const dot = document.createElement('div');
-                        dot.className = 'timeline-commit-dot';
-                        dot.setAttribute('data-commit-time', commit.time);
-                        const dotProgress = (commit.time / 120) * 100;
-                        dot.style.left = dotProgress + '%';
-                        document.getElementById('timelineTrack').appendChild(dot);
-                    }
-                }
-            });
-        }
-
-        function addCommitsForTime() {
-            commits.forEach(commit => {
-                if (commit.time <= proofTime && !displayedCommits.includes(commit.time)) {
-                    displayedCommits.push(commit.time);
-                    const feed = document.getElementById('commitFeed');
-                    const line = document.createElement('div');
-                    line.className = 'commit-line' + (commit.isPivot ? ' pivot' : '');
-                    line.innerHTML = `<span class="commit-time">${Math.floor(commit.time)}m</span>${commit.message}`;
-                    feed.appendChild(line);
-                    feed.scrollTop = feed.scrollHeight;
-                }
-            });
-        }
-
-        function completeSimulation() {
-            proofSimulationActive = false;
-            const active = document.getElementById('proofActive');
-            const complete = document.getElementById('proofComplete');
-            active.classList.remove('visible');
-            complete.classList.add('visible');
-        }
-
-        function togglePause() {
-            proofSimulationPaused = !proofSimulationPaused;
-            const btn = document.getElementById('pauseButton');
-            btn.textContent = proofSimulationPaused ? 'Resume' : 'Pause';
-        }
-
-        function resetSimulation() {
-            proofSimulationActive = false;
-            proofTime = 0;
-            displayedCommits = [];
-            document.getElementById('commitFeed').innerHTML = '';
-            document.getElementById('timelineFill').style.width = '0%';
-            document.getElementById('timeRemaining').textContent = '120';
-            document.getElementById('commitCount').textContent = '0';
-            document.getElementById('linesChanged').textContent = '0';
-            document.getElementById('testCoverage').style.width = '0%';
-            document.getElementById('testPercent').textContent = '0%';
-            document.querySelectorAll('.timeline-commit-dot').forEach(dot => dot.remove());
-
-            const preflight = document.getElementById('proofPreflight');
-            const active = document.getElementById('proofActive');
-            const complete = document.getElementById('proofComplete');
-
-            preflight.style.display = 'grid';
-            active.classList.remove('visible');
-            complete.classList.remove('visible');
-
-            document.getElementById('pauseButton').textContent = 'Pause';
-        }
-
-        // ============ SCORING SLIDERS ============
-        function initScoringSliders() {
-            document.querySelectorAll('.scoring-slider').forEach(slider => {
-                slider.addEventListener('input', (e) => {
-                    const metric = e.target.dataset.metric;
-                    const value = parseFloat(e.target.value);
-                    document.querySelector(`[data-display="${metric}"]`).textContent = value.toFixed(1);
-                    updateComparisonDisplay();
-                });
-            });
-
-            document.getElementById('compareButton').addEventListener('click', () => {
-                const panel = document.getElementById('comparisonPanel');
-                panel.classList.toggle('visible');
-                if (panel.classList.contains('visible')) {
-                    updateComparisonDisplay();
-                }
-            });
-        }
-
-        function updateComparisonDisplay() {
-            const userQuality = parseFloat(document.querySelector('[data-metric="quality"]').value);
-            const userSolving = parseFloat(document.querySelector('[data-metric="solving"]').value);
-            const userTesting = parseFloat(document.querySelector('[data-metric="testing"]').value);
-            const userOwnership = parseFloat(document.querySelector('[data-metric="ownership"]').value);
-
-            const aiQuality = 3.5;
-            const aiSolving = 4.0;
-            const aiTesting = 3.0;
-            const aiOwnership = 4.5;
-
-            // Quality
-            document.getElementById('aiQualityBar').style.width = (aiQuality / 5) * 100 + '%';
-            document.getElementById('userQualityBar').style.width = (userQuality / 5) * 100 + '%';
-            document.getElementById('aiQualityVal').textContent = aiQuality.toFixed(1);
-            document.getElementById('userQualityVal').textContent = userQuality.toFixed(1);
-
-            // Solving
-            document.getElementById('aiSolvingBar').style.width = (aiSolving / 5) * 100 + '%';
-            document.getElementById('userSolvingBar').style.width = (userSolving / 5) * 100 + '%';
-            document.getElementById('aiSolvingVal').textContent = aiSolving.toFixed(1);
-            document.getElementById('userSolvingVal').textContent = userSolving.toFixed(1);
-
-            // Testing
-            document.getElementById('aiTestingBar').style.width = (aiTesting / 5) * 100 + '%';
-            document.getElementById('userTestingBar').style.width = (userTesting / 5) * 100 + '%';
-            document.getElementById('aiTestingVal').textContent = aiTesting.toFixed(1);
-            document.getElementById('userTestingVal').textContent = userTesting.toFixed(1);
-
-            // Ownership
-            document.getElementById('aiOwnershipBar').style.width = (aiOwnership / 5) * 100 + '%';
-            document.getElementById('userOwnershipBar').style.width = (userOwnership / 5) * 100 + '%';
-            document.getElementById('aiOwnershipVal').textContent = aiOwnership.toFixed(1);
-            document.getElementById('userOwnershipVal').textContent = userOwnership.toFixed(1);
-        }
-
-        // ============ ROLE BUILDER ============
-        const roleConfigs = {
-            frontend: {
-                keywords: ['react', 'frontend', 'ui', 'css', 'next', 'vue', 'angular'],
-                title: 'Build a Real-Time Dashboard Component',
-                criteria: [
-                    'Render live data updates without flickering',
-                    'Implement efficient re-rendering with memoization',
-                    'Handle edge cases (missing data, null values)',
-                    'Support keyboard and screen-reader navigation'
-                ],
-                difficulty: 'This tests React fundamentals, performance optimization, and accessibility — signals we care about.'
-            },
-            backend: {
-                keywords: ['backend', 'api', 'python', 'node', 'go', 'java', 'server'],
-                title: 'Design a Scalable Authentication Service',
-                criteria: [
-                    'Implement OAuth 2.0 with multiple provider support',
-                    'Handle session management and token refresh',
-                    'Design for horizontal scaling across regions',
-                    'Demonstrate security considerations (timing attacks, token entropy)'
-                ],
-                difficulty: 'This tests systems thinking, security awareness, and production readiness.'
-            },
-            data: {
-                keywords: ['data', 'analytics', 'ml', 'machine learning', 'etl', 'sql'],
-                title: 'Build a Data Pipeline for Real-Time Analytics',
-                criteria: [
-                    'Ingest streaming data from multiple sources',
-                    'Implement fault tolerance and exactly-once semantics',
-                    'Design aggregation windows and backpressure handling',
-                    'Monitor data quality and pipeline health'
-                ],
-                difficulty: 'This tests distributed systems knowledge, operational thinking, and data quality mindset.'
-            },
-            fullstack: {
-                keywords: ['fullstack', 'full-stack', 'full stack'],
-                title: 'Build a Collaborative Document Editor',
-                criteria: [
-                    'Implement real-time sync with operational transformation',
-                    'Design conflict resolution and undo/redo',
-                    'Optimize for latency and offline support',
-                    'Demonstrate testing across client and server'
-                ],
-                difficulty: 'This tests architectural decision-making across the stack.'
-            }
-        };
-
-        function initRoleBuilder() {
-            const input = document.getElementById('roleInput');
-            let debounceTimer;
-
-            input.addEventListener('input', (e) => {
-                clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(() => {
-                    generateChallenge(e.target.value);
-                }, 300);
-            });
-
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    clearTimeout(debounceTimer);
-                    generateChallenge(e.target.value);
-                }
-            });
-
-            document.querySelectorAll('.chip').forEach(chip => {
-                chip.addEventListener('click', () => {
-                    const widener = chip.dataset.widener;
-                    if (chip.classList.contains('selected')) {
-                        chip.classList.remove('selected');
-                        selectedWideners = selectedWideners.filter(w => w !== widener);
-                    } else if (selectedWideners.length < 2) {
-                        chip.classList.add('selected');
-                        selectedWideners.push(widener);
-                    }
-                });
-            });
-        }
-
-        function generateChallenge(role) {
-            const roleInput = role.toLowerCase().trim();
-            if (!roleInput) {
-                document.getElementById('challengeOutput').innerHTML = '';
-                document.getElementById('widenersSection').style.display = 'none';
-                return;
-            }
-
-            let config = roleConfigs.default;
-            for (const [type, cfg] of Object.entries(roleConfigs)) {
-                if (type !== 'default' && cfg.keywords.some(kw => roleInput.includes(kw))) {
-                    config = cfg;
-                    break;
-                }
-            }
-
-            const challengeHtml = `
-                <div class="challenge-card">
-                    <div class="challenge-title">${config.title}</div>
-                    <ul class="challenge-criteria">
-                        <li>${config.criteria[0]}</li>
-                        <li>${config.criteria[1]}</li>
-                        <li>${config.criteria[2]}</li>
-                        <li>${config.criteria[3]}</li>
-                    </ul>
-                    <div class="challenge-meta">
-                        <div><strong>Time</strong> 120 minutes</div>
-                        <div><strong>Stipend</strong> $100</div>
-                    </div>
-                    <p style="margin-top: 20px; font-size: 13px; color: #8899a6; font-style: italic;">${config.difficulty}</p>
-                </div>
-            `;
-
-            document.getElementById('challengeOutput').innerHTML = challengeHtml;
-            document.getElementById('widenersSection').style.display = 'block';
-        }
-
-        // ============ DASHBOARD ============
-        function initDashboard() {
-            // Anonymize toggle
-            document.getElementById('anonToggle').addEventListener('click', toggleAnonymize);
-
-            // Candidate cards
-            document.querySelectorAll('.candidate-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const candidateId = card.dataset.candidateId;
-                    openFitfolio(candidateId);
-                });
-            });
-
-            // Modal tabs
-            document.querySelectorAll('.fitfolio-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabName = tab.dataset.tab;
-                    switchTab(tabName);
-                });
-            });
-
-            // Close modal
-            document.getElementById('closeModal').addEventListener('click', closeModal);
-
-            // Overlay click
-            document.getElementById('overlay').addEventListener('click', (e) => {
-                if (e.target === document.getElementById('overlay')) {
-                    closeModal();
-                }
-            });
-        }
-
-        function toggleAnonymize() {
-            const toggle = document.getElementById('anonToggle');
-            const isAnon = toggle.classList.toggle('checked');
-
-            const names = {
-                1: isAnon ? 'Candidate A' : 'Sarah Chen',
-                2: isAnon ? 'Candidate B' : 'Marcus Johnson',
-                3: isAnon ? 'Candidate C' : 'Priya Patel'
-            };
-
-            document.querySelectorAll('.candidate-name').forEach((nameEl, idx) => {
-                nameEl.textContent = names[idx + 1];
-            });
-
-            if (document.getElementById('fitfolioName').textContent) {
-                const currentId = document.querySelector('.candidate-card[data-candidate-id]').dataset.candidateId;
-                const modalName = isAnon ? 'Candidate ' + String.fromCharCode(64 + parseInt(currentId)) : names[currentId];
-                document.getElementById('fitfolioName').textContent = modalName;
-            }
-        }
-
-        function openFitfolio(candidateId) {
-            const candidates = {
-                1: { name: 'Sarah Chen', quality: 4.0, solving: 4.5, testing: 4.0, ownership: 4.5 },
-                2: { name: 'Marcus Johnson', quality: 4.0, solving: 3.5, testing: 3.5, ownership: 4.0 },
-                3: { name: 'Priya Patel', quality: 4.5, solving: 4.5, testing: 4.5, ownership: 4.5 }
-            };
-
-            const candidate = candidates[candidateId];
-            const isAnon = document.getElementById('anonToggle').classList.contains('checked');
-            const displayName = isAnon ? 'Candidate ' + String.fromCharCode(64 + parseInt(candidateId)) : candidate.name;
-
-            document.getElementById('fitfolioName').textContent = displayName;
-
-            // Update hiring manager tab
-            const scorePercents = {
-                quality: (candidate.quality / 5) * 100,
-                solving: (candidate.solving / 5) * 100,
-                testing: (candidate.testing / 5) * 100,
-                ownership: (candidate.ownership / 5) * 100
-            };
-
-            document.getElementById('hm-quality').style.width = scorePercents.quality + '%';
-            document.getElementById('hm-solving').style.width = scorePercents.solving + '%';
-            document.getElementById('hm-testing').style.width = scorePercents.testing + '%';
-            document.getElementById('hm-ownership').style.width = scorePercents.ownership + '%';
-
-            document.getElementById('hm-quality-val').textContent = candidate.quality.toFixed(1);
-            document.getElementById('hm-solving-val').textContent = candidate.solving.toFixed(1);
-            document.getElementById('hm-testing-val').textContent = candidate.testing.toFixed(1);
-            document.getElementById('hm-ownership-val').textContent = candidate.ownership.toFixed(1);
-
-            // Show overlay
-            document.getElementById('overlay').classList.add('visible');
-
-            // Reset to first tab
-            switchTab('hiring-manager');
-        }
-
-        function switchTab(tabName) {
-            document.querySelectorAll('.fitfolio-tab').forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.tab === tabName);
-            });
-
-            document.querySelectorAll('.fitfolio-tab-content').forEach(content => {
-                content.classList.toggle('active', content.id === 'tab-' + tabName);
-            });
-        }
-
-        function closeModal() {
-            document.getElementById('overlay').classList.remove('visible');
-        }
-
-        // ============ TIMER ============
-        function startTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                if (timerVisible) {
-                    elapsedSeconds++;
-                    const mins = Math.floor(elapsedSeconds / 60);
-                    const secs = elapsedSeconds % 60;
-                    document.getElementById('timer').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
-                }
-            }, 1000);
-        }
-
-        // ============ STARTUP ============
-        document.addEventListener('DOMContentLoaded', () => {
-            init();
-            startTimer();
+  </div>
+
+  <div class="modal-overlay" id="fitfolioSuccessModal">
+    <div class="modal">
+      <div class="success-modal">
+        <div class="success-icon">✓</div>
+        <h2>FitFolio Generated</h2>
+        <p>FitFolio for Candidate #MH-2841 has been generated and is now available in the Candidates pipeline.</p>
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button class="btn-secondary" id="closeFitfolioSuccess">Close</button>
+          <button class="btn-primary">View in Pipeline →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const appState = {
+      currentPage: 'dashboard',
+      sidebarCollapsed: false,
+      anonMode: true,
+      sessionRunning: false,
+      proofTime: 0,
+      totalProofTime: 120,
+    };
+
+    const candidates = [
+      { id: 'MH-2841', name: 'Sarah Chen', challenge: 'Frontend React', status: 'FitFolio Ready', score: 4.2, wideners: ['Product Sense', 'Communication'], stack: 3, verified: true, avatar: 'SC' },
+      { id: 'MH-2842', name: 'Marcus Johnson', challenge: 'Frontend React', status: 'Scored', score: 3.8, wideners: ['Collaboration', 'Diagnostics'], stack: 1, verified: true, avatar: 'MJ' },
+      { id: 'MH-2843', name: 'Priya Patel', challenge: 'Frontend React', status: 'In Progress', score: null, wideners: ['Customer Empathy', 'Communication'], stack: 2, verified: false, avatar: 'PP' },
+      { id: 'MH-2844', name: 'Alex Rivera', challenge: 'Data Python/SQL', status: 'FitFolio Ready', score: 4.5, wideners: ['Product Sense', 'Diagnostics'], stack: 2, verified: true, avatar: 'AR' },
+      { id: 'MH-2845', name: 'Jordan Lee', challenge: 'Frontend React', status: 'In Progress (Live)', score: null, wideners: ['Communication', 'Collaboration'], stack: 1, verified: false, avatar: 'JL' },
+    ];
+
+    const commits = [
+      { time: 3, msg: 'Initial setup: React + TypeScript scaffold', files: 5, lines: 120 },
+      { time: 8, msg: 'feat: product data model and seed data', files: 2, lines: 85 },
+      { time: 15, msg: 'feat: basic product list rendering', files: 3, lines: 92 },
+      { time: 22, msg: 'feat: search input with onChange handler', files: 2, lines: 48 },
+      { time: 28, msg: 'feat: implement debounce utility (300ms)', files: 1, lines: 24 },
+      { time: 35, msg: 'feat: connect search filter to list rendering', files: 2, lines: 56 },
+      { time: 42, msg: 'feat: add category filter dropdown', files: 3, lines: 71 },
+      { time: 48, msg: 'feat: compose search + category filters', files: 2, lines: 38 },
+      { time: 55, msg: 'test: unit tests for filter and debounce functions', files: 4, lines: 156 },
+      { time: 58, msg: 'refactor: extract FilterContext for state management', files: 3, lines: 72 },
+      { time: 60, msg: 'PIVOT: Add keyboard navigation and ARIA labels', files: 0, lines: 0, isPivot: true },
+      { time: 65, msg: 'feat: keyboard nav for product list (arrow keys + Enter)', files: 3, lines: 84 },
+      { time: 72, msg: 'feat: ARIA labels for search input and filter controls', files: 2, lines: 48 },
+      { time: 80, msg: 'feat: focus management and skip-to-content link', files: 2, lines: 62 },
+      { time: 88, msg: 'feat: screen reader announcements for filter results', files: 2, lines: 41 },
+      { time: 95, msg: 'test: accessibility audit with jest-axe', files: 2, lines: 68 },
+      { time: 105, msg: 'docs: update README with a11y decisions and tradeoffs', files: 1, lines: 94 },
+      { time: 115, msg: 'fix: edge case — empty search with active category filter', files: 1, lines: 18 },
+      { time: 118, msg: 'chore: final cleanup and Loom recording link', files: 2, lines: 12 },
+    ];
+
+    document.addEventListener('DOMContentLoaded', function() {
+      updateCurrentDate();
+      populateCandidateTable();
+      setupEventListeners();
+      initializeHash();
+    });
+
+    function initializeHash() {
+      const hash = window.location.hash.substring(1) || 'dashboard';
+      navigateToPage(hash);
+      window.addEventListener('hashchange', function() {
+        const hash = window.location.hash.substring(1) || 'dashboard';
+        navigateToPage(hash);
+      });
+    }
+
+    function navigateToPage(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const pageEl = document.getElementById(`page-${page}`);
+      if (pageEl) {
+        pageEl.classList.add('active');
+        appState.currentPage = page;
+        document.querySelectorAll('.nav-item').forEach(item => {
+          item.classList.remove('active');
+          if (item.dataset.page === page) {
+            item.classList.add('active');
+          }
         });
-    </script>
+        const titles = {
+          'dashboard': 'Dashboard',
+          'challenges': 'Challenges',
+          'live-session': 'Live Proof Session',
+          'candidates': 'Candidates',
+          'fitfolio': 'FitFolio',
+          'scoring': 'Scoring',
+          'settings': 'Settings',
+        };
+        document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
+      }
+    }
+
+    function updateCurrentDate() {
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const today = new Date().toLocaleDateString('en-US', options);
+      document.getElementById('currentDate').textContent = today;
+    }
+
+    function setupEventListeners() {
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function() {
+          const page = this.dataset.page;
+          window.location.hash = page;
+        });
+      });
+
+      document.getElementById('collapseToggle').addEventListener('click', function() {
+        const sidebar = document.getElementById('sidebar');
+        appState.sidebarCollapsed = !appState.sidebarCollapsed;
+        sidebar.classList.toggle('collapsed');
+      });
+
+      document.getElementById('createChallengeBtn').addEventListener('click', function() {
+        document.getElementById('createChallengeModal').classList.add('active');
+      });
+
+      document.getElementById('closeModalBtn').addEventListener('click', function() {
+        document.getElementById('createChallengeModal').classList.remove('active');
+      });
+
+      document.getElementById('cancelBtn').addEventListener('click', function() {
+        document.getElementById('createChallengeModal').classList.remove('active');
+      });
+
+      document.getElementById('startSessionBtn').addEventListener('click', startSession);
+      document.getElementById('resetSessionBtn').addEventListener('click', resetSession);
+
+      document.querySelectorAll('#fitfolioTabs .tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+          const tabName = this.dataset.tab;
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+          document.getElementById(`tab-${tabName}`).classList.add('active');
+        });
+      });
+
+      document.getElementById('generateFitfolioBtn').addEventListener('click', function() {
+        document.getElementById('fitfolioSuccessModal').classList.add('active');
+      });
+
+      document.getElementById('closeFitfolioSuccess').addEventListener('click', function() {
+        document.getElementById('fitfolioSuccessModal').classList.remove('active');
+      });
+
+      document.querySelectorAll('.score-slider').forEach(slider => {
+        slider.addEventListener('input', function() {
+          this.parentElement.querySelector('.slider-value').textContent = this.value;
+        });
+      });
+
+      document.getElementById('anonToggle').addEventListener('click', function() {
+        appState.anonMode = !appState.anonMode;
+        this.classList.toggle('active');
+        populateCandidateTable();
+      });
+
+      document.getElementById('createChallengeModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+        }
+      });
+
+      document.getElementById('fitfolioSuccessModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+        }
+      });
+    }
+
+    function populateCandidateTable() {
+      const tbody = document.getElementById('candidateBody');
+      tbody.innerHTML = '';
+      candidates.forEach(candidate => {
+        const row = document.createElement('tr');
+        const displayName = appState.anonMode ? candidate.id : candidate.name;
+        const statusBadge = { 'FitFolio Ready': 'badge-success', 'Scored': 'badge-primary', 'In Progress': 'badge-warning', 'In Progress (Live)': 'badge-warning' }[candidate.status] || 'badge-gray';
+        row.innerHTML = `
+          <td>${displayName}</td>
+          <td>${candidate.challenge}</td>
+          <td><span class="badge ${statusBadge}">${candidate.status}</span></td>
+          <td>${candidate.score ? `<strong>${candidate.score}/5</strong>` : '<span class="text-muted">—</span>'}</td>
+          <td><div style="display: flex; gap: 6px; flex-wrap: wrap;">${candidate.wideners.map(w => `<div class="stack-tag" style="font-size: 11px;">${w.split(' ')[0]}</div>`).join('')}</div></td>
+          <td>${candidate.stack}</td>
+          <td>${candidate.verified ? '<span class="badge badge-success">✓</span>' : '<span class="badge badge-warning">Pending</span>'}</td>
+          <td>${candidate.status === 'FitFolio Ready' ? `<button class="btn-secondary" style="padding: 6px 10px; font-size: 12px;" onclick="window.location.hash='fitfolio'">View</button>` : '—'}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function startSession() {
+      appState.sessionRunning = true;
+      appState.proofTime = 0;
+      document.getElementById('startSessionBtn').style.display = 'none';
+      document.getElementById('pauseSessionBtn').style.display = 'inline-block';
+      document.getElementById('commitFeed').innerHTML = '';
+
+      const tick = setInterval(() => {
+        if (appState.sessionRunning) {
+          appState.proofTime += 0.4;
+          const percent = (appState.proofTime / appState.totalProofTime) * 100;
+          document.getElementById('timelineProgress').style.width = percent + '%';
+          document.getElementById('timelineTime').textContent = Math.floor(appState.proofTime) + ' min';
+          const remaining = Math.max(0, appState.totalProofTime - appState.proofTime);
+          document.getElementById('timeRemaining').textContent = Math.round(remaining) + 'm';
+          const phase = appState.proofTime >= 60 ? 'Post-Pivot' : 'Pre-Pivot';
+          document.getElementById('phase').textContent = phase;
+          const displayedCommits = commits.filter(c => c.time <= appState.proofTime);
+          updateCommitFeed(displayedCommits);
+          document.getElementById('commitCount').textContent = displayedCommits.length;
+          const totalLines = displayedCommits.reduce((sum, c) => sum + c.lines, 0);
+          document.getElementById('linesChanged').textContent = totalLines;
+          let coverage = 0;
+          if (appState.proofTime > 55) coverage = Math.min(78, (appState.proofTime - 55) * 2.6);
+          document.getElementById('testCoverage').style.width = coverage + '%';
+          document.getElementById('testCoveragePercent').textContent = Math.round(coverage) + '%';
+          if (appState.proofTime >= appState.totalProofTime) {
+            clearInterval(tick);
+            appState.sessionRunning = false;
+            document.getElementById('pauseSessionBtn').style.display = 'none';
+            document.getElementById('startSessionBtn').style.display = 'inline-block';
+            showProofCompleted();
+          }
+        }
+      }, 100);
+
+      document.getElementById('pauseSessionBtn').addEventListener('click', function pauseClick() {
+        appState.sessionRunning = false;
+        this.textContent = 'Resume';
+        this.removeEventListener('click', pauseClick);
+        this.addEventListener('click', function resumeClick() {
+          appState.sessionRunning = true;
+          this.textContent = 'Pause';
+          this.removeEventListener('click', resumeClick);
+          this.addEventListener('click', pauseClick);
+        });
+      });
+    }
+
+    function resetSession() {
+      appState.sessionRunning = false;
+      appState.proofTime = 0;
+      document.getElementById('startSessionBtn').style.display = 'inline-block';
+      document.getElementById('pauseSessionBtn').style.display = 'none';
+      document.getElementById('pauseSessionBtn').textContent = 'Pause';
+      document.getElementById('commitFeed').innerHTML = '<div style="padding: 16px; text-align: center; color: #8899a6;">Click "Start Session" below to begin streaming commits...</div>';
+      document.getElementById('timelineProgress').style.width = '0%';
+      document.getElementById('timelineTime').textContent = '0 min';
+      document.getElementById('timeRemaining').textContent = '120m';
+      document.getElementById('phase').textContent = 'Pre-Pivot';
+      document.getElementById('commitCount').textContent = '0';
+      document.getElementById('linesChanged').textContent = '0';
+      document.getElementById('testCoverage').style.width = '0%';
+      document.getElementById('testCoveragePercent').textContent = '0%';
+    }
+
+    function updateCommitFeed(displayedCommits) {
+      const feed = document.getElementById('commitFeed');
+      feed.innerHTML = '';
+      displayedCommits.forEach(commit => {
+        const item = document.createElement('div');
+        item.className = 'commit-item' + (commit.isPivot ? ' pivot-marker' : '');
+        const statsText = !commit.isPivot ? `+${commit.lines} lines • ${commit.files} files` : '';
+        item.innerHTML = `
+          <div class="commit-marker"></div>
+          <div class="commit-content">
+            ${commit.isPivot ? '<div class="pivot-label">🔄 Pivot Triggered</div>' : ''}
+            <div class="commit-time">${commit.time}m</div>
+            <div class="commit-msg">${commit.msg}</div>
+            <div class="commit-stats">${statsText}</div>
+          </div>
+        `;
+        feed.appendChild(item);
+      });
+    }
+
+    function showProofCompleted() {
+      const feed = document.getElementById('commitFeed');
+      feed.innerHTML = `
+        <div style="padding: 32px; text-align: center; background: rgba(78, 205, 196, 0.1); border-radius: 8px;">
+          <div style="font-size: 48px; margin-bottom: 16px;">✓</div>
+          <div style="font-size: 18px; font-weight: 700; color: #f0f4f8; margin-bottom: 8px;">Proof Submitted</div>
+          <div style="font-size: 13px; color: #8899a6; margin-bottom: 24px;">All acceptance criteria met • Code verified • Identity confirmed</div>
+          <div class="verified-badge" style="display: inline-block; margin-bottom: 24px;">✓ VERIFIED CRAFT</div>
+          <button class="btn-primary" onclick="window.location.hash='scoring'">Proceed to Scoring →</button>
+        </div>
+      `;
+    }
+  </script>
 </body>
 </html>
