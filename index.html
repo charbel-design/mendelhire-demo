@@ -1822,7 +1822,7 @@
 
           <div class="form-group">
             <label class="form-label">Role</label>
-            <select class="form-select">
+            <select class="form-select" id="newChallengeRole">
               <option>Frontend Engineer</option>
               <option>Backend Engineer</option>
               <option>Data Engineer</option>
@@ -1832,7 +1832,7 @@
 
           <div class="form-group">
             <label class="form-label">Seniority</label>
-            <select class="form-select">
+            <select class="form-select" id="newChallengeSeniority">
               <option>Junior (0-2 years)</option>
               <option>Mid (2-5 years)</option>
               <option>Senior (5+ years)</option>
@@ -1841,7 +1841,7 @@
 
           <div class="form-group">
             <label class="form-label">Focus Area</label>
-            <select class="form-select">
+            <select class="form-select" id="newChallengeFocus">
               <option>System Design</option>
               <option>Data Structures</option>
               <option>Real-World Project</option>
@@ -1851,12 +1851,12 @@
 
           <div class="form-group">
             <label class="form-label">Duration (minutes)</label>
-            <input type="number" class="form-input" value="120">
+            <input type="number" class="form-input" id="newChallengeDuration" value="120">
           </div>
 
           <div class="form-group">
             <label class="form-label">Stipend (USD)</label>
-            <input type="number" class="form-input" value="35">
+            <input type="number" class="form-input" id="newChallengeStipend" value="35">
           </div>
         </div>
 
@@ -1876,7 +1876,7 @@
             <div style="font-size: 14px; color: #f0f4f8; margin-bottom: 12px;">
               <strong>Challenge Summary</strong>
             </div>
-            <div style="font-size: 13px; color: #94a3b8; line-height: 1.8;">
+            <div style="font-size: 13px; color: #94a3b8; line-height: 1.8;" id="challengeSummaryDetails">
               <div>Role: Frontend Engineer</div>
               <div>Seniority: Mid (2-5 years)</div>
               <div>Duration: 120 minutes</div>
@@ -2373,11 +2373,79 @@
       document.getElementById('createChallengeModal').classList.remove('active');
     }
 
+    // ===== CHALLENGE TEMPLATES (role-specific content) =====
+    const challengeTemplates = {
+      'Frontend Engineer': {
+        type: 'Frontend', titles: ['Frontend Vue', 'Frontend Angular', 'Frontend Svelte', 'UI Component Library'],
+        stacks: [['Vue.js', 'CSS', 'Testing'], ['Angular', 'RxJS', 'SCSS'], ['Svelte', 'TypeScript', 'Vitest'], ['React', 'Storybook', 'a11y']],
+        skills: [['Reactive UI patterns', 'Component composition', 'CSS layout'], ['Template-driven forms', 'Observables', 'Lazy loading'], ['Store management', 'Transitions', 'SSR'], ['Design systems', 'Visual testing', 'Theming']],
+        descs: [
+          'Build a drag-and-drop kanban board with Vue. Cards should support labels, assignees, and due dates. At minute 60, add real-time sync simulation and optimistic UI updates.',
+          'Create an Angular dashboard with reactive forms and data tables. Implement sorting, pagination, and inline editing. At the pivot, add role-based field visibility.',
+          'Build a Svelte app with animated transitions between views. Implement a search-as-you-type feature with debouncing. At minute 60, add offline support with a service worker.',
+          'Design a reusable component library with variants, sizes, and themes. At the pivot, add comprehensive keyboard navigation and screen reader support.'
+        ],
+        pivots: ['Add real-time sync and optimistic UI updates', 'Add role-based field visibility controls', 'Add offline support with service worker', 'Add keyboard navigation and screen reader support']
+      },
+      'Backend Engineer': {
+        type: 'Backend', titles: ['Backend API', 'Microservice Auth', 'Event Pipeline', 'REST to GraphQL'],
+        stacks: [['Node.js', 'Express', 'PostgreSQL'], ['Python', 'FastAPI', 'Redis'], ['Go', 'gRPC', 'Kafka'], ['TypeScript', 'GraphQL', 'Prisma']],
+        skills: [['API design', 'Error handling', 'Rate limiting'], ['Authentication', 'Caching', 'Token rotation'], ['Event sourcing', 'Concurrency', 'Message queues'], ['Schema design', 'Resolvers', 'N+1 prevention']],
+        descs: [
+          'Design a RESTful API for a booking system with availability checks, conflict resolution, and pagination. At minute 60, add webhook notifications and retry logic.',
+          'Build an auth microservice with JWT, refresh tokens, and role-based access. At the pivot, add OAuth2 social login flow and token revocation.',
+          'Implement an event-driven pipeline that processes user activity streams. At minute 60, add dead-letter queue handling and exactly-once delivery guarantees.',
+          'Migrate a REST API to GraphQL with batched data loading. At the pivot, add real-time subscriptions for live data updates.'
+        ],
+        pivots: ['Add webhook notifications with retry logic', 'Add OAuth2 social login and token revocation', 'Add dead-letter queue and exactly-once delivery', 'Add real-time GraphQL subscriptions']
+      },
+      'Data Engineer': {
+        type: 'Data', titles: ['Data Pipeline ETL', 'ML Feature Store', 'Analytics Dashboard', 'Data Quality'],
+        stacks: [['Python', 'Pandas', 'Airflow'], ['Python', 'SQL', 'Spark'], ['Python', 'dbt', 'Snowflake'], ['Python', 'Great Expectations', 'SQL']],
+        skills: [['ETL optimization', 'Schema evolution', 'Incremental loads'], ['Feature engineering', 'Data versioning', 'Pipeline orchestration'], ['Dimensional modeling', 'Window functions', 'Materialized views'], ['Data validation', 'Anomaly detection', 'Lineage tracking']],
+        descs: [
+          'Build an ETL pipeline that ingests CSV data, transforms it with business rules, and loads into a star schema. At minute 60, handle a schema change — add a new dimension table and update all downstream joins.',
+          'Create a feature store that computes rolling aggregates from event data. At the pivot, add point-in-time correctness to prevent data leakage in training sets.',
+          'Build an analytics pipeline with dbt models for a SaaS product. At minute 60, add incremental processing and handle late-arriving data with merge strategies.',
+          'Implement a data quality framework with automated checks, alerting, and a quarantine zone. At the pivot, add data lineage visualization and impact analysis.'
+        ],
+        pivots: ['Handle schema change with new dimension table', 'Add point-in-time correctness for ML training', 'Add incremental processing with merge strategies', 'Add data lineage and impact analysis']
+      },
+      'Full Stack Engineer': {
+        type: 'Full Stack', titles: ['Full Stack CRUD', 'Real-Time Chat', 'E-Commerce Flow', 'Admin Portal'],
+        stacks: [['React', 'Node.js', 'MongoDB'], ['Next.js', 'WebSocket', 'Redis'], ['React', 'Stripe', 'PostgreSQL'], ['Vue.js', 'Express', 'PostgreSQL']],
+        skills: [['End-to-end flow', 'Form validation', 'Error boundaries'], ['Real-time messaging', 'Connection management', 'Presence'], ['Payment integration', 'Cart logic', 'Order state machine'], ['RBAC', 'Audit logging', 'Bulk operations']],
+        descs: [
+          'Build a full-stack task management app with authentication, CRUD operations, and real-time updates. At minute 60, add collaborative editing with conflict resolution.',
+          'Create a real-time chat application with typing indicators, read receipts, and message threading. At the pivot, add file sharing with preview generation and virus scanning.',
+          'Build an e-commerce checkout flow from cart to confirmation. At minute 60, add coupon codes, inventory reservation, and order status webhooks.',
+          'Design an admin portal with user management, role-based access, and audit logs. At the pivot, add bulk actions with progress tracking and undo capability.'
+        ],
+        pivots: ['Add collaborative editing with conflict resolution', 'Add file sharing with preview and scanning', 'Add coupons, inventory reservation, and webhooks', 'Add bulk actions with progress tracking and undo']
+      }
+    };
+
+    let challengeCounter = 0;
+
+    function getNewChallengeFormValues() {
+      return {
+        role: document.getElementById('newChallengeRole').value,
+        seniority: document.getElementById('newChallengeSeniority').value,
+        focus: document.getElementById('newChallengeFocus').value,
+        duration: document.getElementById('newChallengeDuration').value || '120',
+        stipend: document.getElementById('newChallengeStipend').value || '35'
+      };
+    }
+
     function nextChallengeStep() {
       if (currentChallengeStep < 3) {
         currentChallengeStep++;
         showChallengeStep(currentChallengeStep);
         if (currentChallengeStep === 2) {
+          // Update Step 3 summary to reflect actual selections
+          const vals = getNewChallengeFormValues();
+          document.getElementById('challengeSummaryDetails').innerHTML =
+            `<div>Role: ${vals.role}</div><div>Seniority: ${vals.seniority}</div><div>Duration: ${vals.duration} minutes</div><div>Focus: ${vals.focus}</div><div>Stipend: $${vals.stipend}</div>`;
           // Simulate AI generation with delay then auto-advance
           setTimeout(() => {
             currentChallengeStep = 3;
@@ -2386,9 +2454,74 @@
           }, 2000);
         }
       } else {
+        // CREATE: add card to challenges page
+        addNewChallengeCard();
         showToast('Challenge created successfully!');
         closeCreateChallengeModal();
       }
+    }
+
+    function addNewChallengeCard() {
+      const vals = getNewChallengeFormValues();
+      const tmpl = challengeTemplates[vals.role] || challengeTemplates['Frontend Engineer'];
+      const idx = challengeCounter % tmpl.titles.length;
+      challengeCounter++;
+
+      const title = tmpl.titles[idx];
+      const stack = tmpl.stacks[idx];
+      const skills = tmpl.skills[idx];
+      const desc = tmpl.descs[idx];
+      const pivot = tmpl.pivots[idx];
+
+      const card = document.createElement('div');
+      card.className = 'challenge-card';
+      card.style.animation = 'fadeIn 0.5s ease';
+      card.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <div class="challenge-type">${tmpl.type}</div>
+          <span class="badge-warning" style="background: rgba(229, 184, 76, 0.15); color: #E5B84C; font-size: 11px; padding: 4px 10px;">Mid-Task Pivot</span>
+          <span style="background: rgba(92, 214, 200, 0.15); color: #5CD6C8; font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 600;">New</span>
+        </div>
+        <div class="challenge-title">${title}</div>
+        <div class="challenge-desc">${desc}</div>
+        <div class="challenge-stats">
+          <div class="challenge-stat">
+            <div class="challenge-stat-label">Candidates</div>
+            <div class="challenge-stat-value">0</div>
+          </div>
+          <div class="challenge-stat">
+            <div class="challenge-stat-label">Avg Score</div>
+            <div class="challenge-stat-value">—</div>
+          </div>
+          <div class="challenge-stat">
+            <div class="challenge-stat-label">Duration</div>
+            <div class="challenge-stat-value">${vals.duration} min</div>
+          </div>
+          <div class="challenge-stat">
+            <div class="challenge-stat-label">Stipend</div>
+            <div class="challenge-stat-value">$${vals.stipend}</div>
+          </div>
+        </div>
+        <div class="challenge-section">
+          <div class="challenge-section-title">Stack</div>
+          <div class="stack-tags">
+            ${stack.map(s => `<div class="stack-tag">${s}</div>`).join('')}
+          </div>
+        </div>
+        <div class="challenge-section">
+          <div class="challenge-section-title">Key Skills</div>
+          <ul>
+            ${skills.map(s => `<li>${s}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="pivot-spec">
+          <div class="pivot-label">Pivot Point</div>
+          <div style="font-size: 14px; color: #f0f4f8;">60 minutes - ${pivot}</div>
+        </div>
+      `;
+
+      const grid = document.querySelector('.challenge-grid');
+      grid.insertBefore(card, grid.firstChild);
     }
 
     function showChallengeStep(step) {
@@ -2400,7 +2533,7 @@
 
     // ===== AI CHALLENGE CHAT ENGINE =====
     function getSelectedRole() {
-      const sel = document.querySelector('#challengeStep1 select');
+      const sel = document.getElementById('newChallengeRole');
       return sel ? sel.value : 'Frontend Engineer';
     }
 
