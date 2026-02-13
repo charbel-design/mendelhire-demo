@@ -2621,7 +2621,7 @@
           <div class="subtitle">Proof-first hiring for engineering teams</div>
           <p class="tagline">Replace resume screening with verified craft. Know the work is real.</p>
           <p class="founder-note">Built by Charbel, founder of Talent Gurus — 10+ years placing high-trust roles where proof of character and craft is non-negotiable.</p>
-          <button class="cta-button" onclick="navigateToSection(1)">
+          <button class="cta-button" id="btn-begin-demo">
             Begin Demo →
           </button>
         </div>
@@ -2782,7 +2782,7 @@
             </div>
           </div>
           <div class="challenge-actions">
-            <button class="start-simulation-btn" onclick="startSimulation()">Start Simulation →</button>
+            <button class="start-simulation-btn" id="btn-start-sim">Start Simulation →</button>
           </div>
         </div>
 
@@ -2835,8 +2835,8 @@
 
           <!-- Controls -->
           <div class="simulation-controls">
-            <button class="control-btn primary" id="btn-start" onclick="toggleSimulation()">Pause</button>
-            <button class="control-btn" onclick="resetSimulation()">Reset</button>
+            <button class="control-btn primary" id="btn-start">Pause</button>
+            <button class="control-btn" id="btn-reset">Reset</button>
           </div>
 
           <!-- Verification Section (shown after completion) -->
@@ -3257,19 +3257,19 @@
 
     <!-- Navigation Bar -->
     <div class="navigation-bar">
-      <button class="nav-arrow" id="navPrev" onclick="prevSection()" title="Previous section">◀</button>
+      <button class="nav-arrow" id="navPrev" title="Previous section">◀</button>
       <div class="nav-dots">
-        <div class="nav-dot active" data-label="Title" data-short="1" onclick="navigateToSection(0)"></div>
-        <div class="nav-dot" data-label="Problem" data-short="2" onclick="navigateToSection(1)"></div>
-        <div class="nav-dot" data-label="Proof" data-short="3" onclick="navigateToSection(2)"></div>
-        <div class="nav-dot" data-label="Solution" data-short="4" onclick="navigateToSection(3)"></div>
-        <div class="nav-dot" data-label="Roles" data-short="5" onclick="navigateToSection(4)"></div>
-        <div class="nav-dot" data-label="Scoring" data-short="6" onclick="navigateToSection(5)"></div>
-        <div class="nav-dot" data-label="Dashboard" data-short="7" onclick="navigateToSection(6)"></div>
-        <div class="nav-dot" data-label="Bridge" data-short="8" onclick="navigateToSection(7)"></div>
-        <div class="nav-dot" data-label="Close" data-short="9" onclick="navigateToSection(8)"></div>
+        <div class="nav-dot active" data-label="Title" data-short="1" data-section="0"></div>
+        <div class="nav-dot" data-label="Problem" data-short="2" data-section="1"></div>
+        <div class="nav-dot" data-label="Proof" data-short="3" data-section="2"></div>
+        <div class="nav-dot" data-label="Solution" data-short="4" data-section="3"></div>
+        <div class="nav-dot" data-label="Roles" data-short="5" data-section="4"></div>
+        <div class="nav-dot" data-label="Scoring" data-short="6" data-section="5"></div>
+        <div class="nav-dot" data-label="Dashboard" data-short="7" data-section="6"></div>
+        <div class="nav-dot" data-label="Bridge" data-short="8" data-section="7"></div>
+        <div class="nav-dot" data-label="Close" data-short="9" data-section="8"></div>
       </div>
-      <button class="nav-arrow" id="navNext" onclick="nextSection()" title="Next section">▶</button>
+      <button class="nav-arrow" id="navNext" title="Next section">▶</button>
     </div>
 
     <!-- Presenter aids -->
@@ -3735,12 +3735,17 @@
           <div
             class="widener-chip"
             data-index="${i}"
-            onclick="toggleWidener(${i})"
           >
             ${w.name}
           </div>
         `)
         .join('');
+
+      container.querySelectorAll('.widener-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          toggleWidener(parseInt(chip.dataset.index));
+        });
+      });
     }
 
     function toggleWidener(index) {
@@ -3885,9 +3890,9 @@
         </div>
 
         <div class="fitfolio-tabs">
-          <button class="fitfolio-tab active" onclick="switchTab(event, 'hiring-manager')">Hiring Manager</button>
-          <button class="fitfolio-tab" onclick="switchTab(event, 'ats-export')">ATS Export</button>
-          <button class="fitfolio-tab" onclick="switchTab(event, 'portfolio')">Portfolio Page</button>
+          <button class="fitfolio-tab active" data-tab="hiring-manager">Hiring Manager</button>
+          <button class="fitfolio-tab" data-tab="ats-export">ATS Export</button>
+          <button class="fitfolio-tab" data-tab="portfolio">Portfolio Page</button>
         </div>
 
         <div id="hiring-manager" class="tab-content visible">
@@ -3975,7 +3980,8 @@
       document.querySelectorAll('.fitfolio-tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('visible'));
 
-      e.target.classList.add('active');
+      const clickedTab = e.target.closest('.fitfolio-tab') || e.target;
+      clickedTab.classList.add('active');
       document.getElementById(tabId).classList.add('visible');
     }
 
@@ -3985,24 +3991,68 @@
       initSection6();
       initSection7();
 
+      // ==================== BUTTON EVENT LISTENERS ====================
+      // (Using addEventListener instead of inline onclick for reliability)
+
+      // Begin Demo button
+      document.getElementById('btn-begin-demo').addEventListener('click', () => {
+        navigateToSection(1);
+      });
+
+      // Start Simulation button
+      document.getElementById('btn-start-sim').addEventListener('click', () => {
+        startSimulation();
+      });
+
+      // Simulation controls
+      document.getElementById('btn-start').addEventListener('click', () => {
+        toggleSimulation();
+      });
+      document.getElementById('btn-reset').addEventListener('click', () => {
+        resetSimulation();
+      });
+
+      // Navigation arrows
+      document.getElementById('navPrev').addEventListener('click', () => {
+        prevSection();
+      });
+      document.getElementById('navNext').addEventListener('click', () => {
+        nextSection();
+      });
+
+      // Navigation dots — use data-section attribute
+      document.querySelectorAll('.nav-dot').forEach(dot => {
+        dot.addEventListener('click', () => {
+          const sectionIndex = parseInt(dot.dataset.section);
+          navigateToSection(sectionIndex);
+        });
+      });
+
+      // Expanded candidate close button
       document.getElementById('expandedClose').addEventListener('click', () => {
         document.getElementById('candidateExpanded').classList.remove('visible');
       });
+
+      // FitFolio tabs (dynamically generated, use event delegation)
+      document.addEventListener('click', (e) => {
+        const tab = e.target.closest('.fitfolio-tab[data-tab]');
+        if (tab) {
+          switchTab(e, tab.dataset.tab);
+        }
+      });
+
+      // Book Pilot CTA (last section)
+      const bookBtn = document.querySelector('#section-9 .cta-button');
+      if (bookBtn) {
+        bookBtn.addEventListener('click', () => {
+          window.open('https://calendly.com', '_blank');
+        });
+      }
 
       navigateToSection(0);
       updateSpeakerNotes();
 
       setInterval(updateTimer, 1000);
-
-      window.toggleWidener = toggleWidener;
-      window.switchTab = switchTab;
-      window.toggleProspectMode = toggleProspectMode;
-      window.navigateToSection = navigateToSection;
-      window.startSimulation = startSimulation;
-      window.toggleSimulation = toggleSimulation;
-      window.resetSimulation = resetSimulation;
-      window.prevSection = prevSection;
-      window.nextSection = nextSection;
 
       updateNavArrows();
     }
