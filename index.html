@@ -4004,19 +4004,6 @@
       window.prevSection = prevSection;
       window.nextSection = nextSection;
 
-      // Event delegation as backup for onclick handlers
-      document.addEventListener('click', function(e) {
-        const btn = e.target.closest('.cta-button, .start-simulation-btn, .nav-dot, .nav-arrow, .control-btn');
-        if (!btn) return;
-
-        // If the normal onclick already fired, this is a no-op backup
-        const onclick = btn.getAttribute('onclick');
-        if (onclick && !e._handled) {
-          e._handled = true;
-          try { new Function(onclick)(); } catch(err) { console.error('Click handler error:', err); }
-        }
-      });
-
       updateNavArrows();
     }
 
