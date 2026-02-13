@@ -701,9 +701,11 @@
     @media (max-width: 1400px) { .two-column { grid-template-columns: 1fr; } }
     .rubric-dimension { margin-bottom: 32px; }
     .dimension-label { display: block; font-size: 13px; font-weight: 600; color: #f0f4f8; margin-bottom: 12px; }
-    .slider { width: 100%; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.15); outline: none; accent-color: #4B93FF; -webkit-appearance: auto; cursor: pointer; }
-    .slider::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.12); }
-    .slider::-webkit-slider-thumb { margin-top: -5px; }
+    .slider { width: 100%; height: 8px; border-radius: 4px; outline: none; cursor: pointer; -webkit-appearance: none; appearance: none; background: linear-gradient(to right, #4B93FF 50%, rgba(255,255,255,0.12) 50%); }
+    .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #4B93FF; border: 3px solid #1a2a44; cursor: pointer; box-shadow: 0 0 8px rgba(75,147,255,0.4); }
+    .slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #4B93FF; border: 3px solid #1a2a44; cursor: pointer; }
+    .slider::-moz-range-progress { background: #4B93FF; border-radius: 4px; height: 8px; }
+    .slider-value { display: inline-block; min-width: 32px; text-align: center; font-size: 14px; font-weight: 700; color: #4B93FF; background: rgba(75,147,255,0.1); border-radius: 6px; padding: 2px 8px; margin-left: 8px; }
     .dimension-scale {
       display: flex;
       justify-content: space-between;
@@ -1282,8 +1284,11 @@
               <h2 style="font-size: 18px; font-weight: 700; color: #f0f4f8; margin-bottom: 24px;">Scoring Rubric</h2>
 
               <div class="rubric-dimension">
-                <label class="dimension-label">Product Sense</label>
-                <input type="range" class="slider" min="1" max="5" value="3">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                  <label class="dimension-label" style="margin-bottom:0;">Product Sense</label>
+                  <span class="slider-value" id="val_ps">3</span>
+                </div>
+                <input type="range" class="slider" min="1" max="5" value="3" id="slider_ps" oninput="updateSlider(this,'val_ps')">
                 <div class="dimension-scale">
                   <span>Weak (1)</span>
                   <span>Outstanding (5)</span>
@@ -1291,8 +1296,11 @@
               </div>
 
               <div class="rubric-dimension">
-                <label class="dimension-label">Communication</label>
-                <input type="range" class="slider" min="1" max="5" value="3">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                  <label class="dimension-label" style="margin-bottom:0;">Communication</label>
+                  <span class="slider-value" id="val_cm">3</span>
+                </div>
+                <input type="range" class="slider" min="1" max="5" value="3" id="slider_cm" oninput="updateSlider(this,'val_cm')">
                 <div class="dimension-scale">
                   <span>Weak (1)</span>
                   <span>Outstanding (5)</span>
@@ -1300,8 +1308,11 @@
               </div>
 
               <div class="rubric-dimension">
-                <label class="dimension-label">Collaboration</label>
-                <input type="range" class="slider" min="1" max="5" value="3">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                  <label class="dimension-label" style="margin-bottom:0;">Collaboration</label>
+                  <span class="slider-value" id="val_cl">3</span>
+                </div>
+                <input type="range" class="slider" min="1" max="5" value="3" id="slider_cl" oninput="updateSlider(this,'val_cl')">
                 <div class="dimension-scale">
                   <span>Weak (1)</span>
                   <span>Outstanding (5)</span>
@@ -1309,8 +1320,11 @@
               </div>
 
               <div class="rubric-dimension">
-                <label class="dimension-label">Diagnostics</label>
-                <input type="range" class="slider" min="1" max="5" value="3">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                  <label class="dimension-label" style="margin-bottom:0;">Diagnostics</label>
+                  <span class="slider-value" id="val_dg">3</span>
+                </div>
+                <input type="range" class="slider" min="1" max="5" value="3" id="slider_dg" oninput="updateSlider(this,'val_dg')">
                 <div class="dimension-scale">
                   <span>Weak (1)</span>
                   <span>Outstanding (5)</span>
@@ -1318,8 +1332,11 @@
               </div>
 
               <div class="rubric-dimension">
-                <label class="dimension-label">Customer Empathy</label>
-                <input type="range" class="slider" min="1" max="5" value="3">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                  <label class="dimension-label" style="margin-bottom:0;">Customer Empathy</label>
+                  <span class="slider-value" id="val_ce">3</span>
+                </div>
+                <input type="range" class="slider" min="1" max="5" value="3" id="slider_ce" oninput="updateSlider(this,'val_ce')">
                 <div class="dimension-scale">
                   <span>Weak (1)</span>
                   <span>Outstanding (5)</span>
@@ -1938,6 +1955,21 @@
       const btn = document.getElementById('simBtn');
       if (btn) btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Start Simulation';
     }
+
+    // SLIDER UPDATE
+    function updateSlider(slider, valId) {
+      const val = slider.value;
+      document.getElementById(valId).textContent = val;
+      const pct = ((val - 1) / 4) * 100;
+      slider.style.background = 'linear-gradient(to right, #4B93FF 0%, #4B93FF ' + pct + '%, rgba(255,255,255,0.12) ' + pct + '%, rgba(255,255,255,0.12) 100%)';
+    }
+    // Initialize all sliders on load
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.slider').forEach(function(s) {
+        const pct = ((s.value - 1) / (s.max - s.min)) * 100;
+        s.style.background = 'linear-gradient(to right, #4B93FF 0%, #4B93FF ' + pct + '%, rgba(255,255,255,0.12) ' + pct + '%, rgba(255,255,255,0.12) 100%)';
+      });
+    });
 
     // TOAST NOTIFICATION
     function showToast(message) {
