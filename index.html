@@ -701,7 +701,9 @@
     @media (max-width: 1400px) { .two-column { grid-template-columns: 1fr; } }
     .rubric-dimension { margin-bottom: 32px; }
     .dimension-label { display: block; font-size: 13px; font-weight: 600; color: #f0f4f8; margin-bottom: 12px; }
-    .slider { width: 100%; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.05); outline: none; accent-color: #4B93FF; }
+    .slider { width: 100%; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.15); outline: none; accent-color: #4B93FF; -webkit-appearance: auto; cursor: pointer; }
+    .slider::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.12); }
+    .slider::-webkit-slider-thumb { margin-top: -5px; }
     .dimension-scale {
       display: flex;
       justify-content: space-between;
@@ -1117,29 +1119,29 @@
           <div class="filter-bar">
             <div class="filter-item">
               <label class="filter-label">Status</label>
-              <select class="form-select" style="width: 180px;">
-                <option>All</option>
-                <option>FitFolio Ready</option>
-                <option>In Progress</option>
-                <option>Scored</option>
-                <option>Invited</option>
+              <select id="filterStatus" class="form-select" style="width: 180px;" onchange="filterCandidates()">
+                <option value="All">All</option>
+                <option value="FitFolio Ready">FitFolio Ready</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Scored">Scored</option>
+                <option value="Invited">Invited</option>
               </select>
             </div>
             <div class="filter-item">
               <label class="filter-label">Challenge</label>
-              <select class="form-select" style="width: 180px;">
-                <option>All</option>
-                <option>Frontend React</option>
-                <option>Data Python/SQL</option>
+              <select id="filterChallenge" class="form-select" style="width: 180px;" onchange="filterCandidates()">
+                <option value="All">All</option>
+                <option value="Frontend React">Frontend React</option>
+                <option value="Data Python/SQL">Data Python/SQL</option>
               </select>
             </div>
             <div class="filter-item">
               <label class="filter-label">Score</label>
-              <select class="form-select" style="width: 140px;">
-                <option>All</option>
-                <option>4.0+</option>
-                <option>3.5+</option>
-                <option>3.0+</option>
+              <select id="filterScore" class="form-select" style="width: 140px;" onchange="filterCandidates()">
+                <option value="All">All</option>
+                <option value="4.0">4.0+</option>
+                <option value="3.5">3.5+</option>
+                <option value="3.0">3.0+</option>
               </select>
             </div>
             <div style="margin-left: auto; display: flex; gap: 8px; align-items: flex-end;">
@@ -1173,7 +1175,7 @@
               </tr>
             </thead>
             <tbody id="candidatesTableBody">
-              <tr>
+              <tr data-status="FitFolio Ready" data-challenge="Frontend React" data-score="4.2">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
                 <td id="name-MH-2841"><strong>Sarah Chen</strong></td>
                 <td>MH-2841</td>
@@ -1183,7 +1185,7 @@
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2841')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
-              <tr>
+              <tr data-status="Scored" data-challenge="Frontend React" data-score="3.8">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
                 <td id="name-MH-2842"><strong>Marcus Johnson</strong></td>
                 <td>MH-2842</td>
@@ -1193,7 +1195,7 @@
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2842')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
-              <tr>
+              <tr data-status="In Progress" data-challenge="Frontend React" data-score="0">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
                 <td id="name-MH-2843"><strong>Priya Patel</strong></td>
                 <td>MH-2843</td>
@@ -1203,7 +1205,7 @@
                 <td><span style="font-size: 12px; color: #64748B;">-</span></td>
                 <td><button class="btn-secondary" style="font-size: 12px; padding: 8px 12px;" disabled>View</button></td>
               </tr>
-              <tr>
+              <tr data-status="FitFolio Ready" data-challenge="Data Python/SQL" data-score="4.5">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
                 <td id="name-MH-2844"><strong>Alex Rivera</strong></td>
                 <td>MH-2844</td>
@@ -1213,7 +1215,7 @@
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2844')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
-              <tr>
+              <tr data-status="In Progress" data-challenge="Frontend React" data-score="0">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
                 <td id="name-MH-2845"><strong>Jordan Lee</strong></td>
                 <td>MH-2845</td>
@@ -1223,7 +1225,7 @@
                 <td><span style="font-size: 12px; color: #64748B;">-</span></td>
                 <td><button class="btn-secondary" style="font-size: 12px; padding: 8px 12px;" disabled>View</button></td>
               </tr>
-              <tr>
+              <tr data-status="Scored" data-challenge="Data Python/SQL" data-score="3.5">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
                 <td id="name-MH-2846"><strong>Tanya Williams</strong></td>
                 <td>MH-2846</td>
@@ -1233,7 +1235,7 @@
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2846')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
-              <tr>
+              <tr data-status="Invited" data-challenge="Frontend React" data-score="0">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
                 <td id="name-MH-2847"><strong>Raj Krishnamurthy</strong></td>
                 <td>MH-2847</td>
@@ -1243,7 +1245,7 @@
                 <td><span style="font-size: 12px; color: #64748B;">-</span></td>
                 <td><button class="btn-secondary" style="font-size: 12px; padding: 8px 12px;" disabled>View</button></td>
               </tr>
-              <tr>
+              <tr data-status="FitFolio Ready" data-challenge="Data Python/SQL" data-score="4.0">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
                 <td id="name-MH-2848"><strong>Elena Volkova</strong></td>
                 <td>MH-2848</td>
@@ -1509,14 +1511,10 @@
 
           <div class="ai-chat-panel" style="margin-top: 0;">
             <div class="chat-header">AI Assistant - Challenge Customization</div>
-            <div class="chat-messages">
-              <div class="chat-message ai">I've created a React component library challenge that focuses on real-world patterns and performance optimization.</div>
-              <div class="chat-message user">Can you add more emphasis on testing?</div>
-              <div class="chat-message ai">Absolutely! I've updated the rubric to include test coverage and integration testing requirements.</div>
-            </div>
+            <div class="chat-messages" id="chatMessages"></div>
             <div class="chat-input-group">
-              <input type="text" class="chat-input" placeholder="Ask anything about this challenge...">
-              <button class="chat-btn">Send</button>
+              <input type="text" class="chat-input" id="chatInput" placeholder="Ask anything about this challenge..." onkeydown="if(event.key==='Enter')sendChatMessage()">
+              <button class="chat-btn" onclick="sendChatMessage()">Send</button>
             </div>
           </div>
         </div>
@@ -1711,6 +1709,14 @@
       if (currentChallengeStep < 3) {
         currentChallengeStep++;
         showChallengeStep(currentChallengeStep);
+        if (currentChallengeStep === 2) {
+          // Simulate AI generation with delay then auto-advance
+          setTimeout(() => {
+            currentChallengeStep = 3;
+            showChallengeStep(3);
+            initChallengeChat();
+          }, 2000);
+        }
       } else {
         showToast('Challenge created successfully!');
         closeCreateChallengeModal();
@@ -1722,6 +1728,117 @@
       document.getElementById('challengeStep2').style.display = step === 2 ? 'block' : 'none';
       document.getElementById('challengeStep3').style.display = step === 3 ? 'block' : 'none';
       document.getElementById('challengeNextBtn').textContent = step === 3 ? 'Create' : 'Next';
+    }
+
+    // ===== AI CHALLENGE CHAT ENGINE =====
+    function getSelectedRole() {
+      const sel = document.querySelector('#challengeStep1 select');
+      return sel ? sel.value : 'Frontend Engineer';
+    }
+
+    function initChallengeChat() {
+      const msgs = document.getElementById('chatMessages');
+      if (!msgs) return;
+      msgs.innerHTML = '';
+      const role = getSelectedRole();
+      addChatMessage('ai', `I've generated a ${role} challenge based on your specifications. The assessment includes a real-world project brief, evaluation rubric with 5 dimensions, a mid-task pivot at 60 minutes, and anti-cheat verification checks. What would you like to adjust?`);
+    }
+
+    function addChatMessage(type, text) {
+      const msgs = document.getElementById('chatMessages');
+      const div = document.createElement('div');
+      div.className = 'chat-message ' + type;
+      div.textContent = text;
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+      addChatMessage('user', text);
+      input.value = '';
+
+      // Show thinking indicator
+      const thinking = document.createElement('div');
+      thinking.className = 'chat-message thinking';
+      thinking.textContent = 'Thinking...';
+      thinking.id = 'thinkingMsg';
+      document.getElementById('chatMessages').appendChild(thinking);
+
+      // Generate contextual response after delay
+      setTimeout(() => {
+        const el = document.getElementById('thinkingMsg');
+        if (el) el.remove();
+        const response = generateAIResponse(text);
+        addChatMessage('ai', response);
+      }, 800 + Math.random() * 1200);
+    }
+
+    function generateAIResponse(input) {
+      const lower = input.toLowerCase();
+      const role = getSelectedRole();
+
+      if (lower.includes('testing') || lower.includes('test')) {
+        return `I've updated the rubric to weight test coverage at 20% of the total score. The challenge now requires candidates to write unit tests for at least 3 core functions and one integration test. The pivot point will also assess how they adapt their testing strategy when requirements change.`;
+      }
+      if (lower.includes('harder') || lower.includes('difficult') || lower.includes('senior')) {
+        return `I've increased the complexity. The challenge now includes a system design component where candidates must architect a scalable solution before coding. The rubric adds a "Architecture Quality" dimension scored 1-5, and the pivot introduces a performance constraint requiring optimization of the initial implementation.`;
+      }
+      if (lower.includes('pivot') || lower.includes('change') || lower.includes('twist')) {
+        return `The current pivot at 60 minutes introduces a new API constraint that forces candidates to refactor their data layer. I can modify this — would you like the pivot to change the UI requirements instead, add a real-time collaboration feature, or introduce a performance bottleneck that needs debugging?`;
+      }
+      if (lower.includes('rubric') || lower.includes('scoring') || lower.includes('criteria')) {
+        return `The rubric currently evaluates 5 dimensions: Code Quality (architecture, patterns, readability), Problem Solving (approach, efficiency, edge cases), Communication (commit messages, documentation, naming), Adaptability (pivot response time, refactoring quality), and the role-specific Widener. Each is scored 1-5 with detailed descriptors. Want me to adjust the weights or add a dimension?`;
+      }
+      if (lower.includes('duration') || lower.includes('time') || lower.includes('long')) {
+        return `The challenge is set to 120 minutes with the pivot at 60 minutes. I can adjust this — shorter sessions (90 min) test speed and prioritization, while longer ones (180 min) allow deeper architecture work. The stipend adjusts automatically based on duration. What duration works best for your hiring bar?`;
+      }
+      if (lower.includes('stack') || lower.includes('react') || lower.includes('python') || lower.includes('technology')) {
+        return `The current tech stack is configured for ${role}. I can modify the required technologies, add specific framework constraints (e.g., "must use React hooks, no class components"), or include a library evaluation component where candidates choose and justify their tooling decisions.`;
+      }
+      if (lower.includes('stipend') || lower.includes('pay') || lower.includes('compensation')) {
+        return `The candidate stipend is currently set at $35/hour based on the 120-minute duration ($70 total). This is competitive for the market and signals that you value candidate time. I can adjust the rate — our data shows that stipends above $30/hour increase completion rates by 40% compared to unpaid assessments.`;
+      }
+      if (lower.includes('brief') || lower.includes('description') || lower.includes('scenario')) {
+        return `The challenge brief presents a realistic product scenario: candidates build a feature for a live application with real constraints. The brief includes user stories, acceptance criteria, a design mockup reference, and API documentation. Would you like me to make the scenario more specific to your product domain?`;
+      }
+      // Generic contextual response
+      const responses = [
+        `Good point. I've incorporated that into the challenge design. The rubric now reflects this preference, and the evaluation criteria have been updated accordingly. The brief maintains its real-world feel while addressing your feedback. Anything else you'd like to refine?`,
+        `Understood. I've adjusted the challenge parameters to account for that. This change affects the scoring weights slightly — Problem Solving now carries more emphasis. The pivot scenario has also been updated to align with this direction. Want to review the updated rubric?`,
+        `I've made that update. The challenge now better reflects what you're looking for in candidates. The evaluation will specifically assess this area through both the main task and the post-pivot phase. Would you like to see how this maps to the 5 Widener dimensions?`,
+      ];
+      return responses[Math.floor(Math.random() * responses.length)];
+    }
+
+    // ===== CANDIDATE TABLE FILTERING =====
+    function filterCandidates() {
+      const statusFilter = document.getElementById('filterStatus').value;
+      const challengeFilter = document.getElementById('filterChallenge').value;
+      const scoreFilter = document.getElementById('filterScore').value;
+
+      const rows = document.querySelectorAll('#candidatesTableBody tr');
+      let visibleCount = 0;
+
+      rows.forEach(row => {
+        const status = row.dataset.status;
+        const challenge = row.dataset.challenge;
+        const score = parseFloat(row.dataset.score) || 0;
+
+        let show = true;
+
+        if (statusFilter !== 'All' && status !== statusFilter) show = false;
+        if (challengeFilter !== 'All' && challenge !== challengeFilter) show = false;
+        if (scoreFilter !== 'All') {
+          const minScore = parseFloat(scoreFilter);
+          if (score < minScore) show = false;
+        }
+
+        row.style.display = show ? '' : 'none';
+        if (show) visibleCount++;
+      });
     }
 
     function openFitFolioModal(candidateId) {
