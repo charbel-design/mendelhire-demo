@@ -825,6 +825,10 @@
       from { transform: translateY(100px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
     .toast.success { border-left-color: var(--success); }
     .toast.error { border-left-color: #ff6464; }
     .toast-close { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 0; transition: all 0.2s ease; }
@@ -1138,19 +1142,19 @@
             <div class="pipeline-stage">
               <div class="pipeline-segment" style="background: linear-gradient(135deg, rgba(75,147,255,0.8), rgba(75,147,255,0.6)); width: 140px;">Applied (24)</div>
             </div>
-            <div class="pipeline-arrow">→</div>
+            <div style="text-align: center; font-size: 11px; color: #64748B; white-space: nowrap; padding: 0 8px;">~2d</div>
             <div class="pipeline-stage">
               <div class="pipeline-segment" style="background: linear-gradient(135deg, rgba(92,214,200,0.8), rgba(92,214,200,0.6)); width: 110px;">Challenged (16)</div>
             </div>
-            <div class="pipeline-arrow">→</div>
+            <div style="text-align: center; font-size: 11px; color: #64748B; white-space: nowrap; padding: 0 8px;">~3d</div>
             <div class="pipeline-stage">
               <div class="pipeline-segment" style="background: linear-gradient(135deg, rgba(229,184,76,0.8), rgba(229,184,76,0.6)); width: 90px;">Scored (12)</div>
             </div>
-            <div class="pipeline-arrow">→</div>
+            <div style="text-align: center; font-size: 11px; color: #64748B; white-space: nowrap; padding: 0 8px;">~1d</div>
             <div class="pipeline-stage">
               <div class="pipeline-segment" style="background: linear-gradient(135deg, rgba(75,147,255,0.8), rgba(75,147,255,0.6)); width: 120px;">FitFolio Ready (4)</div>
             </div>
-            <div class="pipeline-arrow">→</div>
+            <div style="text-align: center; font-size: 11px; color: #64748B; white-space: nowrap; padding: 0 8px;">~2d</div>
             <div class="pipeline-stage">
               <div class="pipeline-segment" style="background: linear-gradient(135deg, rgba(92,214,200,0.8), rgba(92,214,200,0.6)); width: 80px;">Hired (2)</div>
             </div>
@@ -1197,9 +1201,12 @@
           </div>
           <div class="challenge-grid">
             <div class="challenge-card">
-              <div class="challenge-type">Frontend</div>
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <div class="challenge-type">Frontend</div>
+                <span class="badge-warning" style="background: rgba(229, 184, 76, 0.15); color: #E5B84C; font-size: 11px; padding: 4px 10px;">Mid-Task Pivot</span>
+              </div>
               <div class="challenge-title">Frontend React</div>
-              <div class="challenge-desc">Build a React component library with real-world requirements</div>
+              <div class="challenge-desc">Start with a product list (name, price, category). Add client-side search and category filter. At minute 60, add keyboard navigation and ARIA labels for all controls.</div>
               <div class="challenge-stats">
                 <div class="challenge-stat">
                   <div class="challenge-stat-label">Candidates</div>
@@ -1212,6 +1219,10 @@
                 <div class="challenge-stat">
                   <div class="challenge-stat-label">Duration</div>
                   <div class="challenge-stat-value">120 min</div>
+                </div>
+                <div class="challenge-stat">
+                  <div class="challenge-stat-label">Stipend</div>
+                  <div class="challenge-stat-value">$100</div>
                 </div>
               </div>
               <div class="challenge-section">
@@ -1232,13 +1243,16 @@
               </div>
               <div class="pivot-spec">
                 <div class="pivot-label">Pivot Point</div>
-                <div style="font-size: 14px; color: #f0f4f8;">60 minutes - Clean architecture checkpoint</div>
+                <div style="font-size: 14px; color: #f0f4f8;">60 minutes - Add keyboard navigation and ARIA labels</div>
               </div>
             </div>
             <div class="challenge-card">
-              <div class="challenge-type">Data</div>
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <div class="challenge-type">Data</div>
+                <span class="badge-warning" style="background: rgba(229, 184, 76, 0.15); color: #E5B84C; font-size: 11px; padding: 4px 10px;">Mid-Task Pivot</span>
+              </div>
               <div class="challenge-title">Data Python/SQL</div>
-              <div class="challenge-desc">Analyze and optimize database queries with real datasets</div>
+              <div class="challenge-desc">Analyze a CSV of user events. Produce a monthly cohort retention chart and five bullet insights. At the pivot: redefine cohorts by first paid event instead of first seen; update chart and note changes.</div>
               <div class="challenge-stats">
                 <div class="challenge-stat">
                   <div class="challenge-stat-label">Candidates</div>
@@ -1251,6 +1265,10 @@
                 <div class="challenge-stat">
                   <div class="challenge-stat-label">Duration</div>
                   <div class="challenge-stat-value">120 min</div>
+                </div>
+                <div class="challenge-stat">
+                  <div class="challenge-stat-label">Stipend</div>
+                  <div class="challenge-stat-value">$100</div>
                 </div>
               </div>
               <div class="challenge-section">
@@ -1271,7 +1289,7 @@
               </div>
               <div class="pivot-spec">
                 <div class="pivot-label">Pivot Point</div>
-                <div style="font-size: 14px; color: #f0f4f8;">60 minutes - Schema design checkpoint</div>
+                <div style="font-size: 14px; color: #f0f4f8;">60 minutes - Redefine cohorts by first paid event instead of first seen</div>
               </div>
             </div>
           </div>
@@ -1321,8 +1339,17 @@
             </div>
             <span style="font-size: 12px; color: #64748B; white-space: nowrap; margin-left: 8px;">120m</span>
           </div>
-          <div class="pivot-timeline-labels">
-            <span style="font-size: 11px; color: #64748B;">Total: 120 minutes</span>
+          <div class="pivot-timeline-labels" style="display: flex; justify-content: space-between; padding: 0 4px;">
+            <span style="font-size: 11px; color: #64748B;">Phase 1: Core Task (0–60 min)</span>
+            <span style="font-size: 11px; color: #64748B;">Phase 2: Pivot Requirements (60–120 min)</span>
+          </div>
+
+          <!-- Pivot Triggered Notification -->
+          <div id="pivotNotification" style="display: none; margin-top: 16px; padding: 12px 16px; background: rgba(229, 184, 76, 0.1); border: 1px solid rgba(229, 184, 76, 0.3); border-radius: 8px; animation: fadeIn 0.3s ease-in;">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #E5B84C; font-weight: 700;">
+              <span style="font-size: 16px;">🔄</span>
+              Pivot Triggered — Requirements updated
+            </div>
           </div>
 
           <div class="session-stats">
@@ -1450,6 +1477,13 @@
                 </svg>
                 <span id="anonToggleText">Anonymize</span>
               </button>
+              <button class="btn-primary" id="compareBtn" onclick="openCompareView()" style="display: none; font-size: 12px; padding: 8px 16px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                  <rect x="3" y="3" width="7" height="18" rx="1"></rect>
+                  <rect x="14" y="3" width="7" height="18" rx="1"></rect>
+                </svg>
+                Compare (<span id="compareCount">0</span>)
+              </button>
             </div>
           </div>
 
@@ -1467,9 +1501,9 @@
               </tr>
             </thead>
             <tbody id="candidatesTableBody">
-              <tr data-status="FitFolio Ready" data-challenge="Frontend React" data-score="4.2">
+              <tr data-status="FitFolio Ready" data-challenge="Frontend React" data-score="4.2" data-candidate-id="MH-2841">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2841"><div class="avatar-badge"><div class="avatar-circle">SC</div><strong>Sarah Chen</strong></div></td>
+                <td id="name-MH-2841"><div class="avatar-badge"><div class="avatar-circle candidate-avatar">SC</div><strong>Sarah Chen</strong></div></td>
                 <td>MH-2841</td>
                 <td>Frontend React</td>
                 <td><span class="status-badge ready">FitFolio Ready</span></td>
@@ -1477,9 +1511,9 @@
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2841')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
-              <tr data-status="Scored" data-challenge="Frontend React" data-score="3.8">
+              <tr data-status="Scored" data-challenge="Frontend React" data-score="3.8" data-candidate-id="MH-2842">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2842"><div class="avatar-badge"><div class="avatar-circle">MJ</div><strong>Marcus Johnson</strong></div></td>
+                <td id="name-MH-2842"><div class="avatar-badge"><div class="avatar-circle candidate-avatar">MJ</div><strong>Marcus Johnson</strong></div></td>
                 <td>MH-2842</td>
                 <td>Frontend React</td>
                 <td><span class="status-badge scored">Scored</span></td>
@@ -1487,9 +1521,9 @@
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2842')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
-              <tr data-status="In Progress" data-challenge="Frontend React" data-score="0">
+              <tr data-status="In Progress" data-challenge="Frontend React" data-score="0" data-candidate-id="MH-2843">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2843"><div class="avatar-badge"><div class="avatar-circle">PP</div><strong>Priya Patel</strong></div></td>
+                <td id="name-MH-2843"><div class="avatar-badge"><div class="avatar-circle candidate-avatar">PP</div><strong>Priya Patel</strong></div></td>
                 <td>MH-2843</td>
                 <td>Frontend React</td>
                 <td><span class="status-badge progress">In Progress</span></td>
@@ -1497,9 +1531,9 @@
                 <td><span style="font-size: 12px; color: #64748B;">-</span></td>
                 <td><button class="btn-secondary" style="font-size: 12px; padding: 8px 12px;" disabled>View</button></td>
               </tr>
-              <tr data-status="FitFolio Ready" data-challenge="Data Python/SQL" data-score="4.5">
+              <tr data-status="FitFolio Ready" data-challenge="Data Python/SQL" data-score="4.5" data-candidate-id="MH-2844">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2844"><div class="avatar-badge"><div class="avatar-circle">AR</div><strong>Alex Rivera</strong></div></td>
+                <td id="name-MH-2844"><div class="avatar-badge"><div class="avatar-circle candidate-avatar">AR</div><strong>Alex Rivera</strong></div></td>
                 <td>MH-2844</td>
                 <td>Data Python/SQL</td>
                 <td><span class="status-badge ready">FitFolio Ready</span></td>
@@ -1507,9 +1541,9 @@
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2844')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
-              <tr data-status="In Progress" data-challenge="Frontend React" data-score="0">
+              <tr data-status="In Progress" data-challenge="Frontend React" data-score="0" data-candidate-id="MH-2845">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2845"><div class="avatar-badge"><div class="avatar-circle">JL</div><strong>Jordan Lee</strong></div></td>
+                <td id="name-MH-2845"><div class="avatar-badge"><div class="avatar-circle candidate-avatar">JL</div><strong>Jordan Lee</strong></div></td>
                 <td>MH-2845</td>
                 <td>Frontend React</td>
                 <td><span class="status-badge progress">In Progress (Live)</span></td>
@@ -1517,9 +1551,9 @@
                 <td><span style="font-size: 12px; color: #64748B;">-</span></td>
                 <td><button class="btn-secondary" style="font-size: 12px; padding: 8px 12px;" disabled>View</button></td>
               </tr>
-              <tr data-status="Scored" data-challenge="Data Python/SQL" data-score="3.5">
+              <tr data-status="Scored" data-challenge="Data Python/SQL" data-score="3.5" data-candidate-id="MH-2846">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2846"><div class="avatar-badge"><div class="avatar-circle">TW</div><strong>Tanya Williams</strong></div></td>
+                <td id="name-MH-2846"><div class="avatar-badge"><div class="avatar-circle candidate-avatar">TW</div><strong>Tanya Williams</strong></div></td>
                 <td>MH-2846</td>
                 <td>Data Python/SQL</td>
                 <td><span class="status-badge scored">Scored</span></td>
@@ -1527,9 +1561,9 @@
                 <td><span class="verified-badge">Verified</span></td>
                 <td><button class="btn-secondary" onclick="openFitFolioModal('MH-2846')" style="font-size: 12px; padding: 8px 12px;">View</button></td>
               </tr>
-              <tr data-status="Invited" data-challenge="Frontend React" data-score="0">
+              <tr data-status="Invited" data-challenge="Frontend React" data-score="0" data-candidate-id="MH-2847">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2847"><div class="avatar-badge"><div class="avatar-circle">RK</div><strong>Raj Krishnamurthy</strong></div></td>
+                <td id="name-MH-2847"><div class="avatar-badge"><div class="avatar-circle candidate-avatar">RK</div><strong>Raj Krishnamurthy</strong></div></td>
                 <td>MH-2847</td>
                 <td>Frontend React</td>
                 <td><span class="status-badge invited">Invited</span></td>
@@ -1537,9 +1571,9 @@
                 <td><span style="font-size: 12px; color: #64748B;">-</span></td>
                 <td><button class="btn-secondary" style="font-size: 12px; padding: 8px 12px;" disabled>View</button></td>
               </tr>
-              <tr data-status="FitFolio Ready" data-challenge="Data Python/SQL" data-score="4.0">
+              <tr data-status="FitFolio Ready" data-challenge="Data Python/SQL" data-score="4.0" data-candidate-id="MH-2848">
                 <td><input type="checkbox" style="width: 18px; height: 18px;"></td>
-                <td id="name-MH-2848"><div class="avatar-badge"><div class="avatar-circle">EV</div><strong>Elena Volkova</strong></div></td>
+                <td id="name-MH-2848"><div class="avatar-badge"><div class="avatar-circle candidate-avatar">EV</div><strong>Elena Volkova</strong></div></td>
                 <td>MH-2848</td>
                 <td>Data Python/SQL</td>
                 <td><span class="status-badge ready">FitFolio Ready</span></td>
@@ -1577,57 +1611,13 @@
             <div>
               <h2 style="font-size: 18px; font-weight: 700; color: #f0f4f8; margin-bottom: 24px; letter-spacing: -0.02em;">Scoring Rubric</h2>
 
-              <div class="rubric-dimension">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                  <label class="dimension-label" style="margin-bottom:0;">Product Sense</label>
-                  <span class="slider-value" id="val_ps">3</span>
-                </div>
-                <input type="range" class="slider" min="1" max="5" value="3" id="slider_ps" oninput="updateSlider(this,'val_ps')">
-                <div class="dimension-scale">
-                  <span>Weak (1)</span>
-                  <span>Outstanding (5)</span>
-                </div>
+              <div style="margin-bottom: 24px; padding: 12px; background: rgba(75, 147, 255, 0.08); border-left: 3px solid #4B93FF; border-radius: 6px;">
+                <div style="font-size: 12px; font-weight: 700; color: #4B93FF; text-transform: uppercase;">Stack Dimensions</div>
               </div>
 
               <div class="rubric-dimension">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                  <label class="dimension-label" style="margin-bottom:0;">Communication</label>
-                  <span class="slider-value" id="val_cm">3</span>
-                </div>
-                <input type="range" class="slider" min="1" max="5" value="3" id="slider_cm" oninput="updateSlider(this,'val_cm')">
-                <div class="dimension-scale">
-                  <span>Weak (1)</span>
-                  <span>Outstanding (5)</span>
-                </div>
-              </div>
-
-              <div class="rubric-dimension">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                  <label class="dimension-label" style="margin-bottom:0;">Collaboration</label>
-                  <span class="slider-value" id="val_cl">3</span>
-                </div>
-                <input type="range" class="slider" min="1" max="5" value="3" id="slider_cl" oninput="updateSlider(this,'val_cl')">
-                <div class="dimension-scale">
-                  <span>Weak (1)</span>
-                  <span>Outstanding (5)</span>
-                </div>
-              </div>
-
-              <div class="rubric-dimension">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                  <label class="dimension-label" style="margin-bottom:0;">Diagnostics</label>
-                  <span class="slider-value" id="val_dg">3</span>
-                </div>
-                <input type="range" class="slider" min="1" max="5" value="3" id="slider_dg" oninput="updateSlider(this,'val_dg')">
-                <div class="dimension-scale">
-                  <span>Weak (1)</span>
-                  <span>Outstanding (5)</span>
-                </div>
-              </div>
-
-              <div class="rubric-dimension">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                  <label class="dimension-label" style="margin-bottom:0;">Customer Empathy</label>
+                  <label class="dimension-label" style="margin-bottom:0;">Correctness & Edge Cases</label>
                   <span class="slider-value" id="val_ce">3</span>
                 </div>
                 <input type="range" class="slider" min="1" max="5" value="3" id="slider_ce" oninput="updateSlider(this,'val_ce')">
@@ -1637,7 +1627,81 @@
                 </div>
               </div>
 
-              <button class="btn-primary" onclick="showToast('Scoring saved')" style="width: 100%;">Save Scoring</button>
+              <div class="rubric-dimension">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                  <label class="dimension-label" style="margin-bottom:0;">Accessibility</label>
+                  <span class="slider-value" id="val_ac">3</span>
+                </div>
+                <input type="range" class="slider" min="1" max="5" value="3" id="slider_ac" oninput="updateSlider(this,'val_ac')">
+                <div class="dimension-scale">
+                  <span>Weak (1)</span>
+                  <span>Outstanding (5)</span>
+                </div>
+              </div>
+
+              <div class="rubric-dimension">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                  <label class="dimension-label" style="margin-bottom:0;">Code Clarity</label>
+                  <span class="slider-value" id="val_cc">3</span>
+                </div>
+                <input type="range" class="slider" min="1" max="5" value="3" id="slider_cc" oninput="updateSlider(this,'val_cc')">
+                <div class="dimension-scale">
+                  <span>Weak (1)</span>
+                  <span>Outstanding (5)</span>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 24px; padding: 12px; background: rgba(92, 214, 200, 0.08); border-left: 3px solid #5CD6C8; border-radius: 6px; margin-top: 20px;">
+                <div style="font-size: 12px; font-weight: 700; color: #5CD6C8; text-transform: uppercase;">Trait Dimensions</div>
+              </div>
+
+              <div class="rubric-dimension">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                  <label class="dimension-label" style="margin-bottom:0;">Ownership</label>
+                  <span class="slider-value" id="val_ow">3</span>
+                </div>
+                <input type="range" class="slider" min="1" max="5" value="3" id="slider_ow" oninput="updateSlider(this,'val_ow')">
+                <div class="dimension-scale">
+                  <span>Weak (1)</span>
+                  <span>Outstanding (5)</span>
+                </div>
+              </div>
+
+              <div class="rubric-dimension">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                  <label class="dimension-label" style="margin-bottom:0;">Problem-Solving</label>
+                  <span class="slider-value" id="val_ps2">3</span>
+                </div>
+                <input type="range" class="slider" min="1" max="5" value="3" id="slider_ps2" oninput="updateSlider(this,'val_ps2')">
+                <div class="dimension-scale">
+                  <span>Weak (1)</span>
+                  <span>Outstanding (5)</span>
+                </div>
+              </div>
+
+              <div class="rubric-dimension">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                  <label class="dimension-label" style="margin-bottom:0;">Communication</label>
+                  <span class="slider-value" id="val_cm2">3</span>
+                </div>
+                <input type="range" class="slider" min="1" max="5" value="3" id="slider_cm2" oninput="updateSlider(this,'val_cm2')">
+                <div class="dimension-scale">
+                  <span>Weak (1)</span>
+                  <span>Outstanding (5)</span>
+                </div>
+              </div>
+
+              <div style="margin-top: 24px; padding: 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px;">
+                <div style="margin-bottom: 16px; padding: 12px; background: rgba(92, 214, 200, 0.1); border-radius: 6px;">
+                  <div style="font-size: 12px; font-weight: 700; color: #5CD6C8; margin-bottom: 4px;">Wideners Selected</div>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span class="stack-tag" style="background: rgba(92, 214, 200, 0.25); color: #5CD6C8;">Product Sense</span>
+                    <span class="stack-tag" style="background: rgba(92, 214, 200, 0.25); color: #5CD6C8;">Communication</span>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn-primary" onclick="showToast('Scoring saved')" style="width: 100%; margin-top: 24px;">Save Scoring</button>
             </div>
 
             <div>
@@ -1857,40 +1921,119 @@
 
         <div id="hmCard" class="tab-content active">
           <div style="padding: 24px; background: rgba(255, 255, 255, 0.02); border-radius: 12px;">
-            <div style="font-size: 20px; font-weight: 700; color: #f0f4f8; margin-bottom: 8px;" id="hmCardName">Sarah Chen</div>
-            <div style="font-size: 14px; color: #94a3b8; margin-bottom: 24px;">Frontend React • Score: 4.2</div>
+            <!-- 1. One-line headline -->
+            <div style="margin-bottom: 8px;">
+              <div style="font-size: 20px; font-weight: 700; color: #f0f4f8;" id="hmCardName">Sarah Chen</div>
+            </div>
+            <div style="font-size: 14px; color: #f0f4f8; margin-bottom: 24px; font-style: italic;" id="hmCardHeadline">Strong React fundamentals with clean accessibility patterns</div>
 
+            <!-- 2. Verified Craft Badge -->
             <div style="margin-bottom: 24px;">
-              <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase;">Key Strengths</div>
-              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <span class="stack-tag" style="background: rgba(92, 214, 200, 0.15); color: #5CD6C8;">Product Sense</span>
-                <span class="stack-tag" style="background: rgba(92, 214, 200, 0.15); color: #5CD6C8;">Communication</span>
+              <div style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; background: rgba(92, 214, 200, 0.1); border: 1px solid rgba(92, 214, 200, 0.3); border-radius: 8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px; color: #5CD6C8;">
+                  <path d="M12 2L15.09 8.26H22L17.55 12.25L19.64 18.5L12 14.51L4.36 18.5L6.45 12.25L2 8.26H8.91L12 2Z"></path>
+                </svg>
+                <span style="font-size: 14px; font-weight: 700; color: #5CD6C8;">Verified Craft</span>
               </div>
             </div>
 
+            <!-- 3. Widener Results -->
+            <div style="margin-bottom: 24px;">
+              <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase;">Widener Selection</div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;" id="hmCardWideners">
+                <span class="stack-tag" style="background: rgba(92, 214, 200, 0.15); color: #5CD6C8;">Product Sense</span>
+                <span class="stack-tag" style="background: rgba(92, 214, 200, 0.15); color: #5CD6C8;">Communication</span>
+              </div>
+              <div style="font-size: 13px; color: #94a3b8; line-height: 1.5;" id="hmCardWidenerNotes">Excellent user-centric thinking and clear documentation in code comments</div>
+            </div>
+
+            <!-- 4. Proof Snapshot -->
+            <div style="margin-bottom: 24px;">
+              <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase;">Proof Snapshot</div>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <a id="hmCardGitHub" href="#" style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: #4B93FF; text-decoration: none; font-size: 13px;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                  </svg>
+                  View Repository
+                </a>
+                <a id="hmCardLoom" href="#" style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: #4B93FF; text-decoration: none; font-size: 13px;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                  Watch Walkthrough (<span id="hmCardLoomTime">4:23</span>)
+                </a>
+              </div>
+            </div>
+
+            <!-- 5. Challenge Performance -->
             <div style="margin-bottom: 24px;">
               <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase;">Challenge Performance</div>
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                 <div>
                   <div style="font-size: 12px; color: #64748B;">Commits</div>
-                  <div style="font-size: 20px; font-weight: 700; color: #4B93FF;">18</div>
+                  <div style="font-size: 20px; font-weight: 700; color: #4B93FF;" id="hmCardCommits">18</div>
                 </div>
                 <div>
                   <div style="font-size: 12px; color: #64748B;">Lines Added</div>
-                  <div style="font-size: 20px; font-weight: 700; color: #4B93FF;">1094</div>
+                  <div style="font-size: 20px; font-weight: 700; color: #4B93FF;" id="hmCardLines">1094</div>
                 </div>
               </div>
             </div>
 
-            <div>
-              <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase;">Notes</div>
-              <div style="font-size: 14px; color: #f0f4f8; line-height: 1.6;">Excellent architecture decisions. Strong understanding of React patterns. Would be a great addition to the team.</div>
+            <!-- 6. Ask me about -->
+            <div style="margin-bottom: 24px;">
+              <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase;">Ask Me About</div>
+              <ul style="margin: 0; padding-left: 20px; color: #f0f4f8; font-size: 13px; line-height: 1.8;" id="hmCardAskAbout">
+                <li>accessibility-first component design</li>
+                <li>debugging under time pressure</li>
+              </ul>
+            </div>
+
+            <!-- Proof History (for Sarah Chen only) -->
+            <div id="hmCardProofHistorySection" style="display: none; margin-bottom: 24px;">
+              <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase;">Proof History</div>
+              <div id="hmCardProofHistory"></div>
             </div>
           </div>
         </div>
 
         <div id="atsFactsheet" class="tab-content" style="display: none;">
           <div style="padding: 24px; background: rgba(255, 255, 255, 0.02); border-radius: 12px;">
+            <!-- Stack Tags Section -->
+            <div style="margin-bottom: 24px;">
+              <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase;">Tech Stack</div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <span class="stack-tag" style="background: rgba(75, 147, 255, 0.15); color: #4B93FF;">React</span>
+                <span class="stack-tag" style="background: rgba(75, 147, 255, 0.15); color: #4B93FF;">TypeScript</span>
+                <span class="stack-tag" style="background: rgba(75, 147, 255, 0.15); color: #4B93FF;">Testing</span>
+              </div>
+            </div>
+
+            <!-- Verifiable Facts -->
+            <div style="margin-bottom: 24px;">
+              <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase;">Verifiable Facts</div>
+              <ol style="margin: 0; padding-left: 20px; color: #f0f4f8; font-size: 13px; line-height: 1.8;">
+                <li style="margin-bottom: 8px;">Implemented accessible React components with ARIA labels <a href="#" style="color: #4B93FF; margin-left: 8px;">📎 Commit 18</a></li>
+                <li style="margin-bottom: 8px;">Added client-side filtering with keyboard navigation <a href="#" style="color: #4B93FF; margin-left: 8px;">📎 PR #42</a></li>
+                <li style="margin-bottom: 8px;">Wrote 18 commits with clear messages and documented patterns <a href="#" style="color: #4B93FF; margin-left: 8px;">📎 Repo</a></li>
+                <li style="margin-bottom: 8px;">Produced 1094 lines of production-ready code <a href="#" style="color: #4B93FF; margin-left: 8px;">📎 Stats</a></li>
+                <li>Completed challenge in 65 minutes with successful pivot execution <a href="#" style="color: #4B93FF; margin-left: 8px;">📎 Timeline</a></li>
+              </ol>
+            </div>
+
+            <!-- Synonym Map -->
+            <div style="margin-bottom: 24px;">
+              <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase;">Synonym Map</div>
+              <div style="font-size: 13px; color: #f0f4f8; line-height: 1.8;">
+                <div>React = frontend UI components</div>
+                <div>TypeScript = typed JavaScript</div>
+                <div>ARIA labels = web accessibility compliance</div>
+              </div>
+            </div>
+
+            <!-- Candidate Info -->
             <div style="margin-bottom: 24px;">
               <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 12px;">Full Name</div>
               <div style="font-size: 14px; color: #f0f4f8;" id="atsName">Sarah Chen</div>
@@ -1903,25 +2046,157 @@
               <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 12px;">Challenge Completed</div>
               <div style="font-size: 14px; color: #f0f4f8;">Frontend React</div>
             </div>
-            <div>
+            <div style="margin-bottom: 24px;">
               <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 12px;">Final Score</div>
               <div style="font-size: 24px; font-weight: 700; color: #5CD6C8;" id="atsFinalScore">4.2</div>
+            </div>
+
+            <!-- Format Note -->
+            <div style="padding: 12px; background: rgba(75, 147, 255, 0.08); border-left: 3px solid #4B93FF; border-radius: 6px; font-size: 12px; color: #94a3b8;">
+              <strong>Portable Format:</strong> This profile is available as JSON-LD (Person + CreativeWork + SoftwareSourceCode) with OpenGraph metadata for social sharing.
             </div>
           </div>
         </div>
 
         <div id="portfolio" class="tab-content" style="display: none;">
           <div style="padding: 24px; background: rgba(255, 255, 255, 0.02); border-radius: 12px;">
-            <div style="text-align: center; padding: 40px 0;">
-              <div style="font-size: 48px; margin-bottom: 16px;">📁</div>
-              <div style="font-size: 14px; color: #94a3b8;">Portfolio assets will be displayed here</div>
+            <div style="margin-bottom: 24px;">
+              <div style="font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase;">Frontend React Challenge</div>
+              <div style="padding: 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                  <div>
+                    <div style="font-size: 14px; font-weight: 700; color: #f0f4f8;">Product List with Search & Filtering</div>
+                    <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">React, TypeScript, Testing</div>
+                  </div>
+                  <div style="font-size: 20px; font-weight: 700; color: #5CD6C8;">4.2</div>
+                </div>
+                <div style="font-size: 13px; color: #f0f4f8; line-height: 1.6; margin-bottom: 12px;">
+                  Built an accessible product list component with client-side search, category filtering, and keyboard navigation. Added ARIA labels throughout and demonstrated strong understanding of React patterns.
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <a href="#" style="padding: 6px 12px; background: rgba(75, 147, 255, 0.15); color: #4B93FF; border-radius: 6px; text-decoration: none; font-size: 12px;">📎 View Code</a>
+                  <a href="#" style="padding: 6px 12px; background: rgba(75, 147, 255, 0.15); color: #4B93FF; border-radius: 6px; text-decoration: none; font-size: 12px;">🎬 Watch Demo</a>
+                </div>
+              </div>
+            </div>
+
+            <div style="padding: 16px; background: rgba(92, 214, 200, 0.08); border-top: 1px solid rgba(92, 214, 200, 0.2); border-radius: 8px; text-align: center;">
+              <div style="font-size: 13px; color: #f0f4f8;">
+                <strong style="color: #5CD6C8;">✓ Verified by MendelHire</strong> — <a href="#" style="color: #4B93FF; text-decoration: none;">View all proofs</a>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+        <button class="btn-secondary" onclick="openSignalSetupModal()" style="background: rgba(75, 147, 255, 0.1); color: #4B93FF;">⚙️ Signal Setup</button>
+        <div style="display: flex; gap: 12px;">
+          <button class="btn-secondary" onclick="closeFitFolioModal()">Close</button>
+          <button class="btn-secondary" onclick="showToast('Profile exported as PDF')" style="background: rgba(75, 147, 255, 0.15); color: #4B93FF;">Export PDF</button>
+          <button class="btn-primary" onclick="showToast('Profile exported as JSON-LD')">Export for ATS (JSON-LD)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Signal Setup Modal -->
+  <div class="modal-overlay" id="signalSetupModal">
+    <div class="modal" style="width: 500px;">
+      <div class="modal-header">
+        <h2 class="modal-title">Signal Setup</h2>
+        <button class="modal-close" onclick="closeSignalSetupModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="padding: 24px;">
+          <!-- Voice Selection -->
+          <div style="margin-bottom: 24px;">
+            <div style="font-size: 14px; font-weight: 700; color: #f0f4f8; margin-bottom: 12px;">Voice</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); transition: background 0.2s;">
+                <input type="radio" name="voice" value="technical" style="cursor: pointer;">
+                <span style="font-size: 13px; color: #f0f4f8;">Technical</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); transition: background 0.2s;">
+                <input type="radio" name="voice" value="product" style="cursor: pointer;">
+                <span style="font-size: 13px; color: #f0f4f8;">Product-leaning</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); transition: background 0.2s;">
+                <input type="radio" name="voice" value="people" style="cursor: pointer;">
+                <span style="font-size: 13px; color: #f0f4f8;">People-centric</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Domains Selection -->
+          <div style="margin-bottom: 24px;">
+            <div style="font-size: 14px; font-weight: 700; color: #f0f4f8; margin-bottom: 12px;">Domains (Pick 2)</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); transition: background 0.2s;">
+                <input type="checkbox" name="domain" value="fintech" style="cursor: pointer;">
+                <span style="font-size: 13px; color: #f0f4f8;">Fintech</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); transition: background 0.2s;">
+                <input type="checkbox" name="domain" value="infra" style="cursor: pointer;">
+                <span style="font-size: 13px; color: #f0f4f8;">Infra</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); transition: background 0.2s;">
+                <input type="checkbox" name="domain" value="ai" style="cursor: pointer;">
+                <span style="font-size: 13px; color: #f0f4f8;">AI/Agents</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Destination Priority -->
+          <div style="margin-bottom: 24px;">
+            <div style="font-size: 14px; font-weight: 700; color: #f0f4f8; margin-bottom: 12px;">Destination Priority</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); transition: background 0.2s;">
+                <input type="radio" name="destination" value="linkedin" style="cursor: pointer;">
+                <span style="font-size: 13px; color: #f0f4f8;">LinkedIn</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); transition: background 0.2s;">
+                <input type="radio" name="destination" value="github" style="cursor: pointer;">
+                <span style="font-size: 13px; color: #f0f4f8;">GitHub</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); transition: background 0.2s;">
+                <input type="radio" name="destination" value="personal" style="cursor: pointer;">
+                <span style="font-size: 13px; color: #f0f4f8;">Personal site</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Microcopy -->
+          <div style="padding: 12px; background: rgba(92, 214, 200, 0.08); border-left: 3px solid #5CD6C8; border-radius: 6px; font-size: 12px; color: #94a3b8;">
+            We will never post for you. You control what is public. You can change these later.
+          </div>
+        </div>
+      </div>
       <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeFitFolioModal()">Close</button>
-        <button class="btn-primary" onclick="showToast('Profile exported')">Export Profile</button>
+        <button class="btn-secondary" onclick="closeSignalSetupModal()">Cancel</button>
+        <button class="btn-primary" onclick="saveSignalSetup()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARE MODAL -->
+  <div class="modal-overlay" id="compareModal">
+    <div class="modal" style="width: 95vw; max-width: 1100px;">
+      <div class="modal-header">
+        <h2 class="modal-title">Side-by-Side Comparison</h2>
+        <button class="modal-close" onclick="closeCompareModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="compareBody" style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+        <!-- Filled dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeCompareModal()">Close</button>
       </div>
     </div>
   </div>
@@ -1934,7 +2209,7 @@
     const candidates = [
       { id: 'MH-2841', name: 'Sarah Chen', challenge: 'Frontend React', status: 'FitFolio Ready', score: 4.2, wideners: ['Product Sense', 'Communication'], stack: 3, verified: true, avatar: 'SC', pivotTime: 5, commits: 18, lines: 1094 },
       { id: 'MH-2842', name: 'Marcus Johnson', challenge: 'Frontend React', status: 'Scored', score: 3.8, wideners: ['Collaboration', 'Diagnostics'], stack: 1, verified: true, avatar: 'MJ', pivotTime: 8, commits: 14, lines: 876 },
-      { id: 'MH-2843', name: 'Priya Patel', challenge: 'Frontend React', status: 'In Progress', score: null, wideners: ['Customer Empathy', 'Communication'], stack: 2, verified: false, avatar: 'PP', pivotTime: null, commits: 0, lines: 0 },
+      { id: 'MH-2843', name: 'Priya Patel', challenge: 'Frontend React', status: 'In Progress', score: null, wideners: ['Customer Empathy', 'Product Sense'], stack: 2, verified: false, avatar: 'PP', pivotTime: null, commits: 0, lines: 0 },
       { id: 'MH-2844', name: 'Alex Rivera', challenge: 'Data Python/SQL', status: 'FitFolio Ready', score: 4.5, wideners: ['Product Sense', 'Diagnostics'], stack: 2, verified: true, avatar: 'AR', pivotTime: 4, commits: 16, lines: 942 },
       { id: 'MH-2845', name: 'Jordan Lee', challenge: 'Frontend React', status: 'In Progress (Live)', score: null, wideners: ['Communication', 'Collaboration'], stack: 1, verified: false, avatar: 'JL', pivotTime: null, commits: 0, lines: 0 },
       { id: 'MH-2846', name: 'Tanya Williams', challenge: 'Data Python/SQL', status: 'Scored', score: 3.5, wideners: ['Customer Empathy', 'Product Sense'], stack: 1, verified: true, avatar: 'TW', pivotTime: 12, commits: 11, lines: 654 },
@@ -1947,6 +2222,7 @@
     let proofTime = 0;
     const sessionDuration = 120;
     const pivotTime = 60;
+    let pivotNotificationShown = false;
 
     // HASH-BASED ROUTING
     function navigateToPage(page) {
@@ -1977,7 +2253,7 @@
       navigateToPage(hash);
     }
 
-    // RADAR CHART DRAWING
+    // RADAR CHART DRAWING - 6 dimensions: Correctness & Edge Cases, Accessibility, Code Clarity (Stack - blue), Ownership, Problem-Solving, Communication (Traits - green)
     function drawRadarChart() {
       const canvas = document.getElementById('radarChart');
       if (!canvas) return;
@@ -1985,18 +2261,18 @@
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
       const radius = 70;
-      const dimensions = ['Product Sense', 'Communication', 'Collaboration', 'Diagnostics', 'Customer Empathy'];
+      const dimensions = ['Correctness', 'Accessibility', 'Code Clarity', 'Ownership', 'Problem-Solving', 'Communication'];
       const values = [
-        parseInt(document.getElementById('val_ps').textContent),
-        parseInt(document.getElementById('val_cm').textContent),
-        parseInt(document.getElementById('val_cl').textContent),
-        parseInt(document.getElementById('val_dg').textContent),
-        parseInt(document.getElementById('val_ce').textContent)
+        parseInt(document.getElementById('val_ce').textContent) || 3,
+        parseInt(document.getElementById('val_ac').textContent) || 3,
+        parseInt(document.getElementById('val_cc').textContent) || 3,
+        parseInt(document.getElementById('val_ow').textContent) || 3,
+        parseInt(document.getElementById('val_ps2').textContent) || 3,
+        parseInt(document.getElementById('val_cm2').textContent) || 3
       ];
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-      ctx.fillStyle = 'rgba(75, 147, 255, 0.15)';
       ctx.lineWidth = 1;
 
       // Draw grid
@@ -2024,15 +2300,32 @@
         ctx.stroke();
       }
 
-      // Draw data polygon
+      // Draw Stack polygon (indices 0-2, blue)
       ctx.beginPath();
+      ctx.fillStyle = 'rgba(75, 147, 255, 0.15)';
       ctx.strokeStyle = 'rgba(75, 147, 255, 0.8)';
       ctx.lineWidth = 2;
-      for (let j = 0; j < dimensions.length; j++) {
+      for (let j = 0; j < 3; j++) {
         const angle = (j * 2 * Math.PI) / dimensions.length - Math.PI / 2;
         const x = centerX + (radius * values[j] / 5) * Math.cos(angle);
         const y = centerY + (radius * values[j] / 5) * Math.sin(angle);
         if (j === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Draw Traits polygon (indices 3-5, green)
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(92, 214, 200, 0.15)';
+      ctx.strokeStyle = 'rgba(92, 214, 200, 0.8)';
+      ctx.lineWidth = 2;
+      for (let j = 3; j < 6; j++) {
+        const angle = (j * 2 * Math.PI) / dimensions.length - Math.PI / 2;
+        const x = centerX + (radius * values[j] / 5) * Math.cos(angle);
+        const y = centerY + (radius * values[j] / 5) * Math.sin(angle);
+        if (j === 3) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
       ctx.closePath();
@@ -2216,10 +2509,112 @@
       });
     }
 
+    // Detailed candidate profiles
+    const candidateProfiles = {
+      'MH-2841': {
+        name: 'Sarah Chen',
+        headline: 'Strong React fundamentals with clean accessibility patterns',
+        skills: { correctness: 4, accessibility: 5, clarity: 4, ownership: 3, problemSolving: 4, communication: 3 },
+        wideners: ['Product Sense', 'Communication'],
+        widenerNotes: 'Excellent user-centric thinking and clear documentation in code comments',
+        askAbout: ['accessibility-first component design', 'debugging under time pressure'],
+        gitHub: 'https://github.com/sarahchen',
+        loom: 'https://loom.com/share/sarah-react-demo',
+        loomTime: '4:23',
+        proofHistory: [
+          { challenge: 'Frontend React', date: 'Jan 2026', score: 4.2, status: 'current' },
+          { challenge: 'Data Python/SQL', date: 'Nov 2025', score: 3.9, status: 'previous' }
+        ]
+      },
+      'MH-2842': {
+        name: 'Marcus Johnson',
+        headline: 'Solid code architecture with strong debugging skills',
+        skills: { correctness: 3, accessibility: 3, clarity: 4, ownership: 4, problemSolving: 4, communication: 3 },
+        wideners: ['Diagnostics', 'Collaboration'],
+        widenerNotes: 'Collaborative approach and methodical debugging process',
+        askAbout: ['system design thinking', 'team communication patterns'],
+        gitHub: 'https://github.com/marcusjohnson',
+        loom: 'https://loom.com/share/marcus-react-demo',
+        loomTime: '3:45'
+      },
+      'MH-2844': {
+        name: 'Alex Rivera',
+        headline: 'Exceptional analytical skills with superior SQL optimization',
+        skills: { correctness: 5, accessibility: 3, clarity: 4, ownership: 5, problemSolving: 5, communication: 4 },
+        wideners: ['Product Sense', 'Diagnostics'],
+        widenerNotes: 'Data-driven decision making and thorough root cause analysis',
+        askAbout: ['query optimization strategies', 'handling ambiguous requirements'],
+        gitHub: 'https://github.com/alexrivera',
+        loom: 'https://loom.com/share/alex-sql-demo',
+        loomTime: '5:12'
+      },
+      'MH-2846': {
+        name: 'Tanya Williams',
+        headline: 'Detail-oriented analyst with practical data insights',
+        skills: { correctness: 3, accessibility: 2, clarity: 3, ownership: 4, problemSolving: 3, communication: 4 },
+        wideners: ['Customer Empathy', 'Product Sense'],
+        widenerNotes: 'Strong business acumen and user-focused approach to data analysis',
+        askAbout: ['translating data to business outcomes', 'cross-functional collaboration'],
+        gitHub: 'https://github.com/tanyawilliams',
+        loom: 'https://loom.com/share/tanya-sql-demo',
+        loomTime: '4:01'
+      },
+      'MH-2848': {
+        name: 'Elena Volkova',
+        headline: 'Clean, scalable code with comprehensive testing practices',
+        skills: { correctness: 4, accessibility: 4, clarity: 4, ownership: 4, problemSolving: 4, communication: 3 },
+        wideners: ['Diagnostics', 'Collaboration'],
+        widenerNotes: 'Methodical testing approach and collaborative code review skills',
+        askAbout: ['testing strategy and coverage', 'mentoring junior developers'],
+        gitHub: 'https://github.com/elenavolkova',
+        loom: 'https://loom.com/share/elena-sql-demo',
+        loomTime: '3:58'
+      }
+    };
+
     function openFitFolioModal(candidateId) {
       const candidate = candidates.find(c => c.id === candidateId);
-      if (candidate && candidate.score) {
+      const profile = candidateProfiles[candidateId];
+      if (candidate && candidate.score && profile) {
         document.getElementById('hmCardName').textContent = candidate.name;
+        document.getElementById('hmCardHeadline').textContent = profile.headline;
+        document.getElementById('hmCardWideners').innerHTML = profile.wideners.map(w =>
+          `<span class="stack-tag" style="background: rgba(92, 214, 200, 0.15); color: #5CD6C8;">${w}</span>`
+        ).join('');
+        document.getElementById('hmCardWidenerNotes').textContent = profile.widenerNotes;
+        document.getElementById('hmCardAskAbout').innerHTML = profile.askAbout.map(a =>
+          `<li>${a}</li>`
+        ).join('');
+        document.getElementById('hmCardCommits').textContent = candidate.commits;
+        document.getElementById('hmCardLines').textContent = candidate.lines;
+
+        // Update proof snapshot links
+        if (profile.gitHub) {
+          document.getElementById('hmCardGitHub').href = profile.gitHub;
+        }
+        if (profile.loom) {
+          document.getElementById('hmCardLoom').href = profile.loom;
+          document.getElementById('hmCardLoomTime').textContent = profile.loomTime;
+        }
+
+        // Update proof history if available (for Sarah Chen only)
+        if (profile.proofHistory) {
+          document.getElementById('hmCardProofHistorySection').style.display = 'block';
+          const historyHtml = profile.proofHistory.map(h => {
+            const freshDot = h.status === 'current' ? '🟢' : h.status === 'previous' ? '🟡' : '⚪';
+            return `<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+              <span style="font-size: 12px;">${freshDot}</span>
+              <div>
+                <div style="font-size: 14px; color: #f0f4f8;">${h.challenge}</div>
+                <div style="font-size: 12px; color: #94a3b8;">${h.date} • Score: ${h.score}</div>
+              </div>
+            </div>`;
+          }).join('');
+          document.getElementById('hmCardProofHistory').innerHTML = historyHtml;
+        } else {
+          document.getElementById('hmCardProofHistorySection').style.display = 'none';
+        }
+
         document.getElementById('atsName').textContent = candidate.name;
         document.getElementById('atsId').textContent = candidate.id;
         document.getElementById('atsFinalScore').textContent = candidate.score;
@@ -2231,19 +2626,59 @@
       document.getElementById('fitFolioModal').classList.remove('active');
     }
 
-    // ANONYMIZATION
+    function openSignalSetupModal() {
+      document.getElementById('signalSetupModal').classList.add('active');
+    }
+
+    function closeSignalSetupModal() {
+      document.getElementById('signalSetupModal').classList.remove('active');
+    }
+
+    function saveSignalSetup() {
+      const voice = document.querySelector('input[name="voice"]:checked')?.value || 'technical';
+      const domains = Array.from(document.querySelectorAll('input[name="domain"]:checked')).map(d => d.value);
+      const destination = document.querySelector('input[name="destination"]:checked')?.value || 'linkedin';
+      showToast(`Signal setup saved: Voice=${voice}, Domains=${domains.join(', ')}, Destination=${destination}`);
+      closeSignalSetupModal();
+    }
+
+    // ANONYMIZATION - More dramatic visual effect
     function toggleAnonymization() {
       isAnonymized = !isAnonymized;
-      document.getElementById('anonToggleText').textContent = isAnonymized ? 'De-anonymize' : 'Anonymize';
+      document.getElementById('anonToggleText').textContent = isAnonymized ? 'Reveal Identity' : 'Anonymize';
 
       candidates.forEach((candidate, index) => {
         const nameEl = document.getElementById(`name-${candidate.id}`);
+        const avatarEl = document.querySelector(`[data-candidate-id="${candidate.id}"] .candidate-avatar`);
+
         if (nameEl) {
-          nameEl.textContent = isAnonymized ? `Candidate ${index + 1}` : candidate.name;
+          if (isAnonymized) {
+            nameEl.textContent = `Candidate ${index + 1}`;
+            nameEl.style.filter = 'blur(4px)';
+            nameEl.style.opacity = '0.6';
+          } else {
+            nameEl.textContent = candidate.name;
+            nameEl.style.filter = 'none';
+            nameEl.style.opacity = '1';
+          }
+        }
+
+        if (avatarEl) {
+          if (isAnonymized) {
+            avatarEl.textContent = '?';
+            avatarEl.style.background = 'rgba(100, 116, 139, 0.3)';
+            avatarEl.style.color = '#64748B';
+            avatarEl.style.filter = 'blur(2px)';
+          } else {
+            avatarEl.textContent = candidate.avatar;
+            avatarEl.style.background = 'rgba(75, 147, 255, 0.15)';
+            avatarEl.style.color = '#4B93FF';
+            avatarEl.style.filter = 'none';
+          }
         }
       });
 
-      showToast(isAnonymized ? 'Anonymization enabled' : 'Anonymization disabled');
+      showToast(isAnonymized ? 'Anonymization enabled - All names hidden' : 'Anonymization disabled - Names revealed');
     }
 
     // LIVE SESSION SIMULATION
@@ -2294,11 +2729,16 @@
       if (dot) dot.style.left = pct + '%';
       if (fill) fill.style.width = pct + '%';
 
-      // Update phase
+      // Update phase and show pivot notification
       const phaseEl = document.getElementById('sessionPhase');
+      const pivotNotif = document.getElementById('pivotNotification');
       if (phaseEl) {
         phaseEl.textContent = proofTime >= (pivotTime * 60) ? 'Post-Pivot' : 'Pre-Pivot';
         phaseEl.style.color = proofTime >= (pivotTime * 60) ? '#E5B84C' : '#5CD6C8';
+      }
+      if (proofTime >= (pivotTime * 60) && !pivotNotificationShown) {
+        pivotNotificationShown = true;
+        if (pivotNotif) pivotNotif.style.display = 'block';
       }
 
       // Update code editor at specific proof-time thresholds (seconds)
@@ -2337,6 +2777,7 @@
       clearTimeout(simTimer);
       proofTime = 0;
       lastCodePhase = -1;
+      pivotNotificationShown = false;
       updateCodeEditor(0);
       document.getElementById('elapsedTime').textContent = '0:00';
       document.getElementById('commitCount').textContent = '0';
@@ -2347,6 +2788,8 @@
       if (fill) fill.style.width = '0%';
       const phaseEl = document.getElementById('sessionPhase');
       if (phaseEl) { phaseEl.textContent = 'Pre-Pivot'; phaseEl.style.color = '#5CD6C8'; }
+      const pivotNotif = document.getElementById('pivotNotification');
+      if (pivotNotif) pivotNotif.style.display = 'none';
       const btn = document.getElementById('simBtn');
       if (btn) btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Start Simulation';
     }
@@ -2382,6 +2825,136 @@
     });
     document.getElementById('fitFolioModal').addEventListener('click', (e) => {
       if (e.target === e.currentTarget) closeFitFolioModal();
+    });
+
+    // ===== COMPARISON VIEW =====
+    function updateCompareButton() {
+      const checked = document.querySelectorAll('#candidatesTableBody input[type="checkbox"]:checked');
+      const btn = document.getElementById('compareBtn');
+      const count = document.getElementById('compareCount');
+      if (btn && count) {
+        const n = checked.length;
+        count.textContent = n;
+        btn.style.display = (n >= 2 && n <= 3) ? 'flex' : 'none';
+      }
+    }
+
+    // Attach change listeners to all candidate checkboxes
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('#candidatesTableBody input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', updateCompareButton);
+      });
+    });
+
+    function openCompareView() {
+      const checked = document.querySelectorAll('#candidatesTableBody input[type="checkbox"]:checked');
+      const ids = [];
+      checked.forEach(cb => {
+        const row = cb.closest('tr');
+        if (row && row.dataset.candidateId) ids.push(row.dataset.candidateId);
+      });
+      if (ids.length < 2) return;
+
+      const body = document.getElementById('compareBody');
+      body.innerHTML = '';
+
+      const allWideners = ['Product Sense', 'Communication', 'Collaboration', 'Customer Empathy', 'Diagnostics'];
+
+      ids.forEach(id => {
+        const c = candidates.find(x => x.id === id);
+        if (!c || !c.score) return;
+        const profile = typeof candidateProfiles !== 'undefined' ? candidateProfiles[id] : null;
+
+        const col = document.createElement('div');
+        col.style.cssText = 'padding: 24px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;';
+
+        // Header
+        let html = `
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:rgba(75,147,255,0.15);color:#4B93FF;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">${c.avatar}</div>
+            <div>
+              <div style="font-size:16px;font-weight:700;color:#f0f4f8;">${c.name}</div>
+              <div style="font-size:12px;color:#94a3b8;">${c.challenge}</div>
+            </div>
+          </div>`;
+
+        // Score
+        html += `
+          <div style="text-align:center;margin-bottom:20px;">
+            <div style="font-size:11px;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Overall Score</div>
+            <div style="font-size:36px;font-weight:800;color:#4B93FF;">${c.score}</div>
+          </div>`;
+
+        // Mini radar (SVG)
+        const dims = ['CE', 'AC', 'CC', 'OW', 'PS', 'CM'];
+        const vals = profile ? [profile.skills?.correctness||4, profile.skills?.accessibility||3, profile.skills?.clarity||4, profile.skills?.ownership||4, profile.skills?.problemSolving||3, profile.skills?.communication||4]
+          : [Math.round(c.score), Math.round(c.score*0.9), Math.round(c.score*0.95), Math.round(c.score*0.85), Math.round(c.score*0.9), Math.round(c.score)];
+        const svgSize = 160, cx = 80, cy = 80, r = 55;
+        let points = '';
+        vals.forEach((v, i) => {
+          const angle = (i * 2 * Math.PI / 6) - Math.PI/2;
+          const px = cx + (r * v / 5) * Math.cos(angle);
+          const py = cy + (r * v / 5) * Math.sin(angle);
+          points += `${px},${py} `;
+        });
+        let labelsSvg = '';
+        dims.forEach((d, i) => {
+          const angle = (i * 2 * Math.PI / 6) - Math.PI/2;
+          const lx = cx + (r + 15) * Math.cos(angle);
+          const ly = cy + (r + 15) * Math.sin(angle);
+          labelsSvg += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" fill="${i < 3 ? '#4B93FF' : '#5CD6C8'}" font-size="9" font-weight="600">${d}</text>`;
+        });
+        // Grid
+        let gridSvg = '';
+        for (let lvl = 1; lvl <= 5; lvl++) {
+          let gpts = '';
+          for (let j = 0; j < 6; j++) {
+            const a = (j * 2 * Math.PI / 6) - Math.PI/2;
+            gpts += `${cx + (r * lvl / 5) * Math.cos(a)},${cy + (r * lvl / 5) * Math.sin(a)} `;
+          }
+          gridSvg += `<polygon points="${gpts}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>`;
+        }
+
+        html += `
+          <div style="display:flex;justify-content:center;margin-bottom:20px;">
+            <svg width="${svgSize}" height="${svgSize}" viewBox="0 0 ${svgSize} ${svgSize}">
+              ${gridSvg}
+              <polygon points="${points}" fill="rgba(75,147,255,0.15)" stroke="#4B93FF" stroke-width="1.5"/>
+              ${labelsSvg}
+            </svg>
+          </div>`;
+
+        // Widener selections
+        html += `<div style="margin-bottom:16px;"><div style="font-size:11px;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Widener Selections</div><div style="display:flex;gap:6px;flex-wrap:wrap;">`;
+        allWideners.forEach(w => {
+          const sel = c.wideners.includes(w);
+          html += `<span style="padding:4px 10px;border-radius:100px;font-size:11px;font-weight:600;${sel ? 'background:rgba(92,214,200,0.15);color:#5CD6C8;' : 'background:rgba(255,255,255,0.04);color:#64748B;'}">${w}</span>`;
+        });
+        html += `</div></div>`;
+
+        // Curator note
+        const note = profile ? profile.headline : 'Strong technical skills with solid fundamentals.';
+        html += `<div style="padding:12px;background:rgba(75,147,255,0.08);border-radius:8px;font-size:12px;color:#94a3b8;font-style:italic;">"${note}"</div>`;
+
+        // Stats
+        html += `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">
+            <div style="text-align:center;"><div style="font-size:11px;color:#64748B;">Commits</div><div style="font-size:18px;font-weight:700;color:#4B93FF;">${c.commits}</div></div>
+            <div style="text-align:center;"><div style="font-size:11px;color:#64748B;">Lines</div><div style="font-size:18px;font-weight:700;color:#4B93FF;">${c.lines}</div></div>
+          </div>`;
+
+        col.innerHTML = html;
+        body.appendChild(col);
+      });
+
+      document.getElementById('compareModal').classList.add('active');
+    }
+
+    function closeCompareModal() {
+      document.getElementById('compareModal').classList.remove('active');
+    }
+    document.getElementById('compareModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeCompareModal();
     });
 
     // Simulation controlled by Start button — no auto-start
