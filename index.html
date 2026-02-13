@@ -546,17 +546,52 @@
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #E5B84C;
+      border: 2px solid rgba(229, 184, 76, 0.3);
+      z-index: 2;
+    }
+    .pivot-marker::after {
+      content: '60m Pivot';
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      font-weight: 700;
+      color: #E5B84C;
+      white-space: nowrap;
+    }
+    .progress-dot {
+      position: absolute;
+      left: 0%;
+      top: 50%;
+      transform: translate(-50%, -50%);
       width: 12px;
       height: 12px;
       border-radius: 50%;
       background: #4B93FF;
+      z-index: 3;
+      transition: left 0.1s linear;
+    }
+    .progress-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #4B93FF, rgba(75, 147, 255, 0.4));
+      border-radius: 2px;
+      z-index: 1;
+      transition: width 0.1s linear;
     }
     .pivot-timeline-labels {
       display: flex;
       justify-content: space-between;
       font-size: 11px;
       color: #64748B;
-      margin-top: 8px;
+      margin-top: 4px;
     }
 
     /* ===== SESSION STATS ===== */
@@ -997,15 +1032,16 @@
             </div>
           </div>
 
-          <div class="pivot-timeline">
+          <div class="pivot-timeline" style="margin-top: 8px;">
             <span style="font-size: 12px; color: #64748B; white-space: nowrap; margin-right: 8px;">0m</span>
             <div class="pivot-line">
+              <div class="progress-fill" id="progressFill"></div>
               <div class="pivot-marker"></div>
+              <div class="progress-dot" id="progressDot"></div>
             </div>
             <span style="font-size: 12px; color: #64748B; white-space: nowrap; margin-left: 8px;">120m</span>
           </div>
           <div class="pivot-timeline-labels">
-            <span style="font-size: 11px; color: #E5B84C; font-weight: 700;">Pivot at 60m</span>
             <span style="font-size: 11px; color: #64748B;">Total: 120 minutes</span>
           </div>
 
@@ -1023,8 +1059,8 @@
               <div class="stat-box-value" id="linesAdded">0</div>
             </div>
             <div class="stat-box">
-              <div class="stat-box-label">Quality</div>
-              <div class="stat-box-value" id="qualityScore">-</div>
+              <div class="stat-box-label">Phase</div>
+              <div class="stat-box-value" id="sessionPhase" style="color: #5CD6C8;">Pre-Pivot</div>
             </div>
           </div>
 
@@ -1047,12 +1083,18 @@
           </div>
 
           <div class="action-bar" style="margin-top: 32px;">
-            <button class="btn-primary" onclick="showToast('Session paused')">
+            <button class="btn-primary" id="simBtn" onclick="toggleSimulation()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
-                <rect x="6" y="4" width="4" height="16"></rect>
-                <rect x="14" y="4" width="4" height="16"></rect>
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
               </svg>
-              Pause
+              Start Simulation
+            </button>
+            <button class="btn-secondary" onclick="resetSimulation()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+              </svg>
+              Reset
             </button>
             <button class="btn-secondary" onclick="showToast('Toggled candidate view')">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
@@ -1697,17 +1739,71 @@
     }
 
     // LIVE SESSION SIMULATION
+    let simRunning = false;
+    let simTimer = null;
+
     function updateLiveSession() {
+      if (!simRunning) return;
       proofTime += 0.4;
+      const totalSeconds = sessionDuration * 60;
+      const pct = Math.min((proofTime / totalSeconds) * 100, 100);
       const minutes = Math.floor(proofTime / 60);
       const seconds = Math.floor(proofTime % 60);
       document.getElementById('elapsedTime').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
       document.getElementById('commitCount').textContent = Math.floor(proofTime / 8);
       document.getElementById('linesAdded').textContent = Math.floor(proofTime * 8);
 
-      if (proofTime < sessionDuration * 60) {
-        setTimeout(updateLiveSession, 100);
+      // Update timeline progress
+      const dot = document.getElementById('progressDot');
+      const fill = document.getElementById('progressFill');
+      if (dot) dot.style.left = pct + '%';
+      if (fill) fill.style.width = pct + '%';
+
+      // Update phase
+      const phaseEl = document.getElementById('sessionPhase');
+      if (phaseEl) {
+        phaseEl.textContent = proofTime >= (pivotTime * 60) ? 'Post-Pivot' : 'Pre-Pivot';
+        phaseEl.style.color = proofTime >= (pivotTime * 60) ? '#E5B84C' : '#5CD6C8';
       }
+
+      if (proofTime < totalSeconds) {
+        simTimer = setTimeout(updateLiveSession, 100);
+      } else {
+        simRunning = false;
+        const btn = document.getElementById('simBtn');
+        if (btn) btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Restart';
+      }
+    }
+
+    function toggleSimulation() {
+      const btn = document.getElementById('simBtn');
+      if (simRunning) {
+        simRunning = false;
+        clearTimeout(simTimer);
+        if (btn) btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Resume';
+      } else {
+        if (proofTime >= sessionDuration * 60) { proofTime = 0; }
+        simRunning = true;
+        if (btn) btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg> Pause';
+        updateLiveSession();
+      }
+    }
+
+    function resetSimulation() {
+      simRunning = false;
+      clearTimeout(simTimer);
+      proofTime = 0;
+      document.getElementById('elapsedTime').textContent = '0:00';
+      document.getElementById('commitCount').textContent = '0';
+      document.getElementById('linesAdded').textContent = '0';
+      const dot = document.getElementById('progressDot');
+      const fill = document.getElementById('progressFill');
+      if (dot) dot.style.left = '0%';
+      if (fill) fill.style.width = '0%';
+      const phaseEl = document.getElementById('sessionPhase');
+      if (phaseEl) { phaseEl.textContent = 'Pre-Pivot'; phaseEl.style.color = '#5CD6C8'; }
+      const btn = document.getElementById('simBtn');
+      if (btn) btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Start Simulation';
     }
 
     // TOAST NOTIFICATION
@@ -1727,8 +1823,7 @@
       if (e.target === e.currentTarget) closeFitFolioModal();
     });
 
-    // Start live session simulation
-    setTimeout(updateLiveSession, 100);
+    // Simulation controlled by Start button — no auto-start
   </script>
 </body>
 </html>
