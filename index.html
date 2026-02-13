@@ -2437,7 +2437,7 @@ const SearchFilter = ({ items }) => {
             const interval = setInterval(() => {
                 if (proofSimulationPaused) return;
 
-                proofTime += 1.39; // 120 min in ~144 seconds (50x speed)
+                proofTime += 0.4; // 120 min in ~30 seconds for demo pacing
 
                 if (proofTime >= 120) {
                     proofTime = 120;
